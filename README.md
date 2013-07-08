@@ -1,0 +1,80 @@
+mp3 Parser
+==========
+
+[![NPM version](https://badge.fury.io/js/mp3-parser.png)](http://badge.fury.io/js/mp3-parser)
+
+Locate and read individual mp3 frames as well as ID3v2 and Xing/Lame tags. For the latter, only a
+minimal amount of information is parsed - just anough to assert that the read section is indeed an
+ID3v2 or Xing/Lame tag. This will change in future revisions. The primary use case (and raison
+d'etre) for this initial revision is performing precise cuts at frame / tag boundaries.
+
+
+Set up
+------
+
+mp3 Parser may be used as a CommonJS module on Node or in a browser, either through a plain
+`<script>` tag or as an AMD module. It will be automatically exported in the correct format
+depending on the detected environment. To get it, `git clone git://github.com/biril/mp3-parser` or
+`npm install mp3-parser`.
+
+* When working in a *browser, without an AMD module loader*, include mp3-parser.js:
+
+    ```html
+    ...
+    <script type="text/javascript" src="mp3-parser.js"></script>
+    ...
+    ```
+
+    and the module will be exposed as the global `mp3Parser`:
+
+    ```javascript
+    console.log("mp3 Parser version: " + mp3Parser.version);
+    ```
+
+* `require` when working *with CommonJS* (e.g. Node). Assuming mp3 Parser is `npm install`ed:
+
+    ```javascript
+    var mp3Parser = require("mp3-parser");
+    console.log("mp3 Parser version: " + mp3Parser.version);
+    ```
+
+* Or list as a dependency when working *with an AMD loader* (e.g. require.js):
+
+    ```javascript
+    // Your module
+    define(["mp3-parser"], function (mp3Parser) {
+    	console.log("mp3 Parser version: " + mp3Parser.version);
+    });
+    ```
+
+
+Usage
+-----
+
+The parser exposes a collection of `read____` methods, each dedicated to reading a specific section
+of the mp3 file. The current implementation includes `readFrameHeader`, `readFrame`, `readId3v2Tag`
+and `readXingTag`. Each of these accepts a DataView-wrapped ArrayBuffer, which should contain the
+actual mp3 data, and optionally an offset into the buffer.
+
+All methods return a description of the section read in the form of a hash containing key-value
+pairs relevant to the section. For example the hash returned by `readFrameHeader` always contains
+an `mpegAudioVersion` key of value "MPEG Version 1 (ISO/IEC 11172-3)" and a `layerDescription` key
+of value "Layer III". A description will always have a `_section` hash with `type`, `byteLength`
+and `offset` keys:
+
+* `type`: "frame", "frameHeader", "Xing" or "ID3v2"
+* `byteLenfth`: Size of the section in bytes
+* `offset`: Buffer offset at which this section resides
+
+Further documentation is forthcoming. You can also
+
+* View the [annotated version](http://biril.github.io/mp3-parser/) of the source.
+* Try the example script `examples/parse.js`. Run it with `node parse.js <mp3-file>`
+
+
+License
+-------
+
+Licensed and freely distributed under the MIT License (LICENSE.txt).
+
+Copyright (c) 2013 Alex Lambiris

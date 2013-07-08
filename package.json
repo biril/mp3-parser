@@ -1,0 +1,26 @@
+{
+  "name": "mp3-parser",
+  "version": "0.1.0",
+  "author": "biril <alexlambiris@gmail.com>",
+  "description": "Read mp3 frames & tags",
+  "contributors": [],
+  "main": "./mp3-parser.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/biril/mp3-parser"
+  },
+  "bugs": "https://github.com/biril/mp3-parser/issues",
+  "license": "MIT",
+  "keywords": [
+    "mp3"
+  ],
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "lint": "jshint --show-non-errors mp3-parser.js"
+  },
+  "engines": {
+    "node": ">=0.8"
+  },
+  "directories": {}
+}
