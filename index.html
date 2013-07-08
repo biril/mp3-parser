@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>mp3-parser.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>mp3-parser.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <pre><code>mp3-parser v0.1.0
+
+https://github.com/biril/mp3-parser
+Licensed and freely distributed under the MIT License
+Copyright (c) 2013 Alex Lambiris</code></pre>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="comment">/*jshint browser:true */</span>
+<span class="comment">/*global exports, define */</span>
+(<span class="function"><span class="keyword">function</span> <span class="params">(root, createModule)</span> {</span>
+    <span class="string">"use strict"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Expose as a module or global depending on the detected environment:</p>
+<p>A global <code>exports</code> object signifies CommonJS-like enviroments that support <code>module.exports</code>,
+e.g. Node</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (Object.prototype.toString.call(exports) === <span class="string">"[object Object]"</span>) {
+        <span class="keyword">return</span> createModule(exports);
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>A global <code>define</code> method with an <code>amd</code> property signifies the presence of an AMD loader
+ (require.js, curl.js, ..)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (Object.prototype.toString.call(define) === <span class="string">"[object Object]"</span> &amp;&amp; define.amd) {
+        <span class="keyword">return</span> define([<span class="string">"exports"</span>], <span class="function"><span class="keyword">function</span> <span class="params">(exports)</span> {</span> <span class="keyword">return</span> createModule(exports); });
+    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>If none of the above, then assume a browser, without AMD modules</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    root.mp3Parser = createModule({});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Attach a <code>noConflict</code> method onto the <code>mp3Parser</code> global</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    root.mp3Parser.noConflict = (<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Save a reference to the previous value of &#39;mp3Parser&#39;, so that it can be restored later
+ on, if &#39;noConflict&#39; is used</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> previousMp3Parser = root.mp3Parser;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Run in no-conflict mode, setting the <code>mp3Parser</code> global to to its previous value.
+ Returns <code>mp3Parser</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+            <span class="keyword">var</span> mp3Parser = root.mp3Parser;
+            root.mp3Parser = previousMp3Parser;
+            mp3Parser.noConflict = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> mp3Parser; };
+            <span class="keyword">return</span> mp3Parser;
+        };
+    }());
+}(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span> <span class="params">(mp3Parser)</span> {</span>
+    <span class="string">"use strict"</span>;
+
+    <span class="keyword">var</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>Produce octet&#39;s binary representation as a string</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        octetToBinRep = (<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
+            <span class="keyword">var</span> b = []; <span class="comment">// The binary representation</span>
+            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">(octet)</span> {</span>
+                b[<span class="number">0</span>] = ((octet &amp; <span class="number">128</span>) === <span class="number">128</span> ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">1</span>] = ((octet &amp; <span class="number">64</span>)  === <span class="number">64</span>  ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">2</span>] = ((octet &amp; <span class="number">32</span>)  === <span class="number">32</span>  ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">3</span>] = ((octet &amp; <span class="number">16</span>)  === <span class="number">16</span>  ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">4</span>] = ((octet &amp; <span class="number">8</span>)   === <span class="number">8</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">5</span>] = ((octet &amp; <span class="number">4</span>)   === <span class="number">4</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">6</span>] = ((octet &amp; <span class="number">2</span>)   === <span class="number">2</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                b[<span class="number">7</span>] = ((octet &amp; <span class="number">1</span>)   === <span class="number">1</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
+                <span class="keyword">return</span> b.join(<span class="string">""</span>);
+            };
+        }()),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Decode a <a href="http://en.wikipedia.org/wiki/Synchsafe">synchsafe</a> value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        unsynchsafe = <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
+            <span class="keyword">var</span> out = <span class="number">0</span>,
+                mask = <span class="number">0x7F000000</span>;
+
+            <span class="keyword">while</span> (mask) {
+                out &gt;&gt;= <span class="number">1</span>;
+                out |= value &amp; mask;
+                mask &gt;&gt;= <span class="number">8</span>;
+            }
+
+            <span class="keyword">return</span> out;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Get a value indicating whether <code>buffer</code> (a DataView) contains <code>sequence</code> (a string)
+ starting at <code>offset</code>. Will return the <code>sequence</code> itself if it does, false otherwise</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        isReadableSequence = <span class="function"><span class="keyword">function</span> <span class="params">(sequence, buffer, offset)</span> {</span>
+            <span class="keyword">for</span> (<span class="keyword">var</span> i = sequence.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {
+                <span class="keyword">if</span> (sequence.charCodeAt(i) !== buffer.getUint8(offset + i)) { <span class="keyword">return</span> <span class="literal">false</span>; }
+            }
+            <span class="keyword">return</span> sequence;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        v1l3Bitrates = {
+            <span class="string">"0000"</span>: <span class="string">"free"</span>,
+            <span class="string">"0001"</span>: <span class="number">32</span>,
+            <span class="string">"0010"</span>: <span class="number">40</span>,
+            <span class="string">"0011"</span>: <span class="number">48</span>,
+            <span class="string">"0100"</span>: <span class="number">56</span>,
+            <span class="string">"0101"</span>: <span class="number">64</span>,
+            <span class="string">"0110"</span>: <span class="number">80</span>,
+            <span class="string">"0111"</span>: <span class="number">96</span>,
+            <span class="string">"1000"</span>: <span class="number">112</span>,
+            <span class="string">"1001"</span>: <span class="number">128</span>,
+            <span class="string">"1010"</span>: <span class="number">160</span>,
+            <span class="string">"1011"</span>: <span class="number">192</span>,
+            <span class="string">"1100"</span>: <span class="number">224</span>,
+            <span class="string">"1101"</span>: <span class="number">256</span>,
+            <span class="string">"1110"</span>: <span class="number">320</span>,
+            <span class="string">"1111"</span>: <span class="string">"bad"</span>
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        v1l3SamplingRates = {
+            <span class="string">"00"</span>: <span class="number">44100</span>,
+            <span class="string">"01"</span>: <span class="number">48000</span>,
+            <span class="string">"10"</span>: <span class="number">32000</span>,
+            <span class="string">"11"</span>: <span class="string">"reserved"</span>
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        v1l3ChannelModes = {
+            <span class="string">"00"</span>: <span class="string">"Stereo"</span>,
+            <span class="string">"01"</span>: <span class="string">"Joint stereo (Stereo)"</span>,
+            <span class="string">"10"</span>: <span class="string">"Dual channel (Stereo)"</span>,
+            <span class="string">"11"</span>: <span class="string">"Single channel (Mono)"</span>
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <h3>Notes</h3>
+<p>The parser exposes a collection of <code>read____</code> methods, each dedicated to reading a specific
+ section of the mp3 file. The current implementation includes <code>readFrameHeader</code>, <code>readFrame</code>,
+ <code>readId3v2Tag</code> and <code>readXingTag</code>. Each of these accepts a DataView-wrapped ArrayBuffer,
+ which should contain the actual mp3 data, and optionally an offset into the buffer.</p>
+<p>All methods return a description of the section read in the form of a hash containing
+ key-value pairs relevant to the section. For example the hash returned from
+ <code>readFrameHeader</code> always contains an <code>mpegAudioVersion</code> key of value &quot;MPEG Version 1
+ (ISO/IEC 11172-3)&quot; and a <code>layerDescription</code> key of value &quot;Layer III&quot;. A description will
+ always have a <code>_section</code> hash with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p>
+<ul>
+<li><code>type</code>: &quot;frame&quot;, &quot;frameHeader&quot;, &quot;Xing&quot; or &quot;ID3&quot;</li>
+<li><code>byteLenfth</code>: Size of the section in bytes</li>
+<li><code>offset</code>: Buffer offset at which this section resides</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <h3>Read a Frame Header</h3>
+<p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
+ that no frame header is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readFrameHeader = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="number">0</span>);
+
+        <span class="keyword">var</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>To store the header&#39;s four bytes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            b1, b2, b3, b4,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>The header</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            header = {
+                _info: {
+                    type: <span class="string">"frameHeader"</span>,
+                    byteLength: <span class="number">4</span>,
+                    offset: offset
+                }
+            };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>There should be more than 4bytes ahead</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (buffer.byteLength &lt;= offset + <span class="number">4</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+
+        b1 = buffer.getUint8(offset);
+        b2 = buffer.getUint8(offset + <span class="number">1</span>);
+        b3 = buffer.getUint8(offset + <span class="number">2</span>);
+        b4 = buffer.getUint8(offset + <span class="number">3</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>First octet: <code>11111111</code>: Frame sync (all bits must be set)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (b1 !== <span class="number">255</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Second octet: <code>11111011</code> or <code>11111010</code></p>
+<ul>
+<li><code>111.....</code>: Rest of frame sync (all bits must be set)</li>
+<li><code>...11...</code>: MPEG Audio version ID (11 -&gt; MPEG Version 1 (ISO/IEC 11172-3))</li>
+<li><code>.....01.</code>: Layer description (01 -&gt; Layer III)</li>
+<li><code>.......1</code>: Protection bit (1 = Not protected)</li>
+</ul>
+<p>Require the seven most significant bits to be <code>1111101</code> (&gt;= 250)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (b2 &lt; <span class="number">250</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+
+        header.mpegAudioVersionBits = <span class="string">"11"</span>;
+        header.mpegAudioVersion = <span class="string">"MPEG Version 1 (ISO/IEC 11172-3)"</span>;
+        header.layerDescriptionBits = <span class="string">"01"</span>;
+        header.layerDescription = <span class="string">"Layer III"</span>;
+        header.isProtected = b2 &amp; <span class="number">1</span>; <span class="comment">// Just check if last bit is set</span>
+        header.protectionBit = header.isProtected ? <span class="string">"1"</span> : <span class="string">"0"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Third octet: <code>EEEEFFGH</code></p>
+<ul>
+<li><code>EEEE....</code>: Bitrate index. 1111 is invalid, everything else is accepted</li>
+<li><code>....FF..</code>: Sampling rate, 00=44100, 01=48000, 10=32000, 11=reserved</li>
+<li><code>......G.</code>: Padding bit, 0=frame not padded, 1=frame padded</li>
+<li><code>.......H</code>: Private bit. This is informative</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        b3 = octetToBinRep(b3);
+        header.bitrateBits = b3.substr(<span class="number">0</span>, <span class="number">4</span>);
+        header.bitrate = v1l3Bitrates[header.bitrateBits];
+        <span class="keyword">if</span> (header.bitrate === <span class="string">"bad"</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+
+        header.samplingRateBits = b3.substr(<span class="number">4</span>, <span class="number">2</span>);
+        header.samplingRate = v1l3SamplingRates[header.samplingRateBits];
+        <span class="keyword">if</span> (header.samplingRate === <span class="string">"reserved"</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+
+        header.frameIsPaddedBit = b3.substr(<span class="number">6</span>, <span class="number">1</span>);
+        header.frameIsPadded = header.frameIsPaddedBit === <span class="string">"1"</span>;
+        header.framePadding = header.frameIsPadded ? <span class="number">1</span> : <span class="number">0</span>;
+
+        header.privateBit = b3.substr(<span class="number">7</span>, <span class="number">1</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Fourth octet: <code>IIJJKLMM</code></p>
+<ul>
+<li><code>II......</code>: Channel mode</li>
+<li><code>..JJ....</code>: Mode extension (only if joint stereo)</li>
+<li><code>....K...</code>: Copyright</li>
+<li><code>.....L..</code>: Original</li>
+<li><code>......MM</code>: Emphasis</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        b4 = octetToBinRep(b4);
+        header.channelModeBits = b4.substr(<span class="number">0</span>, <span class="number">2</span>);
+        header.channelMode = v1l3ChannelModes[header.channelModeBits];
+
+        <span class="keyword">return</span> header;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h3>Read a Frame</h3>
+<p>Read frame (header + info) located at <code>offset</code> of DataView <code>buffer</code>. If <code>requireNextFrame</code>
+ is set, the presence of a next valid frame will be required for <em>this</em> frame to be regarded
+ as valid. Returns null in the event that no frame is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readFrame = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, requireNextFrame)</span> {</span>
+        offset || (offset = <span class="number">0</span>);
+
+        <span class="keyword">var</span> header = mp3Parser.readFrameHeader(buffer, offset),
+            frame = <span class="literal">null</span>;
+
+        <span class="keyword">if</span> (!header) { <span class="keyword">return</span> <span class="literal">null</span>; }
+
+        frame = {
+            _info: {
+                type: <span class="string">"frame"</span>,
+                offset: offset
+            },
+            header: header
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>The num of samples per v1l3 frame is constant - always 1152</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        frame._info.sampleLength = <span class="number">1152</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>// magic formula - see <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        frame._info.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
+        frame._info.nextFrameIndex = offset + frame._info.byteLength;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>No &quot;Xing&quot; or &quot;Info&quot; identifier should live at octet 36 - this would indicate that this
+ is in fact a Xing tag masquerading as a frame</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (isReadableSequence(<span class="string">"Xing"</span>, buffer, offset + <span class="number">36</span>) || isReadableSequence(<span class="string">"Info"</span>, buffer, offset + <span class="number">36</span>)) {
+            <span class="keyword">return</span> <span class="literal">null</span>;
+        }
+
+        <span class="keyword">if</span> (requireNextFrame &amp;&amp; !mp3Parser.readFrameHeader(buffer, frame._info.nextFrameIndex)) {
+            <span class="keyword">return</span> <span class="literal">null</span>;
+        }
+
+        <span class="keyword">return</span> frame;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <h3>Read the Last Frame</h3>
+<p>Locate and read the very last valid mp3 frame (header + info) in given DataView <code>buffer</code>.
+ The search is carried out in reverse, from given <code>offset</code> (or the very last octet if
+ <code>offset</code> is ommitted) to the first octet in the buffer. If <code>requireNextFrame</code> is set, the
+ presence of a next valid frame will be required for any found frame to be regarded as valid
+ (causing the method to return the next-to-last frame on success). Returns null in the event
+ that no frame is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readLastFrame = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, requireNextFrame)</span> {</span>
+        offset || (offset = buffer.byteLength - <span class="number">1</span>);
+
+        <span class="keyword">var</span> searchIndex = offset,
+            lastFrame = <span class="literal">null</span>;
+
+        <span class="keyword">for</span> (; searchIndex &gt;= <span class="number">0</span>; --searchIndex) {
+            <span class="keyword">if</span> (buffer.getUint8(searchIndex) === <span class="number">255</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Located a candidate frame as 255 is a possible frame-sync byte</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                lastFrame = mp3Parser.readFrame(buffer, searchIndex, requireNextFrame);
+                <span class="keyword">if</span> (lastFrame) { <span class="keyword">return</span> lastFrame; }
+            }
+        }
+
+        <span class="keyword">return</span> <span class="literal">null</span>;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <h3>Read the ID3v2 Tag</h3>
+<p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
+ null in the event that no frame is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readId3v2Tag = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>The ID3v2 tag header, which should be the first information in the file, is 10 bytes:</p>
+<ul>
+<li>identifier: 3 octets, always &quot;ID3&quot; (0x49/73, 0x44/68, 0x33/51)</li>
+<li>version:    2 octets, major version + revision number</li>
+<li>flags:      1 octet: abc00000. a:unsynchronisation, b:extended header, c:experimental</li>
+<li>size:       4 octets for the tag size. Only 28bits are used to avoid bogus frame-sync</li>
+</ul>
+<p>ID3</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (buffer.getUint8(offset) !== <span class="number">73</span> || buffer.getUint8(offset + <span class="number">1</span>) !== <span class="number">68</span> || buffer.getUint8(offset + <span class="number">2</span>) !== <span class="number">51</span>) {
+            <span class="keyword">return</span> <span class="literal">null</span>;
+        }
+
+        <span class="keyword">var</span> flagsOctet = buffer.getUint8(offset + <span class="number">5</span>),
+            tag = {
+                _info: {
+                    type: <span class="string">"ID3v2"</span>,
+                    offset: offset
+                },
+                header: {
+                    majorVersion: buffer.getUint8(offset + <span class="number">3</span>),
+                    minorRevision: buffer.getUint8(offset + <span class="number">4</span>),
+                    flagsOctet: flagsOctet,
+                    unsynchronisationFlag: (flagsOctet &amp; <span class="number">128</span>) === <span class="number">128</span>,
+                    extendedHeaderFlag: (flagsOctet &amp; <span class="number">64</span>) === <span class="number">64</span>,
+                    experimentalIndicatorFlag: (flagsOctet &amp; <span class="number">32</span>) === <span class="number">32</span>,
+                    size: unsynchsafe(buffer.getUint32(offset + <span class="number">6</span>))
+                }
+            };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>The size as expressed in the header is the size of the complete tag after
+ unsychronisation, including padding, excluding the header but not excluding the
+ extended header (total tag size - 10)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        tag._info.byteLength = tag.header.size + <span class="number">10</span>;
+
+        <span class="keyword">return</span> tag;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <h3>Read the Xing Tag</h3>
+<p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
+ DataView <code>buffer</code>. Returns null in the event that no frame is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readXingTag = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="number">0</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>The Xing header begins with a valid frame header</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> header = mp3Parser.readFrameHeader(buffer, offset),
+            tag = <span class="literal">null</span>;
+
+        <span class="keyword">if</span> (!header) { <span class="keyword">return</span> <span class="literal">null</span>; }
+
+        tag = {
+            _info: {
+                type: <span class="string">"Xing"</span>,
+                offset: offset
+            },
+            header: header
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>The &quot;Xing&quot; or &quot;Info&quot; identifier should live at octet 36</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        (tag.identifier = isReadableSequence(<span class="string">"Xing"</span>, buffer, offset + <span class="number">36</span>)) ||
+        (tag.identifier = isReadableSequence(<span class="string">"Info"</span>, buffer, offset + <span class="number">36</span>));
+        <span class="keyword">if</span> (!tag.identifier) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>// magic formula - see <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        tag._info.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
+        tag._info.nextFrameIndex = offset + tag._info.byteLength;
+
+        <span class="keyword">return</span> tag;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap for-h3">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <h3>Read all Tags up to First Frame</h3>
+<p><a href="http://www.rengels.de/computer/mp3tags.html">http://www.rengels.de/computer/mp3tags.html</a>
+<a href="http://stackoverflow.com/q/5005476/612262">http://stackoverflow.com/q/5005476/612262</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readTags = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="number">0</span>);
+
+        <span class="keyword">var</span> sections = [],
+            section = <span class="literal">null</span>,
+            readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame],
+            foundFirstFrame = <span class="literal">false</span>,
+            i = <span class="number">0</span>,
+            numOfReaders = readers.length,
+            bufferLength = buffer.buffer.byteLength;
+
+        <span class="keyword">for</span> (; offset &lt; bufferLength &amp;&amp; !foundFirstFrame; ++offset) {
+            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; numOfReaders; ++i) {
+                section = readers[i](buffer, offset);
+                <span class="keyword">if</span> (section) {
+                    sections.push(section);
+                    offset += section._info.byteLength;
+
+                    <span class="keyword">if</span> (section._info.type === <span class="string">"frame"</span>) {
+                        foundFirstFrame = <span class="literal">true</span>;
+                        <span class="keyword">break</span>;
+                    }
+
+                    i = -<span class="number">1</span>; <span class="keyword">continue</span>;
+                }
+            }
+        }
+
+        <span class="keyword">return</span> sections;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Attach the <code>version</code> property to mp3 Parser and return it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    Object.defineProperties(mp3Parser, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Get current version of mp3-parser</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.0"</span>; } }
+    });
+
+    <span class="keyword">return</span> mp3Parser;
+}));</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
