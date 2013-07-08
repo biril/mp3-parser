@@ -27,7 +27,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <pre><code>mp3-parser v0.1.0
+              <pre><code>mp3-parser v0.1.1
 
 https://github.com/biril/mp3-parser
 Licensed and freely distributed under the MIT License
@@ -371,7 +371,7 @@ e.g. Node</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>            header = {
-                _info: {
+                _section: {
                     type: <span class="string">"frameHeader"</span>,
                     byteLength: <span class="number">4</span>,
                     offset: offset
@@ -528,7 +528,7 @@ e.g. Node</p>
         <span class="keyword">if</span> (!header) { <span class="keyword">return</span> <span class="literal">null</span>; }
 
         frame = {
-            _info: {
+            _section: {
                 type: <span class="string">"frame"</span>,
                 offset: offset
             },
@@ -548,7 +548,7 @@ e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        frame._info.sampleLength = <span class="number">1152</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        frame._section.sampleLength = <span class="number">1152</span>;</pre></div></div>
             
         </li>
         
@@ -563,8 +563,8 @@ e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        frame._info.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
-        frame._info.nextFrameIndex = offset + frame._info.byteLength;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        frame._section.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
+        frame._section.nextFrameIndex = offset + frame._section.byteLength;</pre></div></div>
             
         </li>
         
@@ -584,7 +584,7 @@ e.g. Node</p>
             <span class="keyword">return</span> <span class="literal">null</span>;
         }
 
-        <span class="keyword">if</span> (requireNextFrame &amp;&amp; !mp3Parser.readFrameHeader(buffer, frame._info.nextFrameIndex)) {
+        <span class="keyword">if</span> (requireNextFrame &amp;&amp; !mp3Parser.readFrameHeader(buffer, frame._section.nextFrameIndex)) {
             <span class="keyword">return</span> <span class="literal">null</span>;
         }
 
@@ -684,7 +684,7 @@ e.g. Node</p>
 
         <span class="keyword">var</span> flagsOctet = buffer.getUint8(offset + <span class="number">5</span>),
             tag = {
-                _info: {
+                _section: {
                     type: <span class="string">"ID3v2"</span>,
                     offset: offset
                 },
@@ -714,7 +714,7 @@ e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        tag._info.byteLength = tag.header.size + <span class="number">10</span>;
+            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = tag.header.size + <span class="number">10</span>;
 
         <span class="keyword">return</span> tag;
     };</pre></div></div>
@@ -756,7 +756,7 @@ e.g. Node</p>
         <span class="keyword">if</span> (!header) { <span class="keyword">return</span> <span class="literal">null</span>; }
 
         tag = {
-            _info: {
+            _section: {
                 type: <span class="string">"Xing"</span>,
                 offset: offset
             },
@@ -793,8 +793,8 @@ e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        tag._info.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
-        tag._info.nextFrameIndex = offset + tag._info.byteLength;
+            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
+        tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         <span class="keyword">return</span> tag;
     };</pre></div></div>
@@ -830,9 +830,9 @@ e.g. Node</p>
                 section = readers[i](buffer, offset);
                 <span class="keyword">if</span> (section) {
                     sections.push(section);
-                    offset += section._info.byteLength;
+                    offset += section._section.byteLength;
 
-                    <span class="keyword">if</span> (section._info.type === <span class="string">"frame"</span>) {
+                    <span class="keyword">if</span> (section._section.type === <span class="string">"frame"</span>) {
                         foundFirstFrame = <span class="literal">true</span>;
                         <span class="keyword">break</span>;
                     }
@@ -873,7 +873,7 @@ e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.0"</span>; } }
+            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.1"</span>; } }
     });
 
     <span class="keyword">return</span> mp3Parser;
