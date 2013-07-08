@@ -152,7 +152,7 @@
 
             // The header
             header = {
-                _info: {
+                _section: {
                     type: "frameHeader",
                     byteLength: 4,
                     offset: offset
@@ -238,7 +238,7 @@
         if (!header) { return null; }
 
         frame = {
-            _info: {
+            _section: {
                 type: "frame",
                 offset: offset
             },
@@ -246,11 +246,11 @@
         };
 
         // The num of samples per v1l3 frame is constant - always 1152
-        frame._info.sampleLength = 1152;
+        frame._section.sampleLength = 1152;
 
         //// magic formula - see http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm
-        frame._info.byteLength = Math.floor((144000 * header.bitrate / header.samplingRate) + header.framePadding);
-        frame._info.nextFrameIndex = offset + frame._info.byteLength;
+        frame._section.byteLength = Math.floor((144000 * header.bitrate / header.samplingRate) + header.framePadding);
+        frame._section.nextFrameIndex = offset + frame._section.byteLength;
 
         // No "Xing" or "Info" identifier should live at octet 36 - this would indicate that this
         //  is in fact a Xing tag masquerading as a frame
@@ -258,7 +258,7 @@
             return null;
         }
 
-        if (requireNextFrame && !mp3Parser.readFrameHeader(buffer, frame._info.nextFrameIndex)) {
+        if (requireNextFrame && !mp3Parser.readFrameHeader(buffer, frame._section.nextFrameIndex)) {
             return null;
         }
 
@@ -313,7 +313,7 @@
 
         var flagsOctet = buffer.getUint8(offset + 5),
             tag = {
-                _info: {
+                _section: {
                     type: "ID3v2",
                     offset: offset
                 },
@@ -331,7 +331,7 @@
         // The size as expressed in the header is the size of the complete tag after
         //  unsychronisation, including padding, excluding the header but not excluding the
         //  extended header (total tag size - 10)
-        tag._info.byteLength = tag.header.size + 10;
+        tag._section.byteLength = tag.header.size + 10;
 
         return tag;
     };
@@ -351,7 +351,7 @@
         if (!header) { return null; }
 
         tag = {
-            _info: {
+            _section: {
                 type: "Xing",
                 offset: offset
             },
@@ -364,8 +364,8 @@
         if (!tag.identifier) { return null; }
 
         //// magic formula - see http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm
-        tag._info.byteLength = Math.floor((144000 * header.bitrate / header.samplingRate) + header.framePadding);
-        tag._info.nextFrameIndex = offset + tag._info.byteLength;
+        tag._section.byteLength = Math.floor((144000 * header.bitrate / header.samplingRate) + header.framePadding);
+        tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         return tag;
     };
@@ -391,9 +391,9 @@
                 section = readers[i](buffer, offset);
                 if (section) {
                     sections.push(section);
-                    offset += section._info.byteLength;
+                    offset += section._section.byteLength;
 
-                    if (section._info.type === "frame") {
+                    if (section._section.type === "frame") {
                         foundFirstFrame = true;
                         break;
                     }
