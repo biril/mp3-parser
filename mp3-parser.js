@@ -1,4 +1,4 @@
-//     mp3-parser v0.1.0
+//     mp3-parser v0.1.1
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
@@ -410,7 +410,7 @@
     Object.defineProperties(mp3Parser, {
 
         // Get current version of mp3-parser
-        version: { get: function () { return "0.1.0"; } }
+        version: { get: function () { return "0.1.1"; } }
     });
 
     return mp3Parser;
