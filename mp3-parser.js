@@ -312,10 +312,8 @@
         // * flags:      1 octet: abc00000. a:unsynchronisation, b:extended header, c:experimental
         // * size:       4 octets for the tag size. Only 28bits are used to avoid bogus frame-sync
 
-        // ID3
-        if (buffer.getUint8(offset) !== 73 || buffer.getUint8(offset + 1) !== 68 || buffer.getUint8(offset + 2) !== 51) {
-            return null;
-        }
+        // Check for the presense of ID3 identifier
+        if (!isReadableSequence("ID3", buffer, offset)) { return null; }
 
         var flagsOctet = buffer.getUint8(offset + 5),
             tag = {
