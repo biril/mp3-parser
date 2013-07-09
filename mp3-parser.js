@@ -85,6 +85,12 @@
             return sequence;
         },
 
+        // Get the number of bytes in a frame given its `bitrate`, `samplingRate` and `padding`.
+        //  Based on [a magic formula](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm)
+        getFrameByteLength = function (bitrate, samplingRate, padding) {
+            return Math.floor((144000 * bitrate / samplingRate) + padding);
+        },
+
         //
         v1l3Bitrates = {
             "0000": "free",
@@ -248,8 +254,8 @@
         // The num of samples per v1l3 frame is constant - always 1152
         frame._section.sampleLength = 1152;
 
-        //// magic formula - see http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm
-        frame._section.byteLength = Math.floor((144000 * header.bitrate / header.samplingRate) + header.framePadding);
+        //
+        frame._section.byteLength = getFrameByteLength(header.bitrate, header.samplingRate, header.framePadding);
         frame._section.nextFrameIndex = offset + frame._section.byteLength;
 
         // No "Xing" or "Info" identifier should live at octet 36 - this would indicate that this
@@ -363,8 +369,8 @@
         (tag.identifier = isReadableSequence("Info", buffer, offset + 36));
         if (!tag.identifier) { return null; }
 
-        //// magic formula - see http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm
-        tag._section.byteLength = Math.floor((144000 * header.bitrate / header.samplingRate) + header.framePadding);
+        //
+        tag._section.byteLength = getFrameByteLength(header.bitrate, header.samplingRate, header.framePadding);
         tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         return tag;
