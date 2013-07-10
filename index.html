@@ -27,7 +27,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <pre><code>mp3-parser v0.1.2
+              <pre><code>mp3-parser v0.1.3
 
 https://github.com/biril/mp3-parser
 Licensed and freely distributed under the MIT License
@@ -50,13 +50,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
               <p>Expose as a module or global depending on the detected environment:</p>
-<p>A global <code>exports</code> object signifies CommonJS-like enviroments that support <code>module.exports</code>,
-e.g. Node</p>
+<p>Global <code>define</code> method with <code>amd</code> property signifies an AMD loader (require.js, curl.js, ..)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (Object.prototype.toString.call(exports) === <span class="string">"[object Object]"</span>) {
-        <span class="keyword">return</span> createModule(exports);
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd) {
+        <span class="keyword">return</span> define([<span class="string">"exports"</span>], <span class="function"><span class="keyword">function</span> <span class="params">(exports)</span> {</span> <span class="keyword">return</span> createModule(exports); });
     }</pre></div></div>
             
         </li>
@@ -68,14 +67,11 @@ e.g. Node</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>A global <code>define</code> method with an <code>amd</code> property signifies the presence of an AMD loader
- (require.js, curl.js, ..)</p>
+              <p>Global <code>exports</code> object signifies CommonJS enviroments with <code>module.exports</code>, e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (Object.prototype.toString.call(define) === <span class="string">"[object Object]"</span> &amp;&amp; define.amd) {
-        <span class="keyword">return</span> define([<span class="string">"exports"</span>], <span class="function"><span class="keyword">function</span> <span class="params">(exports)</span> {</span> <span class="keyword">return</span> createModule(exports); });
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span>) { <span class="keyword">return</span> createModule(exports); }</pre></div></div>
             
         </li>
         
@@ -86,7 +82,7 @@ e.g. Node</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>If none of the above, then assume a browser, without AMD modules</p>
+              <p>If none of the above, then assume a browser, without AMD</p>
 
             </div>
             
@@ -233,6 +229,24 @@ e.g. Node</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
+              <p>Get the number of bytes in a frame given its <code>bitrate</code>, <code>samplingRate</code> and <code>padding</code>.
+ Based on <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">a magic formula</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        getFrameByteLength = <span class="function"><span class="keyword">function</span> <span class="params">(bitrate, samplingRate, padding)</span> {</span>
+            <span class="keyword">return</span> Math.floor((<span class="number">144000</span> * bitrate / samplingRate) + padding);
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
               
             </div>
             
@@ -258,11 +272,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-12">
+        <li id="section-13">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-12">&#182;</a>
+                <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
               
             </div>
@@ -277,11 +291,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-13">
+        <li id="section-14">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-13">&#182;</a>
+                <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
               
             </div>
@@ -296,11 +310,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-14">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-14">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <h3>Notes</h3>
 <p>The parser exposes a collection of <code>read____</code> methods, each dedicated to reading a specific
@@ -325,11 +339,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <h3>Read a Frame Header</h3>
 <p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
@@ -345,11 +359,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>To store the header&#39;s four bytes</p>
 
@@ -360,11 +374,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>The header</p>
 
@@ -381,11 +395,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>There should be more than 4bytes ahead</p>
 
@@ -401,11 +415,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
               <p>First octet: <code>11111111</code>: Frame sync (all bits must be set)</p>
 
@@ -416,11 +430,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-21">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Second octet: <code>11111011</code> or <code>11111010</code></p>
 <ul>
@@ -445,11 +459,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Third octet: <code>EEEEFFGH</code></p>
 <ul>
@@ -479,11 +493,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Fourth octet: <code>IIJJKLMM</code></p>
 <ul>
@@ -506,11 +520,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <h3>Read a Frame</h3>
 <p>Read frame (header + info) located at <code>offset</code> of DataView <code>buffer</code>. If <code>requireNextFrame</code>
@@ -538,11 +552,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>The num of samples per v1l3 frame is constant - always 1152</p>
 
@@ -553,27 +567,26 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-25">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
-              </div>
-              <p>// magic formula - see <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm</a></p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame._section.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
-        frame._section.nextFrameIndex = offset + frame._section.byteLength;</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        frame._section.byteLength = getFrameByteLength(header.bitrate, header.samplingRate, header.framePadding);
+        frame._section.nextFrameIndex = offset + frame._section.byteLength;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>No &quot;Xing&quot; or &quot;Info&quot; identifier should live at octet 36 - this would indicate that this
  is in fact a Xing tag masquerading as a frame</p>
@@ -594,11 +607,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <h3>Read the Last Frame</h3>
 <p>Locate and read the very last valid mp3 frame (header + info) in given DataView <code>buffer</code>.
@@ -622,11 +635,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>Located a candidate frame as 255 is a possible frame-sync byte</p>
 
@@ -643,11 +656,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <h3>Read the ID3v2 Tag</h3>
 <p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
@@ -661,11 +674,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>The ID3v2 tag header, which should be the first information in the file, is 10 bytes:</p>
 <ul>
@@ -674,13 +687,11 @@ e.g. Node</p>
 <li>flags:      1 octet: abc00000. a:unsynchronisation, b:extended header, c:experimental</li>
 <li>size:       4 octets for the tag size. Only 28bits are used to avoid bogus frame-sync</li>
 </ul>
-<p>ID3</p>
+<p>Check for the presense of ID3 identifier</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (buffer.getUint8(offset) !== <span class="number">73</span> || buffer.getUint8(offset + <span class="number">1</span>) !== <span class="number">68</span> || buffer.getUint8(offset + <span class="number">2</span>) !== <span class="number">51</span>) {
-            <span class="keyword">return</span> <span class="literal">null</span>;
-        }
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!isReadableSequence(<span class="string">"ID3"</span>, buffer, offset)) { <span class="keyword">return</span> <span class="literal">null</span>; }
 
         <span class="keyword">var</span> flagsOctet = buffer.getUint8(offset + <span class="number">5</span>),
             tag = {
@@ -702,11 +713,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>The size as expressed in the header is the size of the complete tag after
  unsychronisation, including padding, excluding the header but not excluding the
@@ -722,11 +733,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <h3>Read the Xing Tag</h3>
 <p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
@@ -740,11 +751,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>The Xing header begins with a valid frame header</p>
 
@@ -766,11 +777,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>The &quot;Xing&quot; or &quot;Info&quot; identifier should live at octet 36</p>
 
@@ -783,17 +794,16 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <p>// magic formula - see <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm</a></p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = Math.floor((<span class="number">144000</span> * header.bitrate / header.samplingRate) + header.framePadding);
+            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = getFrameByteLength(header.bitrate, header.samplingRate, header.framePadding);
         tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         <span class="keyword">return</span> tag;
@@ -802,11 +812,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <h3>Read all Tags up to First Frame</h3>
 <p><a href="http://www.rengels.de/computer/mp3tags.html">http://www.rengels.de/computer/mp3tags.html</a>
@@ -848,11 +858,11 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Attach the <code>version</code> property to mp3 Parser and return it</p>
 
@@ -863,17 +873,17 @@ e.g. Node</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Get current version of mp3-parser</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.2"</span>; } }
+            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.3"</span>; } }
     });
 
     <span class="keyword">return</span> mp3Parser;
