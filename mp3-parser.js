@@ -11,19 +11,15 @@
 
     // Expose as a module or global depending on the detected environment:
 
-    // A global `exports` object signifies CommonJS-like enviroments that support `module.exports`,
-    // e.g. Node
-    if (Object.prototype.toString.call(exports) === "[object Object]") {
-        return createModule(exports);
-    }
-
-    // A global `define` method with an `amd` property signifies the presence of an AMD loader
-    //  (require.js, curl.js, ..)
-    if (Object.prototype.toString.call(define) === "[object Object]" && define.amd) {
+    // Global `define` method with `amd` property signifies an AMD loader (require.js, curl.js, ..)
+    if (typeof define === "function" && define.amd) {
         return define(["exports"], function (exports) { return createModule(exports); });
     }
 
-    // If none of the above, then assume a browser, without AMD modules
+    // Global `exports` object signifies CommonJS enviroments with `module.exports`, e.g. Node
+    if (typeof exports === "object") { return createModule(exports); }
+
+    // If none of the above, then assume a browser, without AMD
     root.mp3Parser = createModule({});
 
     // Attach a `noConflict` method onto the `mp3Parser` global
