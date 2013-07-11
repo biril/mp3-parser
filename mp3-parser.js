@@ -74,6 +74,8 @@
 
         // Get a value indicating whether `buffer` (a DataView) contains `sequence` (a string)
         //  starting at `offset`. Will return the `sequence` itself if it does, false otherwise
+        //  Note that no check is made for the adequate length of given buffer as this will be
+        //  carried out be the caller as part of the section-parsing process
         isReadableSequence = function (sequence, buffer, offset) {
             for (var i = sequence.length - 1; i >= 0; i--) {
                 if (sequence.charCodeAt(i) !== buffer.getUint8(offset + i)) { return false; }
@@ -308,6 +310,9 @@
         // * flags:      1 octet: abc00000. a:unsynchronisation, b:extended header, c:experimental
         // * size:       4 octets for the tag size. Only 28bits are used to avoid bogus frame-sync
 
+        // There should be at least 10 bytes ahead
+        if (buffer.byteLength < offset + 10) { return null; }
+
         // Check for the presense of ID3 identifier
         if (!isReadableSequence("ID3", buffer, offset)) { return null; }
 
@@ -357,6 +362,9 @@
             },
             header: header
         };
+
+        // There should be at least 36 + 4 = 40 bytes ahead
+        if (buffer.byteLength < offset + 40) { return null; }
 
         // The "Xing" or "Info" identifier should live at octet 36
         (tag.identifier = isReadableSequence("Xing", buffer, offset + 36)) ||
