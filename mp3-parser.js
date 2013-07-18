@@ -58,7 +58,9 @@
             };
         }()),
 
-        // Decode a [synchsafe](http://en.wikipedia.org/wiki/Synchsafe) value
+        // Decode a [synchsafe](http://en.wikipedia.org/wiki/Synchsafe) value. Synchsafes are used
+        //  in ID3 tags, instead of regular ints, to avoid the unintended introduction of bogus
+        //  frame-syncs
         unsynchsafe = function (value) {
             var out = 0,
                 mask = 0x7F000000;
@@ -72,9 +74,9 @@
             return out;
         },
 
-        // Get a value indicating whether `buffer` (a DataView) contains `sequence` (a string)
-        //  starting at `offset`. Will return the `sequence` itself if it does, false otherwise
-        //  Note that no check is made for the adequate length of given buffer as this will be
+        // Get a value indicating whether given DataView `buffer` contains the `sequence` string
+        //  at `offset`. Will return the `sequence` itself if it does, false otherwise. Note that
+        //  no check is performed for the adequate length of given buffer as this will be
         //  carried out be the caller as part of the section-parsing process
         isReadableSequence = function (sequence, buffer, offset) {
             for (var i = sequence.length - 1; i >= 0; i--) {
@@ -143,6 +145,7 @@
     //  * `offset`: Buffer offset at which this section resides
     mp3Parser;
 
+
     // ### Read a Frame Header
     //
     // Read header of frame located at `offset` of DataView `buffer`. Returns null in the event
@@ -151,10 +154,10 @@
         offset || (offset = 0);
 
         var
-            // To store the header's four bytes
+            // The header's four bytes
             b1, b2, b3, b4,
 
-            // The header
+            //
             header = {
                 _section: {
                     type: "frameHeader",
@@ -230,38 +233,40 @@
 
     // ### Read a Frame
     //
-    // Read frame (header + info) located at `offset` of DataView `buffer`. If `requireNextFrame`
-    //  is set, the presence of a next valid frame will be required for _this_ frame to be regarded
-    //  as valid. Returns null in the event that no frame is found at `offset`
+    // Read frame located at `offset` of DataView `buffer`. Will acquire the frame header (see
+    //  `readFrameHeader`) plus some basic information about the frame - notably the length if the
+    //  frame in bytes. If `requireNextFrame` is set, the presence of a next valid frame will be
+    //  required for _this_ frame to be regarded as valid. Returns null in the event that no frame
+    //  is found at `offset`
     mp3Parser.readFrame = function (buffer, offset, requireNextFrame) {
         offset || (offset = 0);
 
-        var header = mp3Parser.readFrameHeader(buffer, offset),
-            frame = null;
+        var frame = {
+                _section: {
+                    type: "frame",
+                    offset: offset
+                },
+                header: mp3Parser.readFrameHeader(buffer, offset)
+            };
 
-        if (!header) { return null; }
-
-        frame = {
-            _section: {
-                type: "frame",
-                offset: offset
-            },
-            header: header
-        };
+        // Frame should alwas begin with a valid header
+        if (!frame.header) { return null; }
 
         // The num of samples per v1l3 frame is constant - always 1152
         frame._section.sampleLength = 1152;
 
         //
-        frame._section.byteLength = getFrameByteLength(header.bitrate, header.samplingRate, header.framePadding);
+        frame._section.byteLength = getFrameByteLength(frame.header.bitrate, frame.header.samplingRate, frame.header.framePadding);
         frame._section.nextFrameIndex = offset + frame._section.byteLength;
 
-        // No "Xing" or "Info" identifier should live at octet 36 - this would indicate that this
+        // No "Xing" or "Info" identifier should reside at octet 36 - this would indicate that this
         //  is in fact a Xing tag masquerading as a frame
         if (isReadableSequence("Xing", buffer, offset + 36) || isReadableSequence("Info", buffer, offset + 36)) {
             return null;
         }
 
+        // If a next frame is required then the data at `frame._section.nextFrameIndex` should be
+        //  a valid frame header
         if (requireNextFrame && !mp3Parser.readFrameHeader(buffer, frame._section.nextFrameIndex)) {
             return null;
         }
@@ -272,22 +277,21 @@
 
     // ### Read the Last Frame
     //
-    // Locate and read the very last valid mp3 frame (header + info) in given DataView `buffer`.
-    //  The search is carried out in reverse, from given `offset` (or the very last octet if
-    //  `offset` is ommitted) to the first octet in the buffer. If `requireNextFrame` is set, the
-    //  presence of a next valid frame will be required for any found frame to be regarded as valid
-    //  (causing the method to return the next-to-last frame on success). Returns null in the event
-    //  that no frame is found at `offset`
+    // Locate and read the very last valid frame in given DataView `buffer`. The search is carried
+    //  out in reverse, from given `offset` (or the very last octet if `offset` is ommitted) to the
+    //  first octet in the buffer. If `requireNextFrame` is set, the presence of a next valid frame
+    //  will be required for any found frame to be regarded as valid (causing the method to
+    //  essentially return the next-to-last frame on success). Returns null in the event that no
+    //  frame is found at `offset`
     mp3Parser.readLastFrame = function (buffer, offset, requireNextFrame) {
         offset || (offset = buffer.byteLength - 1);
 
-        var searchIndex = offset,
-            lastFrame = null;
+        var lastFrame = null;
 
-        for (; searchIndex >= 0; --searchIndex) {
-            if (buffer.getUint8(searchIndex) === 255) {
+        for (; offset >= 0; --offset) {
+            if (buffer.getUint8(offset) === 255) {
                 // Located a candidate frame as 255 is a possible frame-sync byte
-                lastFrame = mp3Parser.readFrame(buffer, searchIndex, requireNextFrame);
+                lastFrame = mp3Parser.readFrame(buffer, offset, requireNextFrame);
                 if (lastFrame) { return lastFrame; }
             }
         }
@@ -305,10 +309,10 @@
 
         // The ID3v2 tag header, which should be the first information in the file, is 10 bytes:
         //
-        // * identifier: 3 octets, always "ID3" (0x49/73, 0x44/68, 0x33/51)
-        // * version:    2 octets, major version + revision number
-        // * flags:      1 octet: abc00000. a:unsynchronisation, b:extended header, c:experimental
-        // * size:       4 octets for the tag size. Only 28bits are used to avoid bogus frame-sync
+        // * identifier: 3 octets: always "ID3" (0x49/73, 0x44/68, 0x33/51)
+        // * version:    2 octets: major version + revision number
+        // * flags:      1 octet : abc00000. a:unsynchronisation, b:extended header, c:experimental
+        // * size:       4 octets: tag size as a synchsafe integer
 
         // There should be at least 10 bytes ahead
         if (buffer.byteLength < offset + 10) { return null; }
@@ -349,30 +353,27 @@
     mp3Parser.readXingTag = function (buffer, offset) {
         offset || (offset = 0);
 
-        // The Xing header begins with a valid frame header
-        var header = mp3Parser.readFrameHeader(buffer, offset),
-            tag = null;
+        var tag = {
+                _section: {
+                    type: "Xing",
+                    offset: offset
+                },
+                header: mp3Parser.readFrameHeader(buffer, offset)
+            };
 
-        if (!header) { return null; }
-
-        tag = {
-            _section: {
-                type: "Xing",
-                offset: offset
-            },
-            header: header
-        };
+        // The Xing header should begin with a valid frame header
+        if (!tag.header) { return null; }
 
         // There should be at least 36 + 4 = 40 bytes ahead
         if (buffer.byteLength < offset + 40) { return null; }
 
-        // The "Xing" or "Info" identifier should live at octet 36
+        // A "Xing" or "Info" identifier should reside at octet 36
         (tag.identifier = isReadableSequence("Xing", buffer, offset + 36)) ||
         (tag.identifier = isReadableSequence("Info", buffer, offset + 36));
         if (!tag.identifier) { return null; }
 
         //
-        tag._section.byteLength = getFrameByteLength(header.bitrate, header.samplingRate, header.framePadding);
+        tag._section.byteLength = getFrameByteLength(tag.header.bitrate, tag.header.samplingRate, tag.header.framePadding);
         tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         return tag;
@@ -394,19 +395,35 @@
             numOfReaders = readers.length,
             bufferLength = buffer.buffer.byteLength;
 
+        // While we haven't located the first frame, pick the next offset ..
         for (; offset < bufferLength && !foundFirstFrame; ++offset) {
+
+            // .. And try out each of the 'readers' on it
             for (i = 0; i < numOfReaders; ++i) {
                 section = readers[i](buffer, offset);
+
+                // If one of the readers successfully parses a section ..
                 if (section) {
+
+                    // .. store it ..
                     sections.push(section);
+
+                    // .. and push the offset to the very end of end of that section. This way,
+                    //  we avoid iterating over offsets which definately aren't the begining of
+                    //  some section (they're part of the located section)
                     offset += section._section.byteLength;
 
+                    // If the section we just parsed is a frame then we've actually located the
+                    //  first frame. Break out of the readers-loop making sure to set
+                    //  foundFirstFrame (so that we also exit the outer loop)
                     if (section._section.type === "frame") {
                         foundFirstFrame = true;
                         break;
                     }
 
-                    i = -1; continue;
+                    // The section is _not_ the first frame. So, having pushed the offset
+                    //  appropriately, retry all readers
+                    i = -1;
                 }
             }
         }
