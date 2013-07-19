@@ -28,6 +28,6 @@ fs.readFile(pathToMp3, function (error, buffer) {
     var lastFrame = mp3Parser.readLastFrame(buffer),
         tags = mp3Parser.readTags(buffer);
 
-    util.puts("\nTags:\n-----\n" + util.inspect(tags, { depth: 3, colors: true }));
+    util.puts("\nTags:\n-----\n" + util.inspect(tags, { depth: 4, colors: true }));
     util.puts("\nLast frame:\n-----------\n" + util.inspect(lastFrame, { depth: 3, colors: true }));
 });
