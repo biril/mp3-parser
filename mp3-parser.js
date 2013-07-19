@@ -85,6 +85,19 @@
             return sequence;
         },
 
+        // Parse DataView `buffer` begining at given `offset` and return a string built from
+        //  `length` octets. Will essentially return the string comprised of octets
+        //  [offset, offset + length)
+        getReadableSequence = function(buffer, offset, length) {
+            var sequence = [],
+                i = offset,
+                l = offset + length;
+            for (; i < l; ++i) {
+                sequence.push(String.fromCharCode(buffer.getUint8(i)));
+            }
+            return sequence.join("");
+        },
+
         // Get the number of bytes in a frame given its `bitrate`, `samplingRate` and `padding`.
         //  Based on [a magic formula](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm)
         getFrameByteLength = function (bitrate, samplingRate, padding) {
@@ -320,7 +333,11 @@
         // Check for the presense of ID3 identifier
         if (!isReadableSequence("ID3", buffer, offset)) { return null; }
 
-        var flagsOctet = buffer.getUint8(offset + 5),
+        var
+            //
+            flagsOctet = buffer.getUint8(offset + 5),
+
+            //
             tag = {
                 _section: {
                     type: "ID3v2",
@@ -334,13 +351,55 @@
                     extendedHeaderFlag: (flagsOctet & 64) === 64,
                     experimentalIndicatorFlag: (flagsOctet & 32) === 32,
                     size: unsynchsafe(buffer.getUint32(offset + 6))
-                }
-            };
+                },
+                frames: []
+            },
+
+            // Index of octet following tag's last octet: The tag spans [offset, tagEnd) (including
+            //  the first 10 header octets)
+            tagEnd,
+
+            // To store frames as they're discovered while paring the tag
+            frame;
 
         // The size as expressed in the header is the size of the complete tag after
         //  unsychronisation, including padding, excluding the header but not excluding the
         //  extended header (total tag size - 10)
         tag._section.byteLength = tag.header.size + 10;
+        tagEnd = offset + tag._section.byteLength;
+
+        // TODO: Process extended header if present
+        if (tag.header.extendedHeaderFlag) {}
+
+        // All frames consist of a frame header followed by one or more fields containing the
+        //  actual information. The layout of the frame header:
+        //
+        // * Frame ID: xx xx xx xx (four characters)
+        // * Size:     xx xx xx xx (frame size excluding frame header (frame size - 10))
+        // * Flags:    xx xx
+
+        // Move offset past the end of the tag header to start reading tag frames
+        offset += 10;
+        while (offset < tagEnd) {
+
+            // Locating a frame with a zeroed out id indicates that all actual frames have already
+            //  been parsed. It's all dead space hereon so practically, we're done
+            if (buffer.getUint32(offset) === 0) { break; }
+
+            // Parse the frame
+            frame = {
+                header: {
+                    id: getReadableSequence(buffer, offset, 4),
+                    size: buffer.getUint32(offset + 4),
+                    flagsOctet1: buffer.getUint8(offset + 8),
+                    flagsOctet2: buffer.getUint8(offset + 9)
+                }
+            };
+            frame.content = getReadableSequence(buffer, offset + 10, frame.header.size);
+
+            tag.frames.push(frame);
+            offset += frame.header.size + 10;
+        }
 
         return tag;
     };
