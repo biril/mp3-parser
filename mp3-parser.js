@@ -180,7 +180,7 @@
             };
 
         // There should be more than 4bytes ahead
-        if (buffer.byteLength <= offset + 4) { return null; }
+        if (buffer.byteLength - offset <= 4) { return null; }
 
         b1 = buffer.getUint8(offset);
         b2 = buffer.getUint8(offset + 1);
@@ -328,7 +328,7 @@
         // * size:       4 octets: tag size as a synchsafe integer
 
         // There should be at least 10 bytes ahead
-        if (buffer.byteLength < offset + 10) { return null; }
+        if (buffer.byteLength - offset < 10) { return null; }
 
         // Check for the presense of ID3 identifier
         if (!isReadableSequence("ID3", buffer, offset)) { return null; }
@@ -452,7 +452,7 @@
             foundFirstFrame = false,
             i = 0,
             numOfReaders = readers.length,
-            bufferLength = buffer.buffer.byteLength;
+            bufferLength = buffer.byteLength;
 
         // While we haven't located the first frame, pick the next offset ..
         for (; offset < bufferLength && !foundFirstFrame; ++offset) {
