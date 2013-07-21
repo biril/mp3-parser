@@ -89,13 +89,7 @@
         //  `length` octets. Will essentially return the string comprised of octets
         //  [offset, offset + length)
         getReadableSequence = function(buffer, offset, length) {
-            var sequence = [],
-                i = offset,
-                l = offset + length;
-            for (; i < l; ++i) {
-                sequence.push(String.fromCharCode(buffer.getUint8(i)));
-            }
-            return sequence.join("");
+            return String.fromCharCode.apply(null, new Uint8Array(buffer.buffer, offset, length));
         },
 
         // Get the number of bytes in a frame given its `bitrate`, `samplingRate` and `padding`.
