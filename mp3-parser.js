@@ -262,7 +262,7 @@
                 header: mp3Parser.readFrameHeader(buffer, offset)
             };
 
-        // Frame should alwas begin with a valid header
+        // Frame should always begin with a valid header
         if (!frame.header) { return null; }
 
         // The num of samples per v1l3 frame is constant - always 1152
@@ -313,10 +313,35 @@
     };
 
 
+    // ### Read an ID3v2 Tag Frame
+    //
+    // Read a specific [ID3v2 Tag](http://id3.org/id3v2.3.0) frame located at `offset` of DataView
+    //  `buffer`. Returns null in the event that no tag-frame is found at `offset`
+    mp3Parser.readId3v2TagFrame = function (buffer, offset) {
+        // All frames consist of a frame header followed by one or more fields containing the
+        //  actual information. The layout of the frame header:
+        //
+        // * Frame ID: xx xx xx xx (four characters)
+        // * Size:     xx xx xx xx (frame size excluding frame header (frame size - 10))
+        // * Flags:    xx xx
+        var frame = {
+                header: {
+                    id: getReadableSequence(buffer, offset, 4),
+                    size: buffer.getUint32(offset + 4),
+                    flagsOctet1: buffer.getUint8(offset + 8),
+                    flagsOctet2: buffer.getUint8(offset + 9)
+                }
+            };
+        frame.content = getReadableSequence(buffer, offset + 10, frame.header.size);
+
+        return frame;
+    };
+
+
     // ### Read the ID3v2 Tag
     //
     // Read [ID3v2 Tag](http://id3.org/id3v2.3.0) located at `offset` of DataView `buffer`. Returns
-    //  null in the event that no frame is found at `offset`
+    //  null in the event that no tag is found at `offset`
     mp3Parser.readId3v2Tag = function (buffer, offset) {
         offset || (offset = 0);
 
@@ -330,7 +355,7 @@
         // There should be at least 10 bytes ahead
         if (buffer.byteLength - offset < 10) { return null; }
 
-        // Check for the presense of ID3 identifier
+        // The 'ID3' identifier is expected at given offset
         if (!isReadableSequence("ID3", buffer, offset)) { return null; }
 
         var
@@ -355,8 +380,8 @@
                 frames: []
             },
 
-            // Index of octet following tag's last octet: The tag spans [offset, tagEnd) (including
-            //  the first 10 header octets)
+            // Index of octet following tag's last octet: The tag spans [offset, tagEnd)
+            //  (including the first 10 header octets)
             tagEnd,
 
             // To store frames as they're discovered while paring the tag
@@ -371,31 +396,18 @@
         // TODO: Process extended header if present
         if (tag.header.extendedHeaderFlag) {}
 
-        // All frames consist of a frame header followed by one or more fields containing the
-        //  actual information. The layout of the frame header:
-        //
-        // * Frame ID: xx xx xx xx (four characters)
-        // * Size:     xx xx xx xx (frame size excluding frame header (frame size - 10))
-        // * Flags:    xx xx
-
         // Move offset past the end of the tag header to start reading tag frames
         offset += 10;
         while (offset < tagEnd) {
 
-            // Locating a frame with a zeroed out id indicates that all actual frames have already
-            //  been parsed. It's all dead space hereon so practically, we're done
+            // Locating a frame with a zeroed out id indicates that all valid frames have already
+            //  been parsed. It's all dead space hereon so practically we're done
             if (buffer.getUint32(offset) === 0) { break; }
 
-            // Parse the frame
-            frame = {
-                header: {
-                    id: getReadableSequence(buffer, offset, 4),
-                    size: buffer.getUint32(offset + 4),
-                    flagsOctet1: buffer.getUint8(offset + 8),
-                    flagsOctet2: buffer.getUint8(offset + 9)
-                }
-            };
-            frame.content = getReadableSequence(buffer, offset + 10, frame.header.size);
+            frame = mp3Parser.readId3v2TagFrame(buffer, offset);
+
+            // Couldn't parse this frame so bail out
+            if (!frame) { break; }
 
             tag.frames.push(frame);
             offset += frame.header.size + 10;
