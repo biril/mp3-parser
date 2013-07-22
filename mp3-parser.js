@@ -237,7 +237,19 @@
 
         // Read the content of user defined text-information ID3v2 tag frame
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
+            if (length < 1) { return null; }
+            var content = { encoding: buffer.getUint8(offset) },
+                termIndex = offset + length - 1,
+                grs = content.encoding === 0 ? getReadableSequence : getReadableSequenceUnicode;
+            for (; termIndex >= offset; --termIndex) {
+                if (buffer.getUint8(termIndex) === 0) { break; }
+            }
+            if (termIndex === offset) { return content; }
 
+            content.description = grs(buffer, offset + 1, termIndex - offset - 1);
+            content.value = grs(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+
+            return content;
         };
 
 
