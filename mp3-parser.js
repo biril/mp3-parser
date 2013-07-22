@@ -75,9 +75,10 @@
         },
 
         // Get a value indicating whether given DataView `buffer` contains the `sequence` string
-        //  at `offset`. Will return the `sequence` itself if it does, false otherwise. Note that
-        //  no check is performed for the adequate length of given buffer as this will be
-        //  carried out be the caller as part of the section-parsing process
+        //  at `offset` index. The buffer is parsed as an array of 8bit single-byte coded characters
+        //  (i.e. ISO/IEC 8859-1, _non_ Unicode). Will return the sequence itself if it does, false
+        //  otherwise. Note that no check is performed for the adequate length of given buffer as
+        //  this should be carried out be the caller as part of the section-parsing process
         isReadableSequence = function (sequence, buffer, offset) {
             for (var i = sequence.length - 1; i >= 0; i--) {
                 if (sequence.charCodeAt(i) !== buffer.getUint8(offset + i)) { return false; }
@@ -85,9 +86,12 @@
             return sequence;
         },
 
-        // Parse DataView `buffer` begining at given `offset` and return a string built from
-        //  `length` octets. Will essentially return the string comprised of octets
-        //  [offset, offset + length)
+        // Parse DataView `buffer` begining at `offset` index and return a string built from
+        //  `length` octets. The buffer is parsed as an array of 8bit single-byte coded characters
+        //  (i.e. ISO/IEC 8859-1, _non_ Unicode). Will essentially return the string comprised of
+        //  octets [offset, offset + length). Note that no check is performed for the adequate
+        //  length of given buffer as this should be carried out be the caller as part of the
+        //  section-parsing process
         getReadableSequence = function(buffer, offset, length) {
             return String.fromCharCode.apply(null, new Uint8Array(buffer.buffer, offset, length));
         },
