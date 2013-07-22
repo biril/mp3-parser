@@ -92,8 +92,13 @@
         //  octets [offset, offset + length). Note that no check is performed for the adequate
         //  length of given buffer as this should be carried out be the caller as part of the
         //  section-parsing process
-        getReadableSequence = function(buffer, offset, length) {
+        getReadableSequence = function (buffer, offset, length) {
             return String.fromCharCode.apply(null, new Uint8Array(buffer.buffer, offset, length));
+        },
+
+        // Unicode version of `getReadableSequence`. TODO: Implement
+        getReadableSequenceUnicode = function (buffer, offset, length) {
+            return "";
         },
 
         // Get the number of bytes in a frame given its `bitrate`, `samplingRate` and `padding`.
@@ -415,7 +420,9 @@
         // Text information frames
         if (frame.header.id.charAt(0) === "T" && frame.header.id !== "TXXX") {
             frame.encoding = buffer.getUint8(offset + 10);
-            frame.content = getReadableSequence(buffer, offset + 11, frame.header.size - 1);
+            frame.content =
+                (frame.encoding === 0 ? getReadableSequence :
+                    getReadableSequenceUnicode)(buffer, offset + 11, frame.header.size - 1);
             return frame;
         }
 
