@@ -227,9 +227,7 @@
         // Read the content of a text-information ID3v2 tag frame
         readId3v2TagFrameContentT = function (buffer, offset, length) {
             if (length < 1) { return null; }
-            var content = {
-                    encoding: buffer.getUint8(offset)
-                };
+            var content = { encoding: buffer.getUint8(offset) };
             content.text = (content.encoding === 0 ? getReadableSequence :
                 getReadableSequenceUnicode)(buffer, offset + 1, length - 1);
             return content;
@@ -594,7 +592,7 @@
         // While we haven't located the first frame, pick the next offset ..
         for (; offset < bufferLength && !foundFirstFrame; ++offset) {
 
-            // .. And try out each of the 'readers' on it
+            // .. and try out each of the 'readers' on it
             for (i = 0; i < numOfReaders; ++i) {
                 section = readers[i](buffer, offset);
 
