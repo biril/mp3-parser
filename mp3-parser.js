@@ -42,6 +42,9 @@
     "use strict";
 
     var
+        // A handy no-op to reuse
+        noOp = function () {},
+
         // Produce octet's binary representation as a string
         octetToBinRep = (function () {
             var b = []; // The binary representation
@@ -219,7 +222,24 @@
             WPAY: "Payment",
             WPUB: "Publishers official webpage",
             WXXX: "User defined URL link frame"
+        },
+
+        // Read the content of a text-information ID3v2 tag frame
+        readId3v2TagFrameContentT = function (buffer, offset, length) {
+            if (length < 1) { return null; }
+            var content = {
+                    encoding: buffer.getUint8(offset)
+                };
+            content.text = (content.encoding === 0 ? getReadableSequence :
+                getReadableSequenceUnicode)(buffer, offset + 1, length - 1);
+            return content;
+        },
+
+        // Read the content of user defined text-information ID3v2 tag frame
+        readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
+
         };
+
 
     // ### Notes
     //
@@ -417,14 +437,15 @@
         // Frame's friendly name
         frame.name = id3v2TagFrameNames[frame.header.id];
 
-        // Text information frames
-        if (frame.header.id.charAt(0) === "T" && frame.header.id !== "TXXX") {
-            frame.encoding = buffer.getUint8(offset + 10);
-            frame.content =
-                (frame.encoding === 0 ? getReadableSequence :
-                    getReadableSequenceUnicode)(buffer, offset + 11, frame.header.size - 1);
-            return frame;
-        }
+        // Read frame's content
+        frame.content = (function (id, offset, length) {
+            // User defined text information frames
+            if (id === "TXXX") { return readId3v2TagFrameContentTxxx; }
+            // Text information frames
+            if (id.charAt(0) === "T") { return readId3v2TagFrameContentT; }
+            // Unknown frame - 'parse it' using a no-op returning `undefined` content
+            return noOp;
+        }(frame.header.id))(buffer, offset + 10, frame.header.size);
 
         return frame;
     };
