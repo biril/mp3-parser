@@ -3,9 +3,11 @@ mp3 Parser
 
 [![NPM version](https://badge.fury.io/js/mp3-parser.png)](http://badge.fury.io/js/mp3-parser)
 
-Locate and read individual mp3 frames as well as ID3v2 and Xing/Lame tags. For the latter, only a
-minimal amount of information is parsed - just anough to assert that the read section is indeed an
-ID3v2 or Xing/Lame tag. This will change in future revisions. The primary use case (and raison
+Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For each of
+these sections present within a given mp3 file, mp3 Parser will provide data indicating their
+presence, their boundaries within the file, as well as any available informative data. In the
+current implementation, the latter is strictly true only for frames as thorough parsing and
+data-extraction from ID3v2 and Xing/Lame tags is work in progress. The primary use case (and raison
 d'etre) for this initial revision is performing precise cuts at frame / tag boundaries.
 
 
@@ -69,7 +71,7 @@ and `offset` keys:
 Further documentation is forthcoming. You can also
 
 * View the [annotated version](http://biril.github.io/mp3-parser/) of the source.
-* Try the example script `examples/parse.js`. Run it with `node parse.js <mp3-file>`
+* Try the example script `example/parse.js`. Run it with `node parse.js <mp3-file>`
 
 
 License
