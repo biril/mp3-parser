@@ -233,7 +233,6 @@
         // * Text encoding: $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
         // * Information:   <text string according to encoding>
         readId3v2TagFrameContentT = function (buffer, offset, length) {
-            if (length < 1) { return null; }
             var content = { encoding: buffer.getUint8(offset) };
             content.text = (content.encoding === 0 ? getReadableSequence :
                 getReadableSequenceUnicode)(buffer, offset + 1, length - 1);
@@ -250,7 +249,6 @@
         // * Description:   <text string according to encoding> $00 (00)
         // * Value:         <text string according to encoding>
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
-            if (length < 1) { return null; }
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
                 grs = content.encoding === 0 ? getReadableSequence : getReadableSequenceUnicode;
@@ -286,7 +284,6 @@
         // * Description:   <text string according to encoding> $00 (00)
         // * URL:           <text string>
         readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
-            if (length < 1) { return null; }
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
                 grs = content.encoding === 0 ? getReadableSequence : getReadableSequenceUnicode;
@@ -497,6 +494,9 @@
 
         // Frame's friendly name
         frame.name = id3v2TagFrameNames[frame.header.id];
+
+        // An ID3v2 tag frame must have a length of at least 1 octet, excluding the header
+        if (frame.size < 1) { return frame; }
 
         // Read frame's content
         frame.content = (function (id, offset, length) {
