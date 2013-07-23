@@ -263,6 +263,42 @@
             content.value = grs(buffer, termIndex + 1, length - (termIndex - offset) - 1);
 
             return content;
+        },
+
+        // Read the content of a URL-link ID3v2 tag frame. There may only be one URL link frame of
+        //  its kind in a tag, except when stated otherwise in the frame description. If the
+        //  textstring is followed by a termination (00) all the following information should be
+        //  ignored and not be displayed. All URL link frame identifiers begins with "W". Only URL
+        //  link frame identifiers begins with "W"
+        //
+        // * URL: <text string>
+        readId3v2TagFrameContentW = function (buffer, offset, length) {
+            return { url: getReadableSequence(buffer, offset, length) };
+        },
+
+        // Read the content of a user-defined URL-link ID3v2 tag frame. Intended for URL links
+        //  concerning the audiofile in a similar way to the other "W"-frames. The frame body
+        //  consists of a description of the string, represented as a terminated string, followed
+        //  by the actual URL. The URL is always encoded with ISO-8859-1. There may be more than
+        //  one "WXXX" frame in each tag, but only one with the same description
+        //
+        // * Text encoding: $xx
+        // * Description:   <text string according to encoding> $00 (00)
+        // * URL:           <text string>
+        readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
+            if (length < 1) { return null; }
+            var content = { encoding: buffer.getUint8(offset) },
+                termIndex = offset + length - 1,
+                grs = content.encoding === 0 ? getReadableSequence : getReadableSequenceUnicode;
+            for (; termIndex >= offset; --termIndex) {
+                if (buffer.getUint8(termIndex) === 0) { break; }
+            }
+            if (termIndex === offset) { return content; }
+
+            content.description = grs(buffer, offset + 1, termIndex - offset - 1);
+            content.url = getReadableSequence(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+
+            return content;
         };
 
 
@@ -468,6 +504,10 @@
             if (id === "TXXX") { return readId3v2TagFrameContentTxxx; }
             // Text-information frames
             if (id.charAt(0) === "T") { return readId3v2TagFrameContentT; }
+            // User-defined URL-link frames
+            if (id === "WXXX") { return readId3v2TagFrameContentWxxx; }
+            // URL-link frames
+            if (id.charAt(0) === "W") { return readId3v2TagFrameContentW; }
             // Unknown frame - 'parse it' using a no-op returning `undefined` content
             return noOp;
         }(frame.header.id))(buffer, offset + 10, frame.header.size);
