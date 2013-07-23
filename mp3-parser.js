@@ -82,7 +82,7 @@
         //  (i.e. ISO/IEC 8859-1, _non_ Unicode). Will return the sequence itself if it does, false
         //  otherwise. Note that no check is performed for the adequate length of given buffer as
         //  this should be carried out be the caller as part of the section-parsing process
-        isReadableSequence = function (sequence, buffer, offset) {
+        isReadable = function (sequence, buffer, offset) {
             for (var i = sequence.length - 1; i >= 0; i--) {
                 if (sequence.charCodeAt(i) !== buffer.getUint8(offset + i)) { return false; }
             }
@@ -95,11 +95,11 @@
         //  octets [offset, offset + length). Note that no check is performed for the adequate
         //  length of given buffer as this should be carried out be the caller as part of the
         //  section-parsing process
-        getReadableSequence = function (buffer, offset, length) {
+        readString = function (buffer, offset, length) {
             return String.fromCharCode.apply(null, new Uint8Array(buffer.buffer, offset, length));
         },
 
-        // UCS-2 version of `getReadableSequence`. UCS-2 is the fixed-width two-byte subset of
+        // UCS-2 version of `readString`. UCS-2 is the fixed-width two-byte subset of
         //  Unicode that can only express values inside the 'Basic Multilingual Plane' (BMP). Note
         //  that this method is generally unsuitable for parsing non-trivial UTF-16 strings. This
         //  of course is only marginally related as, according to ID3v2, all Unicode strings are
@@ -108,7 +108,7 @@
         //  * [How to convert ArrayBuffer to and from String](http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
         //  * [The encoding spec](http://encoding.spec.whatwg.org/)
         //  * [stringencoding shim](https://code.google.com/p/stringencoding/)
-        getReadableSequenceUcs2 = function (buffer, offset, length) {
+        readStringUcs2 = function (buffer, offset, length) {
             buffer = buffer.buffer;
             // When offset happens to be an even number of octets, the array-buffer may be wrapped
             //  in a Uint16Array. In the event that it's _not_, an actual copy has to be made
@@ -245,12 +245,12 @@
         //  should be ignored and not be displayed. All text frame identifiers begin with "T". Only
         //  text frame identifiers begin with "T", with the exception of the "TXXX" frame
         //
-        // * Text encoding: $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Information:   <text string according to encoding>
+        // * Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Information: <text string according to encoding>
         readId3v2TagFrameContentT = function (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) };
-            content.text = (content.encoding === 0 ? getReadableSequence :
-                getReadableSequenceUcs2)(buffer, offset + 1, length - 1);
+            content.text = (content.encoding === 0 ? readString :
+                readStringUcs2)(buffer, offset + 1, length - 1);
             return content;
         },
 
@@ -260,13 +260,13 @@
         //  terminated string, followed by the actual string. There may be more than one "TXXX"
         //  frame in each tag, but only one with the same description
         //
-        // * Text encoding: $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Description:   <text string according to encoding> $00 (00)
-        // * Value:         <text string according to encoding>
+        // * Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Description: <text string according to encoding> $00 (00)
+        // * Value:       <text string according to encoding>
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
-                grs = content.encoding === 0 ? getReadableSequence : getReadableSequenceUcs2;
+                grs = content.encoding === 0 ? readString : readStringUcs2;
             for (; termIndex >= offset; --termIndex) {
                 if (buffer.getUint8(termIndex) === 0) { break; }
             }
@@ -286,7 +286,7 @@
         //
         // * URL: <text string>
         readId3v2TagFrameContentW = function (buffer, offset, length) {
-            return { url: getReadableSequence(buffer, offset, length) };
+            return { url: readString(buffer, offset, length) };
         },
 
         // Read the content of a user-defined URL-link ID3v2 tag frame. Intended for URL links
@@ -295,20 +295,20 @@
         //  by the actual URL. The URL is always encoded with ISO-8859-1. There may be more than
         //  one "WXXX" frame in each tag, but only one with the same description
         //
-        // * Text encoding: $xx
-        // * Description:   <text string according to encoding> $00 (00)
-        // * URL:           <text string>
+        // * Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Description: <text string according to encoding> $00 (00)
+        // * URL:         <text string>
         readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
-                grs = content.encoding === 0 ? getReadableSequence : getReadableSequenceUcs2;
+                grs = content.encoding === 0 ? readString : readStringUcs2;
             for (; termIndex >= offset; --termIndex) {
                 if (buffer.getUint8(termIndex) === 0) { break; }
             }
             if (termIndex === offset) { return content; }
 
             content.description = grs(buffer, offset + 1, termIndex - offset - 1);
-            content.url = getReadableSequence(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+            content.url = readString(buffer, termIndex + 1, length - (termIndex - offset) - 1);
 
             return content;
         };
@@ -448,7 +448,7 @@
 
         // No "Xing" or "Info" identifier should reside at octet 36 - this would indicate that this
         //  is in fact a Xing tag masquerading as a frame
-        if (isReadableSequence("Xing", buffer, offset + 36) || isReadableSequence("Info", buffer, offset + 36)) {
+        if (isReadable("Xing", buffer, offset + 36) || isReadable("Info", buffer, offset + 36)) {
             return null;
         }
 
@@ -500,7 +500,7 @@
         // * Flags:    xx xx
         var frame = {
                 header: {
-                    id: getReadableSequence(buffer, offset, 4),
+                    id: readString(buffer, offset, 4),
                     size: buffer.getUint32(offset + 4),
                     flagsOctet1: buffer.getUint8(offset + 8),
                     flagsOctet2: buffer.getUint8(offset + 9)
@@ -549,7 +549,7 @@
         if (buffer.byteLength - offset < 10) { return null; }
 
         // The 'ID3' identifier is expected at given offset
-        if (!isReadableSequence("ID3", buffer, offset)) { return null; }
+        if (!isReadable("ID3", buffer, offset)) { return null; }
 
         var
             //
@@ -632,8 +632,8 @@
         if (buffer.byteLength < offset + 40) { return null; }
 
         // A "Xing" or "Info" identifier should reside at octet 36
-        (tag.identifier = isReadableSequence("Xing", buffer, offset + 36)) ||
-        (tag.identifier = isReadableSequence("Info", buffer, offset + 36));
+        (tag.identifier = isReadable("Xing", buffer, offset + 36)) ||
+        (tag.identifier = isReadable("Info", buffer, offset + 36));
         if (!tag.identifier) { return null; }
 
         //
