@@ -224,7 +224,14 @@
             WXXX: "User defined URL link frame"
         },
 
-        // Read the content of a text-information ID3v2 tag frame
+        // Read the content of a text-information ID3v2 tag frame. These are common and contain
+        //  info such as artist and album. There may only be one text info frame of its kind in a
+        //  tag. If the textstring is followed by a termination (00) all the following information
+        //  should be ignored and not be displayed. All text frame identifiers begin with "T". Only
+        //  text frame identifiers begin with "T", with the exception of the "TXXX" frame
+        //
+        // * Text encoding: $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Information:   <text string according to encoding>
         readId3v2TagFrameContentT = function (buffer, offset, length) {
             if (length < 1) { return null; }
             var content = { encoding: buffer.getUint8(offset) };
@@ -233,7 +240,15 @@
             return content;
         },
 
-        // Read the content of user defined text-information ID3v2 tag frame
+        // Read the content of user-defined text-information ID3v2 tag frame. Intended for
+        //  one-string text information concerning the audiofile in a similar way to the other
+        //  "T"-frames. The frame body consists of a description of the string, represented as a
+        //  terminated string, followed by the actual string. There may be more than one "TXXX"
+        //  frame in each tag, but only one with the same description
+        //
+        // * Text encoding: $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Description:   <text string according to encoding> $00 (00)
+        // * Value:         <text string according to encoding>
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
             if (length < 1) { return null; }
             var content = { encoding: buffer.getUint8(offset) },
@@ -449,9 +464,9 @@
 
         // Read frame's content
         frame.content = (function (id, offset, length) {
-            // User defined text information frames
+            // User-defined text-information frames
             if (id === "TXXX") { return readId3v2TagFrameContentTxxx; }
-            // Text information frames
+            // Text-information frames
             if (id.charAt(0) === "T") { return readId3v2TagFrameContentT; }
             // Unknown frame - 'parse it' using a no-op returning `undefined` content
             return noOp;
