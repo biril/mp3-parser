@@ -27,7 +27,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <pre><code>mp3-parser v0.1.5
+              <pre><code>mp3-parser v0.1.6
 
 https://github.com/biril/mp3-parser
 Licensed and freely distributed under the MIT License
@@ -233,7 +233,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        isReadableSequence = <span class="function"><span class="keyword">function</span> <span class="params">(sequence, buffer, offset)</span> {</span>
+            <div class="content"><div class='highlight'><pre>        isReadable = <span class="function"><span class="keyword">function</span> <span class="params">(sequence, buffer, offset)</span> {</span>
             <span class="keyword">for</span> (<span class="keyword">var</span> i = sequence.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {
                 <span class="keyword">if</span> (sequence.charCodeAt(i) !== buffer.getUint8(offset + i)) { <span class="keyword">return</span> <span class="literal">false</span>; }
             }
@@ -258,7 +258,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        getReadableSequence = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
+            <div class="content"><div class='highlight'><pre>        readString = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
             <span class="keyword">return</span> String.fromCharCode.apply(<span class="literal">null</span>, <span class="keyword">new</span> Uint8Array(buffer.buffer, offset, length));
         },</pre></div></div>
             
@@ -271,13 +271,21 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Unicode version of <code>getReadableSequence</code>. TODO: Implement</p>
+              <p>UCS-2 version of <code>readString</code>. UCS-2 is the fixed-width two-byte subset of
+ Unicode that can only express values inside the &#39;Basic Multilingual Plane&#39; (BMP). Note
+ that this method is generally unsuitable for parsing non-trivial UTF-16 strings. This
+ of course is only marginally related as, according to ID3v2, all Unicode strings are
+ UCS-2. Further info:</p>
+<ul>
+<li><a href="http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String">How to convert ArrayBuffer to and from String</a></li>
+<li><a href="http://encoding.spec.whatwg.org/">The encoding spec</a></li>
+<li><a href="https://code.google.com/p/stringencoding/">stringencoding shim</a></li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        getReadableSequenceUnicode = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">return</span> <span class="string">""</span>;
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readStringUcs2 = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
+            buffer = buffer.buffer;</pre></div></div>
             
         </li>
         
@@ -287,6 +295,27 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>When offset happens to be an even number of octets, the array-buffer may be wrapped
+ in a Uint16Array. In the event that it&#39;s <em>not</em>, an actual copy has to be made</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (offset % <span class="number">2</span> === <span class="number">1</span>) {
+                buffer = buffer.slice(offset, offset + length);
+                offset = <span class="number">0</span>;
+            }
+            <span class="keyword">return</span> String.fromCharCode.apply(<span class="literal">null</span>, <span class="keyword">new</span> Uint16Array(buffer, offset, length / <span class="number">2</span>));
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Get the number of bytes in a frame given its <code>bitrate</code>, <code>samplingRate</code> and <code>padding</code>.
  Based on <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">a magic formula</a></p>
@@ -300,11 +329,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-15">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               
             </div>
@@ -331,11 +360,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               
             </div>
@@ -350,11 +379,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               
             </div>
@@ -369,11 +398,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               
             </div>
@@ -458,42 +487,57 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
-              </div>
-              <p>Read the content of a text-information ID3v2 tag frame</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentT = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">if</span> (length &lt; <span class="number">1</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
-            <span class="keyword">var</span> content = { encoding: buffer.getUint8(offset) };
-            content.text = (content.encoding === <span class="number">0</span> ? getReadableSequence :
-                getReadableSequenceUnicode)(buffer, offset + <span class="number">1</span>, length - <span class="number">1</span>);
-            <span class="keyword">return</span> content;
-        },</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p>Read the content of user defined text-information ID3v2 tag frame</p>
+              <p>Read the content of a text-information ID3v2 tag frame. These are common and contain
+ info such as artist and album. There may only be one text info frame of its kind in a
+ tag. If the textstring is followed by a termination (00) all the following information
+ should be ignored and not be displayed. All text frame identifiers begin with &quot;T&quot;. Only
+ text frame identifiers begin with &quot;T&quot;, with the exception of the &quot;TXXX&quot; frame</p>
+<ul>
+<li>Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
+<li>Information: <text string according to encoding></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentT = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
+            <span class="keyword">var</span> content = { encoding: buffer.getUint8(offset) };
+            content.text = (content.encoding === <span class="number">0</span> ? readString :
+                readStringUcs2)(buffer, offset + <span class="number">1</span>, length - <span class="number">1</span>);
+            <span class="keyword">return</span> content;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Read the content of user-defined text-information ID3v2 tag frame. Intended for
+ one-string text information concerning the audiofile in a similar way to the other
+ &quot;T&quot;-frames. The frame body consists of a description of the string, represented as a
+ terminated string, followed by the actual string. There may be more than one &quot;TXXX&quot;
+ frame in each tag, but only one with the same description</p>
+<ul>
+<li>Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
+<li>Description: <text string according to encoding> $00 (00)</li>
+<li>Value:       <text string according to encoding></li>
+</ul>
 
             </div>
             
             <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentTxxx = <span class="function"><span class="keyword">function</span>  <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">if</span> (length &lt; <span class="number">1</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
             <span class="keyword">var</span> content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - <span class="number">1</span>,
-                grs = content.encoding === <span class="number">0</span> ? getReadableSequence : getReadableSequenceUnicode;
+                grs = content.encoding === <span class="number">0</span> ? readString : readStringUcs2;
             <span class="keyword">for</span> (; termIndex &gt;= offset; --termIndex) {
                 <span class="keyword">if</span> (buffer.getUint8(termIndex) === <span class="number">0</span>) { <span class="keyword">break</span>; }
             }
@@ -503,16 +547,77 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             content.value = grs(buffer, termIndex + <span class="number">1</span>, length - (termIndex - offset) - <span class="number">1</span>);
 
             <span class="keyword">return</span> content;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Read the content of a URL-link ID3v2 tag frame. There may only be one URL link frame of
+ its kind in a tag, except when stated otherwise in the frame description. If the
+ textstring is followed by a termination (00) all the following information should be
+ ignored and not be displayed. All URL link frame identifiers begins with &quot;W&quot;. Only URL
+ link frame identifiers begins with &quot;W&quot;</p>
+<ul>
+<li>URL: <text string></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentW = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
+            <span class="keyword">return</span> { url: readString(buffer, offset, length) };
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Read the content of a user-defined URL-link ID3v2 tag frame. Intended for URL links
+ concerning the audiofile in a similar way to the other &quot;W&quot;-frames. The frame body
+ consists of a description of the string, represented as a terminated string, followed
+ by the actual URL. The URL is always encoded with ISO-8859-1. There may be more than
+ one &quot;WXXX&quot; frame in each tag, but only one with the same description</p>
+<ul>
+<li>Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
+<li>Description: <text string according to encoding> $00 (00)</li>
+<li>URL:         <text string></li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentWxxx = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
+            <span class="keyword">var</span> content = { encoding: buffer.getUint8(offset) },
+                termIndex = offset + length - <span class="number">1</span>,
+                grs = content.encoding === <span class="number">0</span> ? readString : readStringUcs2;
+            <span class="keyword">for</span> (; termIndex &gt;= offset; --termIndex) {
+                <span class="keyword">if</span> (buffer.getUint8(termIndex) === <span class="number">0</span>) { <span class="keyword">break</span>; }
+            }
+            <span class="keyword">if</span> (termIndex === offset) { <span class="keyword">return</span> content; }
+
+            content.description = grs(buffer, offset + <span class="number">1</span>, termIndex - offset - <span class="number">1</span>);
+            content.url = readString(buffer, termIndex + <span class="number">1</span>, length - (termIndex - offset) - <span class="number">1</span>);
+
+            <span class="keyword">return</span> content;
         };</pre></div></div>
             
         </li>
         
         
-        <li id="section-21">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <h3>Notes</h3>
 <p>The parser exposes a collection of <code>read____</code> methods, each dedicated to reading a specific
@@ -537,11 +642,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <h3>Read a Frame Header</h3>
 <p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
@@ -557,11 +662,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>The header&#39;s four bytes</p>
 
@@ -572,11 +677,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               
             </div>
@@ -592,11 +697,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>There should be more than 4bytes ahead</p>
 
@@ -612,11 +717,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>First octet: <code>11111111</code>: Frame sync (all bits must be set)</p>
 
@@ -627,11 +732,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Second octet: <code>11111011</code> or <code>11111010</code></p>
 <ul>
@@ -656,11 +761,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>Third octet: <code>EEEEFFGH</code></p>
 <ul>
@@ -690,11 +795,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Fourth octet: <code>IIJJKLMM</code></p>
 <ul>
@@ -717,11 +822,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <h3>Read a Frame</h3>
 <p>Read frame located at <code>offset</code> of DataView <code>buffer</code>. Will acquire the frame header (see
@@ -746,11 +851,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Frame should always begin with a valid header</p>
 
@@ -761,11 +866,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>The num of samples per v1l3 frame is constant - always 1152</p>
 
@@ -776,11 +881,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               
             </div>
@@ -791,29 +896,29 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>No &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36 - this would indicate that this
  is in fact a Xing tag masquerading as a frame</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (isReadableSequence(<span class="string">"Xing"</span>, buffer, offset + <span class="number">36</span>) || isReadableSequence(<span class="string">"Info"</span>, buffer, offset + <span class="number">36</span>)) {
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (isReadable(<span class="string">"Xing"</span>, buffer, offset + <span class="number">36</span>) || isReadable(<span class="string">"Info"</span>, buffer, offset + <span class="number">36</span>)) {
             <span class="keyword">return</span> <span class="literal">null</span>;
         }</pre></div></div>
             
         </li>
         
         
-        <li id="section-35">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>If a next frame is required then the data at <code>frame._section.nextFrameIndex</code> should be
  a valid frame header</p>
@@ -830,11 +935,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <h3>Read the Last Frame</h3>
 <p>Locate and read the very last valid frame in given DataView <code>buffer</code>. The search is carried
@@ -857,11 +962,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Located a candidate frame as 255 is a possible frame-sync byte</p>
 
@@ -878,11 +983,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <h3>Read an ID3v2 Tag Frame</h3>
 <p>Read a specific <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> frame located at <code>offset</code> of DataView
@@ -895,11 +1000,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>All frames consist of a frame header followed by one or more fields containing the
  actual information. The layout of the frame header:</p>
@@ -913,57 +1018,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             
             <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> frame = {
                 header: {
-                    id: getReadableSequence(buffer, offset, <span class="number">4</span>),
+                    id: readString(buffer, offset, <span class="number">4</span>),
                     size: buffer.getUint32(offset + <span class="number">4</span>),
                     flagsOctet1: buffer.getUint8(offset + <span class="number">8</span>),
                     flagsOctet2: buffer.getUint8(offset + <span class="number">9</span>)
                 }
             };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-40">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
-              </div>
-              <p>Frame&#39;s friendly name</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame.name = id3v2TagFrameNames[frame.header.id];</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-41">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
-              </div>
-              <p>Read frame&#39;s content</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame.content = (<span class="function"><span class="keyword">function</span> <span class="params">(id, offset, length)</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-42">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
-              </div>
-              <p>User defined text information frames</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id === <span class="string">"TXXX"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentTxxx; }</pre></div></div>
             
         </li>
         
@@ -974,11 +1034,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
-              <p>Text information frames</p>
+              <p>Frame&#39;s friendly name</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id.charAt(<span class="number">0</span>) === <span class="string">"T"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentT; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        frame.name = id3v2TagFrameNames[frame.header.id];</pre></div></div>
             
         </li>
         
@@ -988,6 +1048,96 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>An ID3v2 tag frame must have a length of at least 1 octet, excluding the header</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (frame.size &lt; <span class="number">1</span>) { <span class="keyword">return</span> frame; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Read frame&#39;s content</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        frame.content = (<span class="function"><span class="keyword">function</span> <span class="params">(id, offset, length)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>User-defined text-information frames</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id === <span class="string">"TXXX"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentTxxx; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Text-information frames</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id.charAt(<span class="number">0</span>) === <span class="string">"T"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentT; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>User-defined URL-link frames</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id === <span class="string">"WXXX"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentWxxx; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <p>URL-link frames</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id.charAt(<span class="number">0</span>) === <span class="string">"W"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentW; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
               <p>Unknown frame - &#39;parse it&#39; using a no-op returning <code>undefined</code> content</p>
 
@@ -1002,11 +1152,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-51">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
               <h3>Read the ID3v2 Tag</h3>
 <p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
@@ -1020,11 +1170,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-46">
+        <li id="section-52">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
+                <a class="pilcrow" href="#section-52">&#182;</a>
               </div>
               <p>The ID3v2 tag header, which should be the first information in the file, is 10 bytes:</p>
 <ul>
@@ -1042,28 +1192,28 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-47">
+        <li id="section-53">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
+                <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
               <p>The &#39;ID3&#39; identifier is expected at given offset</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!isReadableSequence(<span class="string">"ID3"</span>, buffer, offset)) { <span class="keyword">return</span> <span class="literal">null</span>; }
+            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!isReadable(<span class="string">"ID3"</span>, buffer, offset)) { <span class="keyword">return</span> <span class="literal">null</span>; }
 
         <span class="keyword">var</span></pre></div></div>
             
         </li>
         
         
-        <li id="section-48">
+        <li id="section-54">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
+                <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
               
             </div>
@@ -1073,11 +1223,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-49">
+        <li id="section-55">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
+                <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
               
             </div>
@@ -1102,11 +1252,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-50">
+        <li id="section-56">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
+                <a class="pilcrow" href="#section-56">&#182;</a>
               </div>
               <p>Index of octet following tag&#39;s last octet: The tag spans [offset, tagEnd)
  (including the first 10 header octets)</p>
@@ -1118,11 +1268,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-51">
+        <li id="section-57">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
+                <a class="pilcrow" href="#section-57">&#182;</a>
               </div>
               <p>To store frames as they&#39;re discovered while paring the tag</p>
 
@@ -1133,11 +1283,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-52">
+        <li id="section-58">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
+                <a class="pilcrow" href="#section-58">&#182;</a>
               </div>
               <p>The size as expressed in the header is the size of the complete tag after
  unsychronisation, including padding, excluding the header but not excluding the
@@ -1151,11 +1301,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-53">
+        <li id="section-59">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-53">&#182;</a>
+                <a class="pilcrow" href="#section-59">&#182;</a>
               </div>
               <p>TODO: Process extended header if present</p>
 
@@ -1166,11 +1316,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-54">
+        <li id="section-60">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-54">&#182;</a>
+                <a class="pilcrow" href="#section-60">&#182;</a>
               </div>
               <p>Move offset past the end of the tag header to start reading tag frames</p>
 
@@ -1182,11 +1332,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-55">
+        <li id="section-61">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-55">&#182;</a>
+                <a class="pilcrow" href="#section-61">&#182;</a>
               </div>
               <p>Locating a frame with a zeroed out id indicates that all valid frames have already
  been parsed. It&#39;s all dead space hereon so practically we&#39;re done</p>
@@ -1200,11 +1350,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-56">
+        <li id="section-62">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-56">&#182;</a>
+                <a class="pilcrow" href="#section-62">&#182;</a>
               </div>
               <p>Couldn&#39;t parse this frame so bail out</p>
 
@@ -1222,11 +1372,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-57">
+        <li id="section-63">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-57">&#182;</a>
+                <a class="pilcrow" href="#section-63">&#182;</a>
               </div>
               <h3>Read the Xing Tag</h3>
 <p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
@@ -1248,11 +1398,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-58">
+        <li id="section-64">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
+                <a class="pilcrow" href="#section-64">&#182;</a>
               </div>
               <p>The Xing header should begin with a valid frame header</p>
 
@@ -1263,11 +1413,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-59">
+        <li id="section-65">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
+                <a class="pilcrow" href="#section-65">&#182;</a>
               </div>
               <p>There should be at least 36 + 4 = 40 bytes ahead</p>
 
@@ -1278,28 +1428,28 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-60">
+        <li id="section-66">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
+                <a class="pilcrow" href="#section-66">&#182;</a>
               </div>
               <p>A &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        (tag.identifier = isReadableSequence(<span class="string">"Xing"</span>, buffer, offset + <span class="number">36</span>)) ||
-        (tag.identifier = isReadableSequence(<span class="string">"Info"</span>, buffer, offset + <span class="number">36</span>));
+            <div class="content"><div class='highlight'><pre>        (tag.identifier = isReadable(<span class="string">"Xing"</span>, buffer, offset + <span class="number">36</span>)) ||
+        (tag.identifier = isReadable(<span class="string">"Info"</span>, buffer, offset + <span class="number">36</span>));
         <span class="keyword">if</span> (!tag.identifier) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
             
         </li>
         
         
-        <li id="section-61">
+        <li id="section-67">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-61">&#182;</a>
+                <a class="pilcrow" href="#section-67">&#182;</a>
               </div>
               
             </div>
@@ -1313,11 +1463,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-62">
+        <li id="section-68">
             <div class="annotation">
               
               <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-62">&#182;</a>
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
               <h3>Read all Tags up to First Frame</h3>
 <p><a href="http://www.rengels.de/computer/mp3tags.html">http://www.rengels.de/computer/mp3tags.html</a>
@@ -1339,11 +1489,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-63">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <p>While we haven&#39;t located the first frame, pick the next offset ..</p>
 
@@ -1354,11 +1504,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-64">
+        <li id="section-70">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-64">&#182;</a>
+                <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
               <p>.. and try out each of the &#39;readers&#39; on it</p>
 
@@ -1370,11 +1520,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-65">
+        <li id="section-71">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
+                <a class="pilcrow" href="#section-71">&#182;</a>
               </div>
               <p>If one of the readers successfully parses a section ..</p>
 
@@ -1385,11 +1535,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-66">
+        <li id="section-72">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
+                <a class="pilcrow" href="#section-72">&#182;</a>
               </div>
               <p>.. store it ..</p>
 
@@ -1400,11 +1550,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-67">
+        <li id="section-73">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
+                <a class="pilcrow" href="#section-73">&#182;</a>
               </div>
               <p>.. and push the offset to the very end of end of that section. This way,
  we avoid iterating over offsets which definately aren&#39;t the begining of
@@ -1417,11 +1567,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-68">
+        <li id="section-74">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
+                <a class="pilcrow" href="#section-74">&#182;</a>
               </div>
               <p>If the section we just parsed is a frame then we&#39;ve actually located the
  first frame. Break out of the readers-loop making sure to set
@@ -1437,11 +1587,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-69">
+        <li id="section-75">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
+                <a class="pilcrow" href="#section-75">&#182;</a>
               </div>
               <p>The section is <em>not</em> the first frame. So, having pushed the offset
  appropriately, retry all readers</p>
@@ -1459,11 +1609,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-70">
+        <li id="section-76">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-70">&#182;</a>
+                <a class="pilcrow" href="#section-76">&#182;</a>
               </div>
               <p>Attach the <code>version</code> property to mp3 Parser and return it</p>
 
@@ -1474,17 +1624,17 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-71">
+        <li id="section-77">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-71">&#182;</a>
+                <a class="pilcrow" href="#section-77">&#182;</a>
               </div>
               <p>Get current version of mp3-parser</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.5"</span>; } }
+            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.6"</span>; } }
     });
 
     <span class="keyword">return</span> mp3Parser;
