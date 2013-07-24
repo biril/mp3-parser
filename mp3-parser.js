@@ -101,9 +101,11 @@
         //  (i.e. ISO/IEC 8859-1, _non_ Unicode). Will return the readable itself if it does, false
         //  otherwise. Note that no check is performed for the adequate length of given buffer as
         //  this should be carried out be the caller as part of the section-parsing process
+        /*
         isReadable = function (readable, buffer, offset) {
             return isSequence(sequenceFromReadable(readable), buffer, offset) ? readable : false;
         },
+        */
 
         // Locate `sequence` (an array of octets) in DataView `buffer`. Search starts at given
         //  `offset` and ends after `length` octets. Will return the offset of sequence if found,
@@ -263,6 +265,13 @@
             WPAY: "Payment",
             WPUB: "Publishers official webpage",
             WXXX: "User defined URL link frame"
+        },
+
+        // Common readable sequences converted to byte arrays
+        seq = {
+            id3: sequenceFromReadable("ID3"),
+            xing: sequenceFromReadable("Xing"),
+            info: sequenceFromReadable("Info")
         },
 
         // Read the content of a text-information ID3v2 tag frame. These are common and contain
@@ -501,7 +510,7 @@
 
         // No "Xing" or "Info" identifier should reside at octet 36 - this would indicate that this
         //  is in fact a Xing tag masquerading as a frame
-        if (isReadable("Xing", buffer, offset + 36) || isReadable("Info", buffer, offset + 36)) {
+        if (isSequence(seq.xing, buffer, offset + 36) || isSequence(seq.info, buffer, offset + 36)) {
             return null;
         }
 
@@ -604,7 +613,7 @@
         if (buffer.byteLength - offset < 10) { return null; }
 
         // The 'ID3' identifier is expected at given offset
-        if (!isReadable("ID3", buffer, offset)) { return null; }
+        if (!isSequence(seq.id3, buffer, offset)) { return null; }
 
         var
             //
@@ -693,8 +702,8 @@
         if (buffer.byteLength < offset + 40) { return null; }
 
         // A "Xing" or "Info" identifier should reside at octet 36
-        (tag.identifier = isReadable("Xing", buffer, offset + 36)) ||
-        (tag.identifier = isReadable("Info", buffer, offset + 36));
+        (tag.identifier = isSequence(seq.xing, buffer, offset + 36)) ||
+        (tag.identifier = isSequence(seq.info, buffer, offset + 36));
         if (!tag.identifier) { return null; }
 
         //
