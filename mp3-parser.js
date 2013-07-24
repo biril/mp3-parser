@@ -589,6 +589,10 @@
         // TODO: Process extended header if present
         if (tag.header.extendedHeaderFlag) {}
 
+        // Go on to read individual frames but only if the tag version is v2.3. This is the only
+        //  version currently supported
+        if (tag.header.majorVersion !== 3) { return tag; }
+
         // Move offset past the end of the tag header to start reading tag frames
         offset += 10;
         while (offset < tagEnd) {
