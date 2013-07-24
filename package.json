@@ -1,6 +1,6 @@
 {
   "name": "mp3-parser",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "author": "biril <alexlambiris@gmail.com>",
   "description": "Read mp3 frames & tags",
   "contributors": [],
