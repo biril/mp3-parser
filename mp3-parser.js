@@ -77,16 +77,42 @@
             return out;
         },
 
-        // Get a value indicating whether given DataView `buffer` contains the `sequence` string
-        //  at `offset` index. The buffer is parsed as an array of 8bit single-byte coded characters
-        //  (i.e. ISO/IEC 8859-1, _non_ Unicode). Will return the sequence itself if it does, false
-        //  otherwise. Note that no check is performed for the adequate length of given buffer as
-        //  this should be carried out be the caller as part of the section-parsing process
-        isReadable = function (sequence, buffer, offset) {
+        // Get a value indicating whether given DataView `buffer` contains the `sequence` (array of
+        //  octets) at `offset` index. Note that no check is performed for the adequate length of
+        //  given buffer as this should be carried out by the caller
+        isSequence = function (sequence, buffer, offset) {
             for (var i = sequence.length - 1; i >= 0; i--) {
-                if (sequence.charCodeAt(i) !== buffer.getUint8(offset + i)) { return false; }
+                if (sequence[i] !== buffer.getUint8(offset + i)) { return false; }
+            }
+            return true;
+        },
+
+        // Convert the `readable` string to an array of octets. The string is parsed as an array
+        //  of 8bit single-byte coded characters (i.e. ISO/IEC 8859-1, _non_ Unicode).
+        sequenceFromReadable = function (readable) {
+            for (var i = readable.length - 1, sequence = []; i >= 0; i--) {
+                sequence[i] = readable.charCodeAt(i);
             }
             return sequence;
+        },
+
+        // Get a value indicating whether given DataView `buffer` contains the `readable` string
+        //  at `offset` index. The buffer is parsed as an array of 8bit single-byte coded characters
+        //  (i.e. ISO/IEC 8859-1, _non_ Unicode). Will return the readable itself if it does, false
+        //  otherwise. Note that no check is performed for the adequate length of given buffer as
+        //  this should be carried out be the caller as part of the section-parsing process
+        isReadable = function (readable, buffer, offset) {
+            return isSequence(sequenceFromReadable(readable), buffer, offset) ? readable : false;
+        },
+
+        // Locate `sequence` (an array of octets) in DataView `buffer`. Search starts at given
+        //  `offset` and ends after `length` octets. Will return the offset of sequence if found,
+        //  -1 otherwise
+        locateSequence = function (sequence, buffer, offset, length) {
+            for (var i = 0, l = length - sequence.length; i < l; ++i) {
+                if (isSequence(sequence, buffer, offset + i)) { return offset + i; }
+            }
+            return -1;
         },
 
         // Parse DataView `buffer` begining at `offset` index and return a string built from
