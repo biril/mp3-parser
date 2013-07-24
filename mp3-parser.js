@@ -586,7 +586,9 @@
         tag._section.byteLength = tag.header.size + 10;
         tagEnd = offset + tag._section.byteLength;
 
-        // TODO: Process extended header if present
+        // TODO: Process extended header if present. The presence of an extended header will affect
+        //  the offset. Currently, it is asummed that no extended header is present so the offset
+        //  is fixed at 10 octets
         if (tag.header.extendedHeaderFlag) {}
 
         // Go on to read individual frames but only if the tag version is v2.3. This is the only
