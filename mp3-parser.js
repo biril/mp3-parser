@@ -311,6 +311,33 @@
             content.url = readString(buffer, termIndex + 1, length - (termIndex - offset) - 1);
 
             return content;
+        },
+
+        // Read the content of an ID3v2 tag comment frame. Indended for any kind of full text
+        //  information that does not fit in any other frame. Consists of a frame header followed
+        //  by encoding, language and content descriptors and ends with the actual comment as a
+        //  text string. Newline characters are allowed in the comment text string. There may be
+        //  more than one comment frame in each tag, but only one with the same language and
+        //  content descriptor
+        //
+        // * Encoding:    $xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Language:    $xx xx xx
+        // * Short descr: <text string according to encoding> $00 (00)
+        // * Actual text: <full text string according to encoding>
+        readId3v2TagFrameContentComm = function (buffer, offset, length) {
+            var content = { encoding: buffer.getUint8(offset) },
+                offsetBeg = offset + 4,     // offset of content beginning (descriptor field)
+                offsetTrm = offsetBeg,      // offset of content null-termination (seperates fields)
+                offsetEnd = offset + length,// offset of (1 octet past) content end
+                grs = content.encoding === 0 ? readString : readStringUcs2;
+            if (length < 5) { return content; }
+            content.language = readString(buffer, offset + 1, 3);
+            for (; offsetTrm < offsetEnd && buffer.getUint8(offsetTrm) !== 0; ++offsetTrm) {}
+            if (offsetTrm === offsetEnd) { return content; }
+            if (content.encoding !== 0) { ++offsetTrm; } // UCS-2 terminates with _2_ null bytes
+            content.shortContentDescriptor = grs(buffer, offsetBeg, offsetTrm - offsetBeg);
+            content.text = grs(buffer, offsetTrm + 1, offsetEnd - offsetTrm - 1);
+            return content;
         };
 
 
@@ -523,6 +550,8 @@
             if (id === "WXXX") { return readId3v2TagFrameContentWxxx; }
             // URL-link frames
             if (id.charAt(0) === "W") { return readId3v2TagFrameContentW; }
+            // Comment frames
+            if (id === "COMM") { return readId3v2TagFrameContentComm; }
             // Unknown frame - 'parse it' using a no-op returning `undefined` content
             return noOp;
         }(frame.header.id))(buffer, offset + 10, frame.header.size);
