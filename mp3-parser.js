@@ -107,14 +107,31 @@
         },
         */
 
-        // Locate `seq` sequence (an array of octets) in DataView `buffer`. Search starts at given
-        //  `offset` and ends after `length` octets. Will return the offset of sequence if found,
-        //  -1 otherwise
+        // Locate first occurrence of sequence `seq` (an array of octets) in DataView `buffer`.
+        //  Search starts at given `offset` and ends after `length` octets. Will return the
+        //  absolute offset of sequence if found, -1 otherwise
         locateSeq = function (seq, buffer, offset, length) {
             for (var i = 0, l = length - seq.length; i < l; ++i) {
                 if (isSeq(seq, buffer, offset + i)) { return offset + i; }
             }
             return -1;
+        },
+
+        // Locate the first occurrence of non-Unicode null-terminator (i.e. a single zeroed-out
+        //  octet) in DataView `buffer`. Search starts at given `offset` and ends after `length`
+        //  octets. Will return the absolute offset of sequence if found, -1 otherwise
+        locateStrTrm = function (buffer, offset, length) {
+            return locateSeq([0], buffer, offset, length);
+        },
+
+        // Locate the first occurrence of Unicode null-terminator (i.e. a sequence of two
+        //  zeroed-out octets) in DataView `buffer`. Search starts at given `offset` and ends after
+        //  `length` octets. Will return the absolute offset of sequence if found, -1 otherwise
+        locateStrTrmUcs2 = function (buffer, offset, length) {
+            var trmOffset = locateSeq([0, 0], buffer, offset, length);
+            if (trmOffset === -1) { return -1; }
+            if ((trmOffset - offset) % 2 !== 0) { ++trmOffset; }
+            return trmOffset;
         },
 
         // Parse DataView `buffer` begining at `offset` index and return a string built from
@@ -299,6 +316,7 @@
         // * Description: <text string according to encoding> 00 (00)
         // * Value:       <text string according to encoding>
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
+            /*
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
                 readS = content.encoding === 0 ? readStr : readStrUcs2;
@@ -309,6 +327,39 @@
 
             content.description = readS(buffer, offset + 1, termIndex - offset - 1);
             content.value = readS(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+
+            return content;
+            */
+            var
+                // The content to be returned
+                content = { encoding: buffer.getUint8(offset) },
+
+                // Offsets
+                offsetBeg = offset + 1, // content beginning (description field)
+                offsetTrm,              // content null-terminator (seperates descr / value fields)
+
+                //
+                isEncodingUcs2 = content.encoding === 1,
+
+                // Choose appropriate string-reader depending on encoding
+                readS = isEncodingUcs2 ? readStrUcs2 : readStr;
+
+            // Encoding + null term. = at least 2 octets
+            if (length < 2) {
+                return content; // Inadequate length!
+            }
+
+            // Locate the the null terminator seperating description and URL
+            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
+                locateStrTrm)(buffer, offsetBeg, length - 4);
+            if (offsetTrm === -1) {
+                return content; // Not found!
+            }
+
+            // Read data
+            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
+            offsetTrm += isEncodingUcs2 ? 2 : 1; // Move past terminating sequence
+            content.value = readS(buffer, offsetTrm, offset + length - offsetTrm);
 
             return content;
         },
@@ -334,16 +385,36 @@
         // * Description: <text string according to encoding> 00 (00)
         // * URL:         <text string>
         readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
-            var content = { encoding: buffer.getUint8(offset) },
-                termIndex = offset + length - 1,
-                readS = content.encoding === 0 ? readStr : readStrUcs2;
-            for (; termIndex >= offset; --termIndex) {
-                if (buffer.getUint8(termIndex) === 0) { break; }
-            }
-            if (termIndex === offset) { return content; }
+            var
+                // The content to be returned
+                content = { encoding: buffer.getUint8(offset) },
 
-            content.description = readS(buffer, offset + 1, termIndex - offset - 1);
-            content.url = readS(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+                // Offsets
+                offsetBeg = offset + 1, // content beginning (description field)
+                offsetTrm,              // content null-terminator (seperates descr / URL fields)
+
+                //
+                isEncodingUcs2 = content.encoding === 1,
+
+                // Choose appropriate string-reader depending on encoding
+                readS = isEncodingUcs2 ? readStrUcs2 : readStr;
+
+            // Encoding + null term. = at least 2 octets
+            if (length < 2) {
+                return content; // Inadequate length!
+            }
+
+            // Locate the the null terminator seperating description and URL
+            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
+                locateStrTrm)(buffer, offsetBeg, length - 4);
+            if (offsetTrm === -1) {
+                return content; // Not found!
+            }
+
+            // Read data
+            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
+            offsetTrm += isEncodingUcs2 ? 2 : 1; // Move past terminating sequence
+            content.url = readStr(buffer, offsetTrm, offset + length - offsetTrm);
 
             return content;
         },
@@ -360,18 +431,40 @@
         // * Short descr: <text string according to encoding> 00 (00)
         // * Actual text: <full text string according to encoding>
         readId3v2TagFrameContentComm = function (buffer, offset, length) {
-            var content = { encoding: buffer.getUint8(offset) },
-                offsetBeg = offset + 4,     // offset of content beginning (descriptor field)
-                offsetTrm = offsetBeg,      // offset of content null-termination (seperates fields)
-                offsetEnd = offset + length,// offset of (1 octet past) content end
-                readS = content.encoding === 0 ? readStr : readStrUcs2;
-            if (length < 5) { return content; }
-            content.language = readS(buffer, offset + 1, 3);
-            for (; offsetTrm < offsetEnd && buffer.getUint8(offsetTrm) !== 0; ++offsetTrm) {}
-            if (offsetTrm === offsetEnd) { return content; }
-            if (content.encoding !== 0) { ++offsetTrm; } // UCS-2 terminates with _2_ null bytes
+            var
+                // The content to be returned
+                content = { encoding: buffer.getUint8(offset) },
+
+                // Offsets
+                offsetBeg = offset + 4, // content beginning (description field)
+                offsetTrm,              // content null-terminator (seperates descr / text fields)
+
+                //
+                isEncodingUcs2 = content.encoding === 1,
+
+                // Choose appropriate string-reader depending on encoding
+                readS = isEncodingUcs2 ? readStrUcs2 : readStr;
+
+            // Encoding + language + null term. = at least 5 octets
+            if (length < 5) {
+                return content; // Inadequate length!
+            }
+
+            // Read the language field - 3 octets
+            content.language = readStr(buffer, offset + 1, 3);
+
+            // Locate the the null terminator seperating description and text
+            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
+                locateStrTrm)(buffer, offsetBeg, length - 4);
+            if (offsetTrm === -1) {
+                return content; // Not found!
+            }
+
+            // Read data
             content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
-            content.text = readS(buffer, offsetTrm + 1, offsetEnd - offsetTrm - 1);
+            offsetTrm += isEncodingUcs2 ? 2 : 1; // Move past terminating sequence
+            content.text = readS(buffer, offsetTrm, offset + length - offsetTrm);
+
             return content;
         };
 
