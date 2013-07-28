@@ -1,4 +1,4 @@
-//     mp3-parser v0.1.8
+//     mp3-parser v0.1.9
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
@@ -316,20 +316,6 @@
         // * Description: <text string according to encoding> 00 (00)
         // * Value:       <text string according to encoding>
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
-            /*
-            var content = { encoding: buffer.getUint8(offset) },
-                termIndex = offset + length - 1,
-                readS = content.encoding === 0 ? readStr : readStrUcs2;
-            for (; termIndex >= offset; --termIndex) {
-                if (buffer.getUint8(termIndex) === 0) { break; }
-            }
-            if (termIndex === offset) { return content; }
-
-            content.description = readS(buffer, offset + 1, termIndex - offset - 1);
-            content.value = readS(buffer, termIndex + 1, length - (termIndex - offset) - 1);
-
-            return content;
-            */
             var
                 // The content to be returned
                 content = { encoding: buffer.getUint8(offset) },
@@ -862,7 +848,7 @@
     Object.defineProperties(mp3Parser, {
 
         // Get current version of mp3-parser
-        version: { get: function () { return "0.1.8"; } }
+        version: { get: function () { return "0.1.9"; } }
     });
 
     return mp3Parser;
