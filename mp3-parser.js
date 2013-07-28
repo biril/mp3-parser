@@ -301,14 +301,14 @@
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
-                readStr = content.encoding === 0 ? readStr : readStrUcs2;
+                readS = content.encoding === 0 ? readStr : readStrUcs2;
             for (; termIndex >= offset; --termIndex) {
                 if (buffer.getUint8(termIndex) === 0) { break; }
             }
             if (termIndex === offset) { return content; }
 
-            content.description = readStr(buffer, offset + 1, termIndex - offset - 1);
-            content.value = readStr(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+            content.description = readS(buffer, offset + 1, termIndex - offset - 1);
+            content.value = readS(buffer, termIndex + 1, length - (termIndex - offset) - 1);
 
             return content;
         },
@@ -336,14 +336,14 @@
         readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) },
                 termIndex = offset + length - 1,
-                readStr = content.encoding === 0 ? readStr : readStrUcs2;
+                readS = content.encoding === 0 ? readStr : readStrUcs2;
             for (; termIndex >= offset; --termIndex) {
                 if (buffer.getUint8(termIndex) === 0) { break; }
             }
             if (termIndex === offset) { return content; }
 
-            content.description = readStr(buffer, offset + 1, termIndex - offset - 1);
-            content.url = readStr(buffer, termIndex + 1, length - (termIndex - offset) - 1);
+            content.description = readS(buffer, offset + 1, termIndex - offset - 1);
+            content.url = readS(buffer, termIndex + 1, length - (termIndex - offset) - 1);
 
             return content;
         },
@@ -364,14 +364,14 @@
                 offsetBeg = offset + 4,     // offset of content beginning (descriptor field)
                 offsetTrm = offsetBeg,      // offset of content null-termination (seperates fields)
                 offsetEnd = offset + length,// offset of (1 octet past) content end
-                readStr = content.encoding === 0 ? readStr : readStrUcs2;
+                readS = content.encoding === 0 ? readStr : readStrUcs2;
             if (length < 5) { return content; }
-            content.language = readStr(buffer, offset + 1, 3);
+            content.language = readS(buffer, offset + 1, 3);
             for (; offsetTrm < offsetEnd && buffer.getUint8(offsetTrm) !== 0; ++offsetTrm) {}
             if (offsetTrm === offsetEnd) { return content; }
             if (content.encoding !== 0) { ++offsetTrm; } // UCS-2 terminates with _2_ null bytes
-            content.description = readStr(buffer, offsetBeg, offsetTrm - offsetBeg);
-            content.text = readStr(buffer, offsetTrm + 1, offsetEnd - offsetTrm - 1);
+            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
+            content.text = readS(buffer, offsetTrm + 1, offsetEnd - offsetTrm - 1);
             return content;
         };
 
