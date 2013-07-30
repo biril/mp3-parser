@@ -655,7 +655,7 @@
         if (frame.size < 1) { return frame; }
 
         // Read frame's content
-        frame.content = (function (id, offset, length) {
+        frame.content = (function (id) {
             // User-defined text-information frames
             if (id === "TXXX") { return readId3v2TagFrameContentTxxx; }
             // Text-information frames
