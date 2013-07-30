@@ -14,8 +14,12 @@
   "keywords": [
     "mp3"
   ],
-  "dependencies": {},
-  "devDependencies": {},
+  "dependencies": {
+    "underscore": "1.4.x"
+  },
+  "devDependencies": {
+    "jshint": "2.1.x"
+  },
   "scripts": {
     "lint": "jshint --show-non-errors mp3-parser.js"
   },
