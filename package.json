@@ -18,10 +18,12 @@
     "underscore": "1.4.x"
   },
   "devDependencies": {
+    "jasmine-node": "1.9.x",
     "jshint": "2.1.x"
   },
   "scripts": {
-    "lint": "jshint --show-non-errors mp3-parser.js"
+    "test": "./node_modules/.bin/jasmine-node --verbose --color --captureExceptions ./test/spec/",
+    "lint": "jshint --show-non-errors mp3-parser.js test/spec/"
   },
   "engines": {
     "node": ">=0.8"
