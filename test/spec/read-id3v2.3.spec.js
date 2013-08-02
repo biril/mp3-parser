@@ -107,35 +107,19 @@ describe("ID3v2.3 reader", function () {
                 expected: { } },
 
             TALB: { name: "Album/Movie/Show title" },
-            TBPM: { name: "BPM (beats per minute)", expected: { value: "303" } }, // Should be an integer represented as a numerical string.
+            TBPM: { name: "BPM (beats per minute)", expected: { value: "303" } }, // Integer represented as a numeric string.
             TCOM: { name: "Composer" },
             TCON: { name: "Content type" },
-            TCOP: { name: "Copyright message", expected: { value: "2013 whatever" } }, // Should begin with a year and a space character
-            // TDAT: {
-            //     name: "Date",
-            //     expected: { } },
-            // TDLY: {
-            //     name: "Playlist delay",
-            //     expected: { } },
-            // TENC: {
-            //     name: "Encoded by",
-            //     expected: { } },
-            // TEXT: {
-            //     name: "Lyricist/Text writer",
-            //     expected: { } },
-            // TFLT: {
-            //     name: "File type",
-            //     expected: { } },
-            // TIME: {
-            //     name: "Time",
-            //     expected: { } },
-            // TIT1: {
-            //     name: "Content group description",
-            //     expected: { } },
+            TCOP: { name: "Copyright message", expected: { value: "2013 whatever" } }, // Begins with a year followed by space character
+            TDAT: { name: "Date", expected: { value: "0101" } }, // Numeric string in DDMM format
+            TDLY: { name: "Playlist delay", expected: { value: "10" } }, // Numeric string - number of ms
+            TENC: { name: "Encoded by" },
+            TEXT: { name: "Lyricist/Text writer" },
+            TFLT: { name: "File type" },
+            TIME: { name: "Time", expected: { value: "1802" } }, // Numeric string in HHMM format
+            TIT1: { name: "Content group description" },
             TIT2: { name: "Title/songname/content description" },
-            // TIT3: {
-            //     name: "Subtitle/Description refinement",
-            //     expected: { } },
+            TIT3: { name: "Subtitle/Description refinement" },
             // TKEY: {
             //     name: "Initial key",
             //     expected: { } },
@@ -203,9 +187,7 @@ describe("ID3v2.3 reader", function () {
             // TSSE: {
             //     name: "Software/Hardware and settings used for encoding",
             //     expected: { } },
-            // TYER: {
-            //     name: "Year",
-            //     expected: { } },
+            TYER: { name: "Year", expected: { value: "2013" } }, // Should be a numeric string in YYYY format
 
             // TXXX: {
             //    name: "User defined text information frame",
