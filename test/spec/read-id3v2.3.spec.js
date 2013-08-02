@@ -120,74 +120,30 @@ describe("ID3v2.3 reader", function () {
             TIT1: { name: "Content group description" },
             TIT2: { name: "Title/songname/content description" },
             TIT3: { name: "Subtitle/Description refinement" },
-            // TKEY: {
-            //     name: "Initial key",
-            //     expected: { } },
-            // TLAN: {
-            //     name: "Language(s)",
-            //     expected: { } },
-            // TLEN: {
-            //     name: "Length",
-            //     expected: { } },
-            // TMED: {
-            //     name: "Media type",
-            //     expected: { } },
-            // TOAL: {
-            //     name: "Original album/movie/show title",
-            //     expected: { } },
-            // TOFN: {
-            //     name: "Original filename",
-            //     expected: { } },
-            // TOLY: {
-            //     name: "Original lyricist(s)/text writer(s)",
-            //     expected: { } },
-            // TOPE: {
-            //     name: "Original artist(s)/performer(s)",
-            //     expected: { } },
-            // TORY: {
-            //     name: "Original release year",
-            //     expected: { } },
-            // TOWN: {
-            //     name: "File owner/licensee",
-            //     expected: { } },
+            TKEY: { name: "Initial key", expected: { value: "Cbm" } }, // 3 chars max. A/Ab/A#/Abm/A#m
+            TLAN: { name: "Language(s)", expected: { value: "eng"} }, // Multiple ISO-639-2 lang codes
+            TLEN: { name: "Length", expected: { value: "10" } }, // Numeric string - number of ms
+            TMED: { name: "Media type" },
+            TOAL: { name: "Original album/movie/show title" },
+            TOFN: { name: "Original filename" },
+            TOLY: { name: "Original lyricist(s)/text writer(s)" },
+            TOPE: { name: "Original artist(s)/performer(s)" },
+            TORY: { name: "Original release year", expected: { value: "1999" } }, // Numeric string in YYYY format
+            TOWN: { name: "File owner/licensee" },
             TPE1: { name: "Lead performer(s)/Soloist(s)" },
-            // TPE2: {
-            //     name: "Band/orchestra/accompaniment",
-            //     expected: { } },
-            // TPE3: {
-            //     name: "Conductor/performer refinement",
-            //     expected: { } },
-            // TPE4: {
-            //     name: "Interpreted, remixed, or otherwise modified by",
-            //     expected: { } },
-            // TPOS: {
-            //     name: "Part of a set",
-            //     expected: { } },
-            // TPUB: {
-            //     name: "Publisher",
-            //     expected: { } },
-            // TRCK: {
-            //     name: "Track number/Position in set",
-            //     expected: { } },
-            // TRDA: {
-            //     name: "Recording dates",
-            //     expected: { } },
-            // TRSN: {
-            //     name: "Internet radio station name",
-            //     expected: { } },
-            // TRSO: {
-            //     name: "Internet radio station owner",
-            //     expected: { } },
-            // TSIZ: {
-            //     name: "Size",
-            //     expected: { } },
-            // TSRC: {
-            //     name: "ISRC (international standard recording code)",
-            //     expected: { } },
-            // TSSE: {
-            //     name: "Software/Hardware and settings used for encoding",
-            //     expected: { } },
-            TYER: { name: "Year", expected: { value: "2013" } }, // Should be a numeric string in YYYY format
+            TPE2: { name: "Band/orchestra/accompaniment" },
+            TPE3: { name: "Conductor/performer refinement" },
+            TPE4: { name: "Interpreted, remixed, or otherwise modified by" },
+            TPOS: { name: "Part of a set", expected: { value: "01/02" } }, // Numeric string, optionally extended with '/'
+            TPUB: { name: "Publisher" },
+            TRCK: { name: "Track number/Position in set", expected: { value: "303/909" } }, // Numeric string, optionally extended with '/'
+            TRDA: { name: "Recording dates" },
+            TRSN: { name: "Internet radio station name" },
+            TRSO: { name: "Internet radio station owner" },
+            TSIZ: { name: "Size", expected: { value: "1" } }, // Numeric string - Size of file in bytes, excluding ID3v2 tag
+            TSRC: { name: "ISRC (international standard recording code)", expected: { value: "0123456789AB" } }, // 12 chars
+            TSSE: { name: "Software/Hardware and settings used for encoding" },
+            TYER: { name: "Year", expected: { value: "2013" } }, // Numeric string in YYYY format
 
             // TXXX: {
             //    name: "User defined text information frame",
@@ -233,10 +189,13 @@ describe("ID3v2.3 reader", function () {
     beforeEach(function () { });
 
     describe("when reading text-information frames", function () {
-        // Pick text-information frames only, preprocess them and test each one. Frames that don't
-        //  provide an `expected` hash are expected to be set to their 'friendly name' (as defined
-        //  in the ID3v2 spec). This testing-policy can't be used for _all of them_ as some require
-        //  their value to follow certain formatting rules.
+        // Pick text-information frames only, preprocess them and test each one. For frames that
+        //  don't provide an `expected` hash, their value is checked against their 'friendly name'
+        //  (as defined in the ID3v2 spec). This testing-policy isn't used for _all of them_ as some
+        //  require their value to follow certain formatting rules according to the spec. In these
+        //  cases the `expected` hash contains such a conforming `value`. (Note that, in practice,
+        //  it is actually highly unlikely that taggers actually enforce the spec's formatting
+        //  rules)
         _.chain(id3v2TagFrames)
             .map(function (frame, id) {
                 return { id: id, name: frame.name, expected: frame.expected };
