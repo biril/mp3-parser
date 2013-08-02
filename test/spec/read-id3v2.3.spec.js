@@ -251,30 +251,27 @@ describe("ID3v2.3 reader", function () {
     beforeEach(function () { });
 
     describe("when reading text-information frames", function () {
-        // Pick text-information frames ..
-        var textInformationFrames = _(id3v2TagFrames).map(function (frame, id) {
+        // Pick text-information frames only, preprocess them and test each one. Frames that don't
+        //  provide an `expected` hash are expected to be set to their 'friendly name' (as defined
+        //  in the ID3v2 spec). This testing-policy can't be used for _all of them_ as some require
+        //  their value to follow certain formatting rules.
+        _.chain(id3v2TagFrames)
+            .map(function (frame, id) {
                 return { id: id, name: frame.name, expected: frame.expected };
             }).filter(function (frame) {
                 return frame.id.charAt(0) === "T" && frame.id !== "TXXX";
+            }).each(function (frame) {
+                it("should read " + frame.id + ": " + frame.name, function () {
+                    var capturedFrames = getCapturedFrames(frame.id),
+                        f = null;
+
+                    expect(capturedFrames.length).toBe(1);
+                    f = capturedFrames[0];
+
+                    expect(f.content.encoding).toBe(0);
+                    expect(f.content.text).toBe(frame.expected ? frame.expected.value : frame.name);
+                });
             });
-
-        // .. and test each one. The frames that don't provide an `expected` hash are expected
-        //  to be set to their 'friendly name' (as defined in the ID3v2 spec). This 'testing
-        //  policy' can't be used for _all of them_ as some require their value to follow certain
-        //  formatting rules
-        _(textInformationFrames).each(function (frame) {
-            it("should read " + frame.id + ": " + frame.name, function () {
-                var capturedFrames = getCapturedFrames(frame.id),
-                    f = null;
-
-                expect(capturedFrames.length).toBe(1);
-                f = capturedFrames[0];
-
-                expect(f.content.encoding).toBe(0);
-                expect(f.content.text).toBe(frame.expected ? frame.expected.value : frame.name);
-            });
-        });
-
     });
 
 });
