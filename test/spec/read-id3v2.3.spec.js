@@ -225,4 +225,16 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             });
     });
 
+    it("should read TXXX: User defined text information frame", function () {
+        var capturedFrames = getCapturedFrames("TXXX"),
+            f = null;
+
+        expect(capturedFrames.length).toBe(1);
+        f = capturedFrames[0];
+
+        expect(f.content.encoding).toBe(0);
+        expect(f.content.description).toBe(id3v2TagFrames.TXXX.name + " description");
+        expect(f.content.value).toBe(id3v2TagFrames.TXXX.name);
+    });
+
 });
