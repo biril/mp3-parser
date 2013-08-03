@@ -167,30 +167,16 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             USLT: {
                 name: "Unsychronized lyric/text transcription",
                 expected: { } },
-            WCOM: {
-                name: "Commercial information",
-                expected: { } },
-            WCOP: {
-                name: "Copyright/Legal information",
-                expected: { } },
-            WOAF: {
-                name: "Official audio file webpage",
-                expected: { } },
-            WOAR: {
-                name: "Official artist/performer webpage",
-                expected: { } },
-            WOAS: {
-                name: "Official audio source webpage",
-                expected: { } },
-            WORS: {
-                name: "Official internet radio station homepage",
-                expected: { } },
-            WPAY: {
-                name: "Payment",
-                expected: { } },
-            WPUB: {
-                name: "Publishers official webpage",
-                expected: { } },
+
+            WCOM: { name: "Commercial information" },
+            WCOP: { name: "Copyright/Legal information" },
+            WOAF: { name: "Official audio file webpage" },
+            WOAR: { name: "Official artist/performer webpage" },
+            WOAS: { name: "Official audio source webpage" },
+            WORS: { name: "Official internet radio station homepage" },
+            WPAY: { name: "Payment" },
+            WPUB: { name: "Publishers official webpage" },
+
             WXXX: {
                 name: "User defined URL link frame",
                 expected: { } }
@@ -234,5 +220,21 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         expect(f.content.description).toBe(id3v2TagFrames.TXXX.name + " description");
         expect(f.content.value).toBe(id3v2TagFrames.TXXX.name);
     });
+
+    // Pick URL-link frames only, preprocess them and test each one. Frame values are checked
+    //  against each frame's 'friendly name', as defined in the ID3v2 spec.
+    _.chain(id3v2TagFrames)
+        .map(function (frame, id) {
+            return { id: id, name: frame.name };
+        }).filter(function (frame) {
+            return frame.id.charAt(0) === "W" && frame.id !== "WXXX";
+        }).each(function (frame) {
+            it("should read " + frame.id + ": " + frame.name, function () {
+                var capturedFrames = getCapturedFrames(frame.id);
+
+                expect(capturedFrames.length).toBe(1);
+                expect(capturedFrames[0].content.value).toBe(frame.name);
+            });
+        });
 
 });
