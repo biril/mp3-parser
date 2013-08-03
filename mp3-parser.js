@@ -301,7 +301,7 @@
         // * Information: <text string according to encoding>
         readId3v2TagFrameContentT = function (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) };
-            content.text = (content.encoding === 0 ? readStr :
+            content.value = (content.encoding === 0 ? readStr :
                 readStrUcs2)(buffer, offset + 1, length - 1);
             return content;
         },

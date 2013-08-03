@@ -220,7 +220,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                     f = capturedFrames[0];
 
                     expect(f.content.encoding).toBe(0);
-                    expect(f.content.text).toBe(frame.expected ? frame.expected.value : frame.name);
+                    expect(f.content.value).toBe(frame.expected ? frame.expected.value : frame.name);
                 });
             });
     });
