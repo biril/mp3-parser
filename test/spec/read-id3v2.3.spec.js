@@ -156,9 +156,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             TSSE: { name: "Software/Hardware and settings used for encoding" },
             TYER: { name: "Year", expected: { value: "2013" } }, // Numeric string in YYYY format
 
-            TXXX: {
-                name: "User defined text information frame",
-                expected: { } },
+            TXXX: { name: "User defined text information frame" },
+
             UFID: {
                 name: "Unique file identifier",
                 expected: { } },
@@ -199,32 +198,31 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
     // beforeEach(function () { });
 
-    describe("when reading text-information frames", function () {
-        // Pick text-information frames only, preprocess them and test each one. For frames that
-        //  don't provide an `expected` hash, their value is checked against their 'friendly name',
-        //  as defined in the ID3v2 spec. This testing-policy isn't used for _all of them_ as some
-        //  require their value to follow certain formatting rules according to the spec. In these
-        //  cases the `expected` hash contains such a conforming `value`. (Note that, in practice,
-        //  it is actually highly unlikely that taggers enforce the spec's formatting rules)
-        _.chain(id3v2TagFrames)
-            .map(function (frame, id) {
-                return { id: id, name: frame.name, expected: frame.expected };
-            }).filter(function (frame) {
-                return frame.id.charAt(0) === "T" && frame.id !== "TXXX";
-            }).each(function (frame) {
-                it("should read " + frame.id + ": " + frame.name, function () {
-                    var capturedFrames = getCapturedFrames(frame.id),
-                        f = null;
+    // Pick text-information frames only, preprocess them and test each one. For frames that
+    //  don't provide an `expected` hash, their value is checked against their 'friendly name',
+    //  as defined in the ID3v2 spec. This testing-policy isn't used for _all of them_ as some
+    //  require their value to follow certain formatting rules according to the spec. In these
+    //  cases the `expected` hash contains such a conforming `value`. (Note that, in practice,
+    //  it is actually highly unlikely that taggers enforce the spec's formatting rules)
+    _.chain(id3v2TagFrames)
+        .map(function (frame, id) {
+            return { id: id, name: frame.name, expected: frame.expected };
+        }).filter(function (frame) {
+            return frame.id.charAt(0) === "T" && frame.id !== "TXXX";
+        }).each(function (frame) {
+            it("should read " + frame.id + ": " + frame.name, function () {
+                var capturedFrames = getCapturedFrames(frame.id),
+                    f = null;
 
-                    expect(capturedFrames.length).toBe(1);
-                    f = capturedFrames[0];
+                expect(capturedFrames.length).toBe(1);
+                f = capturedFrames[0];
 
-                    expect(f.content.encoding).toBe(0);
-                    expect(f.content.value).toBe(frame.expected ? frame.expected.value : frame.name);
-                });
+                expect(f.content.encoding).toBe(0);
+                expect(f.content.value).toBe(frame.expected ? frame.expected.value : frame.name);
             });
-    });
+        });
 
+    //
     it("should read TXXX: User defined text information frame", function () {
         var capturedFrames = getCapturedFrames("TXXX"),
             f = null;
