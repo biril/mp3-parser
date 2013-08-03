@@ -358,7 +358,7 @@
         //
         // * URL: <text string>
         readId3v2TagFrameContentW = function (buffer, offset, length) {
-            return { url: readStr(buffer, offset, length) };
+            return { value: readStr(buffer, offset, length) };
         },
 
         // Read the content of a user-defined URL-link ID3v2 tag frame. Intended for URL links
@@ -400,7 +400,7 @@
             // Read data
             content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
             offsetTrm += isEncodingUcs2 ? 2 : 1; // Move past terminating sequence
-            content.url = readStr(buffer, offsetTrm, offset + length - offsetTrm);
+            content.value = readStr(buffer, offsetTrm, offset + length - offsetTrm);
 
             return content;
         },
