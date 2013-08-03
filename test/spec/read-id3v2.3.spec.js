@@ -177,9 +177,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             WPAY: { name: "Payment" },
             WPUB: { name: "Publishers official webpage" },
 
-            WXXX: {
-                name: "User defined URL link frame",
-                expected: { } }
+            WXXX: { name: "User defined URL link frame" }
         };
 
     // beforeEach(function () { });
@@ -236,5 +234,18 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                 expect(capturedFrames[0].content.value).toBe(frame.name);
             });
         });
+
+    //
+    it("should read WXXX: User defined URL link frame", function () {
+        var capturedFrames = getCapturedFrames("WXXX"),
+            f = null;
+
+        expect(capturedFrames.length).toBe(1);
+        f = capturedFrames[0];
+
+        expect(f.content.encoding).toBe(0);
+        expect(f.content.description).toBe(id3v2TagFrames.WXXX.name + " description");
+        expect(f.content.value).toBe(id3v2TagFrames.WXXX.name);
+    });
 
 });
