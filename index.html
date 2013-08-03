@@ -27,7 +27,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <pre><code>mp3-parser v0.1.11
+              <pre><code>mp3-parser v0.1.12
 
 https://github.com/biril/mp3-parser
 Licensed and freely distributed under the MIT License
@@ -631,7 +631,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             
             <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentT = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
             <span class="keyword">var</span> content = { encoding: buffer.getUint8(offset) };
-            content.text = (content.encoding === <span class="number">0</span> ? readStr :
+            content.value = (content.encoding === <span class="number">0</span> ? readStr :
                 readStrUcs2)(buffer, offset + <span class="number">1</span>, length - <span class="number">1</span>);
             <span class="keyword">return</span> content;
         },</pre></div></div>
@@ -798,7 +798,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             </div>
             
             <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentW = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">return</span> { url: readStr(buffer, offset, length) };
+            <span class="keyword">return</span> { value: readStr(buffer, offset, length) };
         },</pre></div></div>
             
         </li>
@@ -937,7 +937,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             
             <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
             offsetTrm += isEncodingUcs2 ? <span class="number">2</span> : <span class="number">1</span>; <span class="comment">// Move past terminating sequence</span>
-            content.url = readStr(buffer, offsetTrm, offset + length - offsetTrm);
+            content.value = readStr(buffer, offsetTrm, offset + length - offsetTrm);
 
             <span class="keyword">return</span> content;
         },</pre></div></div>
@@ -2157,7 +2157,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.11"</span>; } }
+            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.12"</span>; } }
     });
 
     <span class="keyword">return</span> mp3Parser;
