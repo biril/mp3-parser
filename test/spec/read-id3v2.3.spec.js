@@ -1,8 +1,15 @@
+//     mp3-parser test suite: ID3v2.3 tag / ISO-8859-1 encoded frames. Tests run against
+//     id3v2.3-iso-8859-1.mp3 (maintained with [Kid3 ID3 Tagger](http://kid3.sourceforge.net/))
+
+//     https://github.com/biril/mp3-parser
+//     Licensed and freely distributed under the MIT License
+//     Copyright (c) 2013 Alex Lambiris
+
 /*jshint node:true */
 /*global describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
 "use strict";
 
-describe("ID3v2.3 reader", function () {
+describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", function () {
 
     var util = require("util"),
 
@@ -12,6 +19,7 @@ describe("ID3v2.3 reader", function () {
 
         filePath = __dirname + "/../id3v2.3-iso-8859-1.mp3",
 
+        // Read the file into a DataView-wrapped ArrayBuffer
         buffer = (function (b) {
             if (!b) {
                 util.error("Oops: Failed to load " + filePath);
@@ -26,15 +34,18 @@ describe("ID3v2.3 reader", function () {
             return new DataView(uint8Array.buffer);
         }(require("fs").readFileSync(filePath))),
 
+        // Read the ID3v2 tag. This is done once, here, and all tests run on `capturedId3v2Tag`
         capturedId3v2Tag = mp3Parser.readId3v2Tag(buffer),
 
+        // Helper to get all captured ID3v2 tag frames of given `id`
         getCapturedFrames = function (id) {
             return _(capturedId3v2Tag.frames).filter(function (frame) {
                 return frame.header.id === id;
             });
         },
 
-        //
+        // All ID3v2 tag frames along with their 'friendly names' as defined in the spec and and,
+        //  in certain cases, an `expected` hash which defines values to test against
         id3v2TagFrames = {
             AENC: {
                 name: "Audio encryption",
@@ -145,9 +156,9 @@ describe("ID3v2.3 reader", function () {
             TSSE: { name: "Software/Hardware and settings used for encoding" },
             TYER: { name: "Year", expected: { value: "2013" } }, // Numeric string in YYYY format
 
-            // TXXX: {
-            //    name: "User defined text information frame",
-            //    expected: { } },
+            TXXX: {
+                name: "User defined text information frame",
+                expected: { } },
             UFID: {
                 name: "Unique file identifier",
                 expected: { } },
@@ -186,16 +197,15 @@ describe("ID3v2.3 reader", function () {
                 expected: { } }
         };
 
-    beforeEach(function () { });
+    // beforeEach(function () { });
 
     describe("when reading text-information frames", function () {
         // Pick text-information frames only, preprocess them and test each one. For frames that
-        //  don't provide an `expected` hash, their value is checked against their 'friendly name'
-        //  (as defined in the ID3v2 spec). This testing-policy isn't used for _all of them_ as some
+        //  don't provide an `expected` hash, their value is checked against their 'friendly name',
+        //  as defined in the ID3v2 spec. This testing-policy isn't used for _all of them_ as some
         //  require their value to follow certain formatting rules according to the spec. In these
         //  cases the `expected` hash contains such a conforming `value`. (Note that, in practice,
-        //  it is actually highly unlikely that taggers actually enforce the spec's formatting
-        //  rules)
+        //  it is actually highly unlikely that taggers enforce the spec's formatting rules)
         _.chain(id3v2TagFrames)
             .map(function (frame, id) {
                 return { id: id, name: frame.name, expected: frame.expected };
