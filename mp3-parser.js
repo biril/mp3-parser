@@ -144,6 +144,14 @@
             return String.fromCharCode.apply(null, new Uint8Array(buffer.buffer, offset, length));
         },
 
+        // Similar to `readStr` but will check for a null-terminator determining the end of the
+        //  string. The returned string will be of _at most_ `length` octets
+        readTrmStr = function (buffer, offset, length) {
+            var trmOffset = locateStrTrm(buffer, offset, length);
+            if (trmOffset !== -1) { length = trmOffset - offset; }
+            return readStr(buffer, offset, length);
+        },
+
         // UCS-2 version of `readStr`. UCS-2 is the fixed-width two-byte subset of
         //  Unicode that can only express values inside the 'Basic Multilingual Plane' (BMP). Note
         //  that this method is generally unsuitable for parsing non-trivial UTF-16 strings. This
