@@ -165,7 +165,7 @@
         },
 
         // Get the number of bytes in a frame given its `bitrate`, `samplingRate` and `padding`.
-        //  Based on [a magic formula](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm)
+        //  Based on [magic formula](http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm)
         getFrameByteLength = function (bitrate, samplingRate, padding) {
             return Math.floor((144000 * bitrate / samplingRate) + padding);
         },
@@ -298,7 +298,7 @@
         //  text frame identifiers begin with "T", with the exception of the "TXXX" frame
         //
         // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Information: <text string according to encoding>
+        // * Information: a text string according to encoding
         readId3v2TagFrameContentT = function (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) };
             content.value = (content.encoding === 0 ? readStr :
@@ -313,8 +313,8 @@
         //  frame in each tag, but only one with the same description
         //
         // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Description: <text string according to encoding> 00 (00)
-        // * Value:       <text string according to encoding>
+        // * Description: a text string according to encoding (followed by 00 (00))
+        // * Value:       a text string according to encoding
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
             var
                 // The content to be returned
@@ -356,7 +356,7 @@
         //  ignored and not be displayed. All URL link frame identifiers begins with "W". Only URL
         //  link frame identifiers begins with "W"
         //
-        // * URL: <text string>
+        // * URL: a text string
         readId3v2TagFrameContentW = function (buffer, offset, length) {
             return { value: readStr(buffer, offset, length) };
         },
@@ -368,8 +368,8 @@
         //  one "WXXX" frame in each tag, but only one with the same description
         //
         // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Description: <text string according to encoding> 00 (00)
-        // * URL:         <text string>
+        // * Description: a text string according to encoding (followed by 00 (00))
+        // * URL:         a text string
         readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
             var
                 // The content to be returned
@@ -414,8 +414,8 @@
         //
         // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
         // * Language:    xx xx xx
-        // * Short descr: <text string according to encoding> 00 (00)
-        // * Actual text: <full text string according to encoding>
+        // * Short descr: a text string according to encoding (followed by 00 (00))
+        // * Actual text: a text string according to encoding
         readId3v2TagFrameContentComm = function (buffer, offset, length) {
             var
                 // The content to be returned
@@ -630,15 +630,15 @@
 
     // ### Read an ID3v2 Tag Frame
     //
-    // Read a specific [ID3v2 Tag](http://id3.org/id3v2.3.0) frame located at `offset` of DataView
-    //  `buffer`. Returns null in the event that no tag-frame is found at `offset`
+    // Read [ID3v2 Tag frame](http://id3.org/id3v2.3.0#Declared_ID3v2_frames) located at `offset`
+    //  of DataView `buffer`. Returns null in the event that no tag-frame is found at `offset`
     mp3Parser.readId3v2TagFrame = function (buffer, offset) {
-        // All frames consist of a frame header followed by one or more fields containing the
-        //  actual information. The layout of the frame header:
+        // All frames consist of a frame header followed by one or more fields containing the actual
+        // information. The frame header is 10 octets long and laid out as `IIIISSSSFF`, where
         //
-        // * Frame ID: xx xx xx xx (four characters)
-        // * Size:     xx xx xx xx (frame size excluding frame header (frame size - 10))
-        // * Flags:    xx xx
+        // * `IIII......`: Frame id (four characters)
+        // * `....SSSS..`: Size (frame size excluding frame header = frame size - 10)
+        // * `........FF`: Flags
         var frame = {
                 header: {
                     id: readStr(buffer, offset, 4),
@@ -681,12 +681,13 @@
     mp3Parser.readId3v2Tag = function (buffer, offset) {
         offset || (offset = 0);
 
-        // The ID3v2 tag header, which should be the first information in the file, is 10 bytes:
+        // The ID3v2 tag header, which should be the first information in the file, is 10 octets
+        //  long and laid out as `IIIVVFSSSS`, where
         //
-        // * identifier: 3 octets: always "ID3" (0x49/73, 0x44/68, 0x33/51)
-        // * version:    2 octets: major version + revision number
-        // * flags:      1 octet : abc00000. a:unsynchronisation, b:extended header, c:experimental
-        // * size:       4 octets: tag size as a synchsafe integer
+        // * `III.......`: id, always "ID3" (0x49/73, 0x44/68, 0x33/51)
+        // * `...VV.....`: version (major version + revision number)
+        // * `.....F....`: flags: abc00000. a:unsynchronisation, b:extended header, c:experimental
+        // * `......SSSS`: tag's size as a synchsafe integer
 
         // There should be at least 10 bytes ahead
         if (buffer.byteLength - offset < 10) { return null; }
@@ -795,8 +796,8 @@
 
     // ### Read all Tags up to First Frame
     //
-    // http://www.rengels.de/computer/mp3tags.html
-    // http://stackoverflow.com/q/5005476/612262
+    // ( See [this](http://www.rengels.de/computer/mp3tags.html) and
+    //  [this](http://stackoverflow.com/a/5013505) )
     mp3Parser.readTags = function (buffer, offset) {
         offset || (offset = 0);
 

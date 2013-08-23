@@ -44,8 +44,9 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             });
         },
 
-        // All ID3v2 tag frames along with their 'friendly names' as defined in the spec and and,
-        //  in certain cases, an `expected` hash which defines values to test against
+        // All [ID3v2 tag frames](http://id3.org/id3v2.3.0#Declared_ID3v2_frames) along with their
+        //  'friendly names' as defined in the spec and, in certain cases, an `expected` hash which
+        //  defines values to test against
         id3v2TagFrames = {
             AENC: {
                 name: "Audio encryption",
