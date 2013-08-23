@@ -154,21 +154,35 @@
 
         // UCS-2 version of `readStr`. UCS-2 is the fixed-width two-byte subset of
         //  Unicode that can only express values inside the 'Basic Multilingual Plane' (BMP). Note
-        //  that this method is generally unsuitable for parsing non-trivial UTF-16 strings. This
-        //  of course is only marginally related as, according to ID3v2, all Unicode strings are
-        //  UCS-2. Further info:
+        //  that this method is generally unsuitable for parsing non-trivial UTF-16 strings
+        //  (containing surrogate pairs). [This is only marginally related as, according to ID3v2,
+        //  all Unicode strings are UCS-2.] Further info:
         //
         //  * [How to convert ArrayBuffer to and from String](http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
         //  * [The encoding spec](http://encoding.spec.whatwg.org/)
         //  * [stringencoding shim](https://code.google.com/p/stringencoding/)
+        //
+        // About the BOM: The current implementation removes the leading BOM from given buffer to
+        //  avoid invisible characters that mess up the resulting strings. Tests performed with
+        //  UCS-2 LE encoded frames indicate that String.fromCharCode correctly converts byte array
+        //  to string but no tests have been made for UCS-2 BE. (Kid3, the ID3v2 Tag generator used
+        //  at the time of this writing, goes totally weird when switched to BE)
         readStrUcs2 = function (buffer, offset, length) {
+            // Tweak offset to remove the BOM (LE: FF FE / BE: FE FF)
+            if (buffer.getUint16(offset) === 0xFFFE || buffer.getUint16(offset) === 0xFEFF) {
+                offset += 2;
+                length -= 2;
+            }
+
             buffer = buffer.buffer;
+
             // When offset happens to be an even number of octets, the array-buffer may be wrapped
             //  in a Uint16Array. In the event that it's _not_, an actual copy has to be made
             if (offset % 2 === 1) {
                 buffer = buffer.slice(offset, offset + length);
                 offset = 0;
             }
+
             return String.fromCharCode.apply(null, new Uint16Array(buffer, offset, length / 2));
         },
 
