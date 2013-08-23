@@ -444,8 +444,8 @@
                 return content; // Inadequate length!
             }
 
-            // Read the language field - 3 octets
-            content.language = readStr(buffer, offset + 1, 3);
+            // Read the language field - 3 octets at most
+            content.language = readTrmStr(buffer, offset + 1, 3);
 
             // Locate the the null terminator seperating description and text
             offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
