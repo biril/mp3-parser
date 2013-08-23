@@ -37,7 +37,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         // Read the ID3v2 tag. This is done once, here, and all tests run on `capturedId3v2Tag`
         capturedId3v2Tag = mp3Parser.readId3v2Tag(buffer),
 
-        // Helper to get all captured ID3v2 tag frames of given `id`
+        // Helper to get (an array of) all captured ID3v2 tag frames of given `id`
         getCapturedFrames = function (id) {
             return _(capturedId3v2Tag.frames).filter(function (frame) {
                 return frame.header.id === id;
@@ -54,9 +54,28 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             APIC: {
                 name: "Attached picture",
                 expected: { } },
+
             COMM: {
                 name: "Comments",
-                expected: { } },
+                expected: {
+                    withoutLang: {
+                        description: "commentWithoutLang",
+                        text: "This comment has an empty language field",
+                        language: ""
+                    },
+                    withLang: {
+                        description: "commentWithLang",
+                        text: "This comment has a language field of value 'eng'",
+                        language: "eng"
+                    },
+                    withHalfLang: {
+                        description: "commentWithHalfLang",
+                        text: "This comment has a language field of value 'en' (inadequate length)",
+                        language: "en"
+                    }
+                }
+            },
+
             COMR: {
                 name: "Commercial frame",
                 expected: { } },
@@ -182,6 +201,47 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         };
 
     // beforeEach(function () { });
+
+    it("should read COMM: Comments frame", function () {
+        var capturedFrames = getCapturedFrames("COMM"),
+
+            // Get expected and actual comment frames, for the case of no lang-field
+            expectedFrameWithoutLang = id3v2TagFrames["COMM"].expected.withoutLang,
+            frameWithoutLang = null,
+            framesWithoutLang = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedFrameWithoutLang.description;
+            }),
+
+            // Get expected and actual comment frames, for the case of lang-field present
+            expectedFrameWithLang = id3v2TagFrames["COMM"].expected.withLang,
+            frameWithLang = null,
+            framesWithLang = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedFrameWithLang.description;
+            }),
+
+            // Get expected and actual comment frames, for the case of lang-field of inadequate
+            //  length present
+            expectedFrameWithHalfLang = id3v2TagFrames["COMM"].expected.withHalfLang,
+            frameWithHalfLang = null,
+            framesWithHalfLang = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedFrameWithHalfLang.description;
+            });
+
+        expect(framesWithoutLang.length).toBe(1);
+        frameWithoutLang = framesWithoutLang[0];
+        expect(frameWithoutLang.content.language).toBe(expectedFrameWithoutLang.language);
+        expect(frameWithoutLang.content.text).toBe(expectedFrameWithoutLang.text);
+
+        expect(framesWithLang.length).toBe(1);
+        frameWithLang = framesWithLang[0];
+        expect(frameWithLang.content.language).toBe(expectedFrameWithLang.language);
+        expect(frameWithLang.content.text).toBe(expectedFrameWithLang.text);
+
+        expect(framesWithHalfLang.length).toBe(1);
+        frameWithHalfLang = framesWithHalfLang[0];
+        expect(frameWithHalfLang.content.language).toBe(expectedFrameWithHalfLang.language);
+        expect(frameWithHalfLang.content.text).toBe(expectedFrameWithHalfLang.text);
+    });
 
     // Pick text-information frames only, preprocess them and test each one. For frames that
     //  don't provide an `expected` hash, their value is checked against their 'friendly name',
