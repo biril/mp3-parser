@@ -111,7 +111,7 @@
         //  Search starts at given `offset` and ends after `length` octets. Will return the
         //  absolute offset of sequence if found, -1 otherwise
         locateSeq = function (seq, buffer, offset, length) {
-            for (var i = 0, l = length - seq.length; i < l; ++i) {
+            for (var i = 0, l = length - seq.length + 1; i < l; ++i) {
                 if (isSeq(seq, buffer, offset + i)) { return offset + i; }
             }
             return -1;
