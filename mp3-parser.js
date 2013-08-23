@@ -435,7 +435,7 @@
         //  content descriptor
         //
         // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Language:    xx xx xx
+        // * Language:    xx xx xx (ISO-639-2)
         // * Short descr: a text string according to encoding (followed by 00 (00))
         // * Actual text: a text string according to encoding
         readId3v2TagFrameContentComm = function (buffer, offset, length) {
