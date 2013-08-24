@@ -15,7 +15,7 @@
     "mp3"
   ],
   "dependencies": {
-    "underscore": "1.4.x"
+    "underscore": "1.5.x"
   },
   "devDependencies": {
     "jasmine-node": "1.9.x",
