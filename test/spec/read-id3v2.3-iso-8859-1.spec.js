@@ -137,44 +137,51 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                 name: "Synchronized tempo codes",
                 expected: { } },
 
+            // Text information frames. For some of these (which are commented below), the standard
+            //  contains specific formatting instructions. They are however T-frames and as such
+            //  their content is of variable length and encoding. As a result the formatting
+            //  constraints cannot be practically enforced. So we test all of them as if they could
+            //  contain _any_ text in _any_ encoding. This is one of the standard's (many) weird
+            //  points - why would TSIZ which is supposed to contain the "size of file in bytes,
+            //  excluding ID3v2 tag" be encoded as a T-frame?? ..
             TALB: { name: "Album/Movie/Show title" },
-            TBPM: { name: "BPM (beats per minute)", expected: { value: "303" } }, // Integer represented as a numeric string.
+            TBPM: { name: "BPM (beats per minute)"}, // Integer represented as a numeric string
             TCOM: { name: "Composer" },
             TCON: { name: "Content type" },
-            TCOP: { name: "Copyright message", expected: { value: "2013 whatever" } }, // Begins with a year followed by space character
-            TDAT: { name: "Date", expected: { value: "0101" } }, // Numeric string in DDMM format
-            TDLY: { name: "Playlist delay", expected: { value: "10" } }, // Numeric string - number of ms
+            TCOP: { name: "Copyright message" }, // Begins with a year followed by space character
+            TDAT: { name: "Date" }, // Numeric string in DDMM format
+            TDLY: { name: "Playlist delay" }, // Numeric string - number of ms
             TENC: { name: "Encoded by" },
             TEXT: { name: "Lyricist/Text writer" },
             TFLT: { name: "File type" },
-            TIME: { name: "Time", expected: { value: "1802" } }, // Numeric string in HHMM format
+            TIME: { name: "Time" }, // Numeric string in HHMM format
             TIT1: { name: "Content group description" },
             TIT2: { name: "Title/songname/content description" },
             TIT3: { name: "Subtitle/Description refinement" },
-            TKEY: { name: "Initial key", expected: { value: "Cbm" } }, // 3 chars max. A/Ab/A#/Abm/A#m
-            TLAN: { name: "Language(s)", expected: { value: "eng"} }, // Multiple ISO-639-2 lang codes
-            TLEN: { name: "Length", expected: { value: "10" } }, // Numeric string - number of ms
+            TKEY: { name: "Initial key" }, // 3 chars max. A/Ab/A#/Abm/A#m
+            TLAN: { name: "Language(s)" }, // Multiple ISO-639-2 lang codes
+            TLEN: { name: "Length" }, // Numeric string - number of ms
             TMED: { name: "Media type" },
             TOAL: { name: "Original album/movie/show title" },
             TOFN: { name: "Original filename" },
             TOLY: { name: "Original lyricist(s)/text writer(s)" },
             TOPE: { name: "Original artist(s)/performer(s)" },
-            TORY: { name: "Original release year", expected: { value: "1999" } }, // Numeric string in YYYY format
+            TORY: { name: "Original release year" }, // Numeric string in YYYY format
             TOWN: { name: "File owner/licensee" },
             TPE1: { name: "Lead performer(s)/Soloist(s)" },
             TPE2: { name: "Band/orchestra/accompaniment" },
             TPE3: { name: "Conductor/performer refinement" },
             TPE4: { name: "Interpreted, remixed, or otherwise modified by" },
-            TPOS: { name: "Part of a set", expected: { value: "01/02" } }, // Numeric string, optionally extended with '/'
+            TPOS: { name: "Part of a set" }, // Numeric string, with optional with '/' (e.g. 01/02)
             TPUB: { name: "Publisher" },
-            TRCK: { name: "Track number/Position in set", expected: { value: "303/909" } }, // Numeric string, optionally extended with '/'
+            TRCK: { name: "Track number/Position in set" }, // Numeric string, with optional '/'
             TRDA: { name: "Recording dates" },
             TRSN: { name: "Internet radio station name" },
             TRSO: { name: "Internet radio station owner" },
-            TSIZ: { name: "Size", expected: { value: "1" } }, // Numeric string - Size of file in bytes, excluding ID3v2 tag
-            TSRC: { name: "ISRC (international standard recording code)", expected: { value: "0123456789AB" } }, // 12 chars
+            TSIZ: { name: "Size" }, // Numeric string - Size of file in bytes, excluding ID3v2 tag
+            TSRC: { name: "ISRC (international standard recording code)" }, // 12 chars
             TSSE: { name: "Software/Hardware and settings used for encoding" },
-            TYER: { name: "Year", expected: { value: "2013" } }, // Numeric string in YYYY format
+            TYER: { name: "Year" }, // Numeric string in YYYY format
 
             TXXX: { name: "User defined text information frame" },
 
@@ -244,11 +251,13 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
     });
 
     // Pick text-information frames only, preprocess them and test each one. For frames that
-    //  don't provide an `expected` hash, their value is checked against their 'friendly name',
-    //  as defined in the ID3v2 spec. This testing-policy isn't used for _all of them_ as some
-    //  require their value to follow certain formatting rules according to the spec. In these
-    //  cases the `expected` hash contains such a conforming `value`. (Note that, in practice,
-    //  it is actually highly unlikely that taggers enforce the spec's formatting rules)
+    //  don't provide an `expected` hash, their value is checked against '{friendly name}',
+    //  (where their 'friendly name' is as defined in the ID3v2 spec). This testing-policy wasn't
+    //  initially used for _all of them_ as some require their value to follow certain formatting
+    //  rules according to the spec. In these cases the `expected` hash used to contain such a
+    //  conforming `value`. _However_ the current implementation uses this testing policy for _all_
+    //  of them (see earlier comments regarding how no formatting can reasonably be enforced on
+    //  T-frames)
     _.chain(id3v2TagFrames)
         .map(function (frame, id) {
             return { id: id, name: frame.name, expected: frame.expected };
