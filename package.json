@@ -26,7 +26,7 @@
     "lint": "jshint --show-non-errors mp3-parser.js test/spec/"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": ">=0.10"
   },
   "directories": {}
 }

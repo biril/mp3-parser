@@ -178,6 +178,7 @@
 
             // When offset happens to be an even number of octets, the array-buffer may be wrapped
             //  in a Uint16Array. In the event that it's _not_, an actual copy has to be made
+            // (Note that Node <= 0.8 as well as IE <= 10 lack an ArrayBuffer#slice. TODO: shim it)
             if (offset % 2 === 1) {
                 buffer = buffer.slice(offset, offset + length);
                 offset = 0;
