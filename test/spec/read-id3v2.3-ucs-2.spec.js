@@ -219,7 +219,6 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
             expectedFrameWithoutLang = id3v2TagFrames["COMM"].expected.withoutLang,
             frameWithoutLang = null,
             framesWithoutLang = _(capturedFrames).filter(function (frame) {
-                console.log("frame.content.description vs expectedFrameWithoutLang.description = " + frame.content.description + " vs " + expectedFrameWithoutLang.description);
                 return frame.content.description === expectedFrameWithoutLang.description;
             }),
 
