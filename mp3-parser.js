@@ -152,11 +152,11 @@
             return readStr(buffer, offset, length);
         },
 
-        // UCS-2 version of `readStr`. UCS-2 is the fixed-width two-byte subset of
-        //  Unicode that can only express values inside the 'Basic Multilingual Plane' (BMP). Note
-        //  that this method is generally unsuitable for parsing non-trivial UTF-16 strings
-        //  (containing surrogate pairs). [This is only marginally related as, according to ID3v2,
-        //  all Unicode strings are UCS-2.] Further info:
+        // UCS-2 (ISO/IEC 10646-1:1993, UCS-2) version of `readStr`. UCS-2 is the fixed-width
+        //  two-byte subset of Unicode that can only express values inside the Basic Multilingual
+        //  Plane (BMP). Note that this method is generally unsuitable for parsing non-trivial
+        //  UTF-16 strings which may contain surrogate pairs. [This is only marginally related
+        //  though as, according to ID3v2, all Unicode strings should be UCS-2.] Further info:
         //
         //  * [How to convert ArrayBuffer to and from String](http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String)
         //  * [The encoding spec](http://encoding.spec.whatwg.org/)
@@ -314,13 +314,15 @@
             info: seqFromStr("Info")
         },
 
-        // Read the content of a text-information ID3v2 tag frame. These are common and contain
-        //  info such as artist and album. There may only be one text info frame of its kind in a
-        //  tag. If the textstring is followed by a termination (00) all the following information
-        //  should be ignored and not be displayed. All text frame identifiers begin with "T". Only
-        //  text frame identifiers begin with "T", with the exception of the "TXXX" frame
+        // Read the content of an ID3v2
+        //  [text-information frame](http://id3.org/id3v2.3.0#Text_information_frames). These are
+        //  common and contain info such as artist and album. There may only be one text info frame
+        //  of its kind in a tag. If the textstring is followed by a termination (00) all the
+        //  following information should be ignored and not be displayed. All text frame
+        //  identifiers begin with "T". Only text frame identifiers begin with "T", with the
+        //  exception of the "TXXX" frame
         //
-        // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2
         // * Information: a text string according to encoding
         readId3v2TagFrameContentT = function (buffer, offset, length) {
             var content = { encoding: buffer.getUint8(offset) };
@@ -329,13 +331,14 @@
             return content;
         },
 
-        // Read the content of user-defined text-information ID3v2 tag frame. Intended for
-        //  one-string text information concerning the audiofile in a similar way to the other
-        //  "T"-frames. The frame body consists of a description of the string, represented as a
-        //  terminated string, followed by the actual string. There may be more than one "TXXX"
-        //  frame in each tag, but only one with the same description
+        // Read the content of an ID3v2
+        //  (user-defined text-information frame)[http://id3.org/id3v2.3.0#User_defined_text_information_frame].
+        //  Intended for one-string text information concerning the audiofile in a similar way to
+        //  the other "T"-frames. The frame body consists of a description of the string,
+        //  represented as a terminated string, followed by the actual string. There may be more
+        //  than one "TXXX" frame in each tag, but only one with the same description
         //
-        // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2
         // * Description: a text string according to encoding (followed by 00 (00))
         // * Value:       a text string according to encoding
         readId3v2TagFrameContentTxxx = function  (buffer, offset, length) {
@@ -373,24 +376,27 @@
             return content;
         },
 
-        // Read the content of a URL-link ID3v2 tag frame. There may only be one URL link frame of
-        //  its kind in a tag, except when stated otherwise in the frame description. If the
-        //  textstring is followed by a termination (00) all the following information should be
-        //  ignored and not be displayed. All URL link frame identifiers begins with "W". Only URL
-        //  link frame identifiers begins with "W"
+        // Read the content of an ID3v2
+        //  [URL-link frame](http://id3.org/id3v2.3.0#URL_link_frames). There may only be one
+        //  URL link frame of its kind in a tag, except when stated otherwise in the frame
+        //  description. If the textstring is followed by a termination (00) all the following
+        //  information should be ignored and not be displayed. All URL link frame identifiers
+        //  begins with "W". Only URL link frame identifiers begins with "W"
         //
         // * URL: a text string
         readId3v2TagFrameContentW = function (buffer, offset, length) {
             return { value: readStr(buffer, offset, length) };
         },
 
-        // Read the content of a user-defined URL-link ID3v2 tag frame. Intended for URL links
-        //  concerning the audiofile in a similar way to the other "W"-frames. The frame body
-        //  consists of a description of the string, represented as a terminated string, followed
-        //  by the actual URL. The URL is always encoded with ISO-8859-1. There may be more than
-        //  one "WXXX" frame in each tag, but only one with the same description
+        // Read the content of an ID3v2
+        //  [user-defined URL-link frame](http://id3.org/id3v2.3.0#User_defined_URL_link_frame).
+        //  Intended for URL links concerning the audiofile in a similar way to the other
+        //  "W"-frames. The frame body consists of a description of the string, represented as a
+        //  terminated string, followed by the actual URL. The URL is always encoded with
+        //  ISO-8859-1. There may be more than one "WXXX" frame in each tag, but only one with the
+        //  same description
         //
-        // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
+        // * Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2
         // * Description: a text string according to encoding (followed by 00 (00))
         // * URL:         a text string
         readId3v2TagFrameContentWxxx = function (buffer, offset, length) {
@@ -428,15 +434,15 @@
             return content;
         },
 
-        // Read the content of an ID3v2 tag comment frame. Indended for any kind of full text
-        //  information that does not fit in any other frame. Consists of a frame header followed
-        //  by encoding, language and content descriptors and ends with the actual comment as a
-        //  text string. Newline characters are allowed in the comment text string. There may be
-        //  more than one comment frame in each tag, but only one with the same language and
-        //  content descriptor
+        // Read the content of an ID3v2 [comment frame](http://id3.org/id3v2.3.0#Comments).
+        //  Intended for any kind of full text information that does not fit in any other frame.
+        //  Consists of a frame header followed by encoding, language and content descriptors and
+        //  ends with the actual comment as a text string. Newline characters are allowed in the
+        //  comment text string. There may be more than one comment frame in each tag, but only one
+        //  with the same language and content descriptor
         //
-        // * Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))
-        // * Language:    xx xx xx (ISO-639-2)
+        // * Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2
+        // * Language:    3 digit (octet) lang-code (ISO-639-2)
         // * Short descr: a text string according to encoding (followed by 00 (00))
         // * Actual text: a text string according to encoding
         readId3v2TagFrameContentComm = function (buffer, offset, length) {
