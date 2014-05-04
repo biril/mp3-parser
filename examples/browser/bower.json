@@ -1,0 +1,21 @@
+{
+  "name": "mp3-parser-example",
+  "version": "0.0.1",
+  "authors": [
+    "biril <alexlambiris@gmail.com>"
+  ],
+  "description": "mp3 Parser example",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components"
+  ],
+  "dependencies": {
+    "requirejs": "~2.1.10",
+    "underscore": "~1.5.2",
+    "jquery": "~2.0.3",
+    "mp3-parser": "~0.2.0"
+  }
+}

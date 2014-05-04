@@ -1,0 +1,19 @@
+{
+  "name": "mp3-parser-example",
+  "version": "0.0.1",
+  "description": "mp3 Parser example",
+  "homepage": "",
+  "author": "alexlambiris@gmail.com",
+  "repository": {
+      "type": "git",
+      "url": ""
+  },
+  "private": true,
+  "engines": {
+    "node": "0.8.x || 0.10.x"
+  },
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "grunt-contrib-connect": "0.3.x"
+  }
+}
