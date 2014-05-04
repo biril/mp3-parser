@@ -20,7 +20,7 @@ mp3 Parser may be used as a CommonJS module on Node or in a browser, either thro
 depending on the detected environment. To get it, `git clone git://github.com/biril/mp3-parser` or
 `npm install mp3-parser`.
 
-* When working in a *browser, without an AMD module loader*, include mp3-parser.js:
+* In projects targetting _browsers, without an AMD module loader_, include mp3-parser.js:
 
     ```html
     ...
@@ -28,13 +28,13 @@ depending on the detected environment. To get it, `git clone git://github.com/bi
     ...
     ```
 
-    and the module will be exposed as the global `mp3Parser`:
+    This will export the `mp3Parser` global:
 
     ```javascript
     console.log("mp3 Parser version: " + mp3Parser.version);
     ```
 
-* `require` when working *with CommonJS* (e.g. Node). Assuming mp3 Parser is `npm install`ed:
+* `require` when working _with CommonJS_ (e.g. Node). Assuming mp3 Parser is `npm install`ed:
 
     ```javascript
     var mp3Parser = require("mp3-parser");
@@ -72,7 +72,7 @@ and `offset` keys:
 Further documentation is forthcoming. You can also
 
 * View the [annotated version](http://biril.github.io/mp3-parser/) of the source.
-* Try the example script `example/parse.js`. Run it with `node parse.js <mp3-file>`
+* Try the example script `examples/node/parse.js`. Run it with `node parse.js <mp3-file>`
 
 
 License
@@ -80,4 +80,4 @@ License
 
 Licensed and freely distributed under the MIT License (LICENSE.txt).
 
-Copyright (c) 2013 Alex Lambiris
+Copyright (c) 2013-2014 Alex Lambiris
