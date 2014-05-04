@@ -15,6 +15,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
         _ = require("underscore"),
 
+        matchers = require(__dirname + "/../matchers.js"),
+
         mp3Parser = require(__dirname + "/../../mp3-parser.js"),
 
         filePath = __dirname + "/../id3v2.3-iso-8859-1.mp3",
@@ -187,7 +189,16 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
             UFID: {
                 name: "Unique file identifier",
-                expected: { } },
+                expected: {
+                    shortish: {
+                        ownerIdentifier: "http://ufid/owner/for32ByteIdentifier",
+                        identifier: _.range(32)
+                    },
+                    longish: {
+                        ownerIdentifier: "http://ufid/owner/for64ByteIdentifier",
+                        identifier: _.range(64)
+                    }
+                } },
             USER: {
                 name: "Terms of use",
                 expected: { } },
@@ -207,7 +218,38 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             WXXX: { name: "User defined URL link frame" }
         };
 
-    // beforeEach(function () { });
+    beforeEach(function () { this.addMatchers(matchers); });
+
+    it("should read UFID: Unique file identifier (multiple)", function () {
+        var capturedFrames = getCapturedFrames("UFID"),
+
+            // Get expected and actual frames for the case of a short UFID
+            expectedShortFrame = id3v2TagFrames["UFID"].expected.shortish,
+            shortFrame,
+            shortFrames = _(capturedFrames).filter(function (frame) {
+                return frame.content.ownerIdentifier === expectedShortFrame.ownerIdentifier;
+            }),
+
+            // Get expected and actual frames for the case of a long UFID
+            expectedLongFrame = id3v2TagFrames["UFID"].expected.longish,
+            longFrame,
+            longFrames = _(capturedFrames).filter(function (frame) {
+                return frame.content.ownerIdentifier === expectedLongFrame.ownerIdentifier;
+            });
+
+        expect(shortFrames.length).toBe(1);
+        shortFrame = shortFrames[0];
+        expect(shortFrame.content.ownerIdentifier).toBe(expectedShortFrame.ownerIdentifier);
+        expect(shortFrame.content.identifier).asDataViewToEqual(expectedShortFrame.identifier);
+
+        expect(longFrames.length).toBe(1);
+        longFrame = longFrames[0];
+        expect(longFrame.content.ownerIdentifier).toBe(expectedLongFrame.ownerIdentifier);
+        expect(longFrame.content.identifier).asDataViewToEqual(expectedLongFrame.identifier);
+
+        // TODO: Check (and document) edge cases: What happens for frames of length 0 or >64
+        //  (not allowed by the standard)
+    });
 
     it("should read COMM: Comments frame", function () {
         var capturedFrames = getCapturedFrames("COMM"),

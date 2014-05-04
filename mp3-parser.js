@@ -481,6 +481,30 @@
             content.text = readS(buffer, offsetTrm, offset + length - offsetTrm);
 
             return content;
+        },
+
+        // Read the content of an ID3v2
+        //  [unique file identifier frame](http://id3.org/id3v2.3.0#Unique_file_identifier). Allows
+        //  identification of the audio file by means of some database that may contain more
+        //  information relevant to the content. All frames begin with a null-terminated string - a
+        //  URL containing an email address, or a link to a location where an email address can be
+        //  found - that belongs to the organisation responsible for this specific database
+        //  implementation. The 'Owner identifier' must be non-empty (more than just a termination)
+        //  and is followed by the actual identifier, which may be up to 64 bytes. There may be
+        //  more than one "UFID" frame in a tag, but only one with the same 'Owner identifier'.
+        //
+        // * Owner identifier: a text string (followed by 00)
+        // * Identifier:       up to 64 bytes of binary data
+        readId3v2TagFrameContentUfid = function (buffer, offset, length) {
+            var
+                // Read up to the first null terminator to get the owner-identifier
+                ownerIdentifier = readTrmStr(buffer, offset, length),
+
+                // Figure out the identifier based on frame length vs owner-identifier length
+                identifier = new DataView(buffer.buffer, offset + ownerIdentifier.length + 1,
+                    length - ownerIdentifier.length - 1);
+
+            return { ownerIdentifier: ownerIdentifier, identifier: identifier };
         };
 
 
@@ -695,6 +719,8 @@
             if (id.charAt(0) === "W") { return readId3v2TagFrameContentW; }
             // Comment frames
             if (id === "COMM") { return readId3v2TagFrameContentComm; }
+            // Unique-file-identifier frames
+            if (id === "UFID") { return readId3v2TagFrameContentUfid; }
             // Unknown frame - 'parse it' using a no-op returning `undefined` content
             return noOp;
         }(frame.header.id))(buffer, offset + 10, frame.header.size);
