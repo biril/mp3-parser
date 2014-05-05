@@ -27,18 +27,9 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <pre><code>mp3-parser v0.1.13
-
-https://github.com/biril/mp3-parser
-Licensed and freely distributed under the MIT License
-Copyright (c) 2013 Alex Lambiris</code></pre>
-
+              <pre><code>mp3-parser v0<span class="hljs-number">.1</span><span class="hljs-number">.14</span>
+</code></pre>
             </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="comment">/*jshint browser:true */</span>
-<span class="comment">/*global exports, define */</span>
-(<span class="function"><span class="keyword">function</span> <span class="params">(root, createModule)</span> {</span>
-    <span class="string">"use strict"</span>;</pre></div></div>
             
         </li>
         
@@ -49,14 +40,17 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Expose as a module or global depending on the detected environment:</p>
-<p>Global <code>define</code> method with <code>amd</code> property signifies an AMD loader (require.js, curl.js, ..)</p>
-
+              <pre><code>https:<span class="hljs-comment">//github.com/biril/mp3-parser</span>
+Licensed and freely distributed under the MIT License
+Copyright (c) <span class="hljs-number">2013</span> Alex Lambiris
+</code></pre>
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> define === <span class="string">"function"</span> &amp;&amp; define.amd) {
-        <span class="keyword">return</span> define([<span class="string">"exports"</span>], <span class="function"><span class="keyword">function</span> <span class="params">(exports)</span> {</span> <span class="keyword">return</span> createModule(exports); });
-    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-comment">/*jshint browser:true */</span>
+<span class="hljs-comment">/*global exports, define */</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(root, createModule)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;</pre></div></div>
             
         </li>
         
@@ -67,11 +61,9 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>Global <code>exports</code> object signifies CommonJS enviroments with <code>module.exports</code>, e.g. Node</p>
+              <p>Expose as a module or global depending on the detected environment:</p>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="keyword">if</span> (<span class="keyword">typeof</span> exports === <span class="string">"object"</span>) { <span class="keyword">return</span> createModule(exports); }</pre></div></div>
             
         </li>
         
@@ -82,11 +74,13 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>If none of the above, then assume a browser, without AMD</p>
+              <p>Global <code>define</code> method with <code>amd</code> property signifies an AMD loader (require.js, curl.js, ..)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    root.mp3Parser = createModule({});</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">"function"</span> &amp;&amp; define.amd) {
+        <span class="hljs-keyword">return</span> define([<span class="hljs-string">"exports"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(exports)</span> {</span> <span class="hljs-keyword">return</span> createModule(exports); });
+    }</pre></div></div>
             
         </li>
         
@@ -97,11 +91,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Attach a <code>noConflict</code> method onto the <code>mp3Parser</code> global</p>
+              <p>Global <code>exports</code> object signifies CommonJS enviroments with <code>module.exports</code>, e.g. Node</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    root.mp3Parser.noConflict = (<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">"object"</span>) { <span class="hljs-keyword">return</span> createModule(exports); }</pre></div></div>
             
         </li>
         
@@ -112,12 +106,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
-              <p>Save a reference to the previous value of &#39;mp3Parser&#39;, so that it can be restored later
- on, if &#39;noConflict&#39; is used</p>
+              <p>If none of the above, then assume a browser, without AMD</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> previousMp3Parser = root.mp3Parser;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    root.mp3Parser = createModule({});</pre></div></div>
             
         </li>
         
@@ -128,22 +121,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Run in no-conflict mode, setting the <code>mp3Parser</code> global to to its previous value.
- Returns <code>mp3Parser</code></p>
+              <p>Attach a <code>noConflict</code> method onto the <code>mp3Parser</code> global</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
-            <span class="keyword">var</span> mp3Parser = root.mp3Parser;
-            root.mp3Parser = previousMp3Parser;
-            mp3Parser.noConflict = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> mp3Parser; };
-            <span class="keyword">return</span> mp3Parser;
-        };
-    }());
-}(<span class="keyword">this</span>, <span class="function"><span class="keyword">function</span> <span class="params">(mp3Parser)</span> {</span>
-    <span class="string">"use strict"</span>;
-
-    <span class="keyword">var</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    root.mp3Parser.noConflict = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span></pre></div></div>
             
         </li>
         
@@ -154,11 +136,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>A handy no-op to reuse</p>
+              <p>Save a reference to the previous value of ‘mp3Parser’, so that it can be restored later
+ on, if ‘noConflict’ is used</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        noOp = <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>},</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> previousMp3Parser = root.mp3Parser;</pre></div></div>
             
         </li>
         
@@ -169,24 +152,22 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
-              <p>Produce octet&#39;s binary representation as a string</p>
+              <p>Run in no-conflict mode, setting the <code>mp3Parser</code> global to to its previous value.
+ Returns <code>mp3Parser</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        octetToBinRep = (<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span>
-            <span class="keyword">var</span> b = []; <span class="comment">// The binary representation</span>
-            <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="params">(octet)</span> {</span>
-                b[<span class="number">0</span>] = ((octet &amp; <span class="number">128</span>) === <span class="number">128</span> ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">1</span>] = ((octet &amp; <span class="number">64</span>)  === <span class="number">64</span>  ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">2</span>] = ((octet &amp; <span class="number">32</span>)  === <span class="number">32</span>  ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">3</span>] = ((octet &amp; <span class="number">16</span>)  === <span class="number">16</span>  ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">4</span>] = ((octet &amp; <span class="number">8</span>)   === <span class="number">8</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">5</span>] = ((octet &amp; <span class="number">4</span>)   === <span class="number">4</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">6</span>] = ((octet &amp; <span class="number">2</span>)   === <span class="number">2</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                b[<span class="number">7</span>] = ((octet &amp; <span class="number">1</span>)   === <span class="number">1</span>   ? <span class="string">"1"</span> : <span class="string">"0"</span>);
-                <span class="keyword">return</span> b.join(<span class="string">""</span>);
-            };
-        }()),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> mp3Parser = root.mp3Parser;
+            root.mp3Parser = previousMp3Parser;
+            mp3Parser.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> mp3Parser; };
+            <span class="hljs-keyword">return</span> mp3Parser;
+        };
+    }());
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+
+    <span class="hljs-keyword">var</span></pre></div></div>
             
         </li>
         
@@ -197,24 +178,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <p>Decode a <a href="http://en.wikipedia.org/wiki/Synchsafe">synchsafe</a> value. Synchsafes are used
- in ID3 tags, instead of regular ints, to avoid the unintended introduction of bogus
- frame-syncs</p>
+              <p>A handy no-op to reuse</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        unsynchsafe = <span class="function"><span class="keyword">function</span> <span class="params">(value)</span> {</span>
-            <span class="keyword">var</span> out = <span class="number">0</span>,
-                mask = <span class="number">0x7F000000</span>;
-
-            <span class="keyword">while</span> (mask) {
-                out &gt;&gt;= <span class="number">1</span>;
-                out |= value &amp; mask;
-                mask &gt;&gt;= <span class="number">8</span>;
-            }
-
-            <span class="keyword">return</span> out;
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        noOp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>},</pre></div></div>
             
         </li>
         
@@ -225,18 +193,24 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Get a value indicating whether given DataView <code>buffer</code> contains the <code>seq</code> sequence (array
- of octets) at <code>offset</code> index. Note that no check is performed for the adequate length of
- given buffer as this should be carried out by the caller</p>
+              <p>Produce octet’s binary representation as a string</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        isSeq = <span class="function"><span class="keyword">function</span> <span class="params">(seq, buffer, offset)</span> {</span>
-            <span class="keyword">for</span> (<span class="keyword">var</span> i = seq.length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {
-                <span class="keyword">if</span> (seq[i] !== buffer.getUint8(offset + i)) { <span class="keyword">return</span> <span class="literal">false</span>; }
-            }
-            <span class="keyword">return</span> <span class="literal">true</span>;
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        octetToBinRep = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> b = []; <span class="hljs-comment">// The binary representation</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(octet)</span> {</span>
+                b[<span class="hljs-number">0</span>] = ((octet &amp; <span class="hljs-number">128</span>) === <span class="hljs-number">128</span> ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">1</span>] = ((octet &amp; <span class="hljs-number">64</span>)  === <span class="hljs-number">64</span>  ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">2</span>] = ((octet &amp; <span class="hljs-number">32</span>)  === <span class="hljs-number">32</span>  ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">3</span>] = ((octet &amp; <span class="hljs-number">16</span>)  === <span class="hljs-number">16</span>  ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">4</span>] = ((octet &amp; <span class="hljs-number">8</span>)   === <span class="hljs-number">8</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">5</span>] = ((octet &amp; <span class="hljs-number">4</span>)   === <span class="hljs-number">4</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">6</span>] = ((octet &amp; <span class="hljs-number">2</span>)   === <span class="hljs-number">2</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">7</span>] = ((octet &amp; <span class="hljs-number">1</span>)   === <span class="hljs-number">1</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                <span class="hljs-keyword">return</span> b.join(<span class="hljs-string">""</span>);
+            };
+        }()),</pre></div></div>
             
         </li>
         
@@ -247,16 +221,23 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Convert the <code>str</code> string to an array of octets. The string is parsed as an array
- of 8bit single-byte coded characters (i.e. ISO/IEC 8859-1, <em>non</em> Unicode).</p>
+              <p>Decode a <a href="http://en.wikipedia.org/wiki/Synchsafe">synchsafe</a> value. Synchsafes are used
+ in ID3 tags, instead of regular ints, to avoid the unintended introduction of bogus
+ frame-syncs</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        seqFromStr = <span class="function"><span class="keyword">function</span> <span class="params">(str)</span> {</span>
-            <span class="keyword">for</span> (<span class="keyword">var</span> i = str.length - <span class="number">1</span>, seq = []; i &gt;= <span class="number">0</span>; i--) {
-                seq[i] = str.charCodeAt(i);
+            <div class="content"><div class='highlight'><pre>        unsynchsafe = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+            <span class="hljs-keyword">var</span> out = <span class="hljs-number">0</span>,
+                mask = <span class="hljs-number">0x7F000000</span>;
+
+            <span class="hljs-keyword">while</span> (mask) {
+                out &gt;&gt;= <span class="hljs-number">1</span>;
+                out |= value &amp; mask;
+                mask &gt;&gt;= <span class="hljs-number">8</span>;
             }
-            <span class="keyword">return</span> seq;
+
+            <span class="hljs-keyword">return</span> out;
         },</pre></div></div>
             
         </li>
@@ -268,19 +249,18 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Get a value indicating whether given DataView <code>buffer</code> contains the <code>str</code> string
- at <code>offset</code> index. The buffer is parsed as an array of 8bit single-byte coded characters
- (i.e. ISO/IEC 8859-1, <em>non</em> Unicode). Will return the string itself if it does, false
- otherwise. Note that no check is performed for the adequate length of given buffer as
- this should be carried out be the caller as part of the section-parsing process</p>
+              <p>Get a value indicating whether given DataView <code>buffer</code> contains the <code>seq</code> sequence (array
+ of octets) at <code>offset</code> index. Note that no check is performed for the adequate length of
+ given buffer as this should be carried out by the caller</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="comment">/*
-        isStr = function (str, buffer, offset) {
-            return isSeq(seqFromStr(str), buffer, offset) ? str : false;
-        },
-        */</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        isSeq = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seq, buffer, offset)</span> {</span>
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = seq.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+                <span class="hljs-keyword">if</span> (seq[i] !== buffer.getUint8(offset + i)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; }
+            }
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+        },</pre></div></div>
             
         </li>
         
@@ -291,17 +271,16 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Locate first occurrence of sequence <code>seq</code> (an array of octets) in DataView <code>buffer</code>.
- Search starts at given <code>offset</code> and ends after <code>length</code> octets. Will return the
- absolute offset of sequence if found, -1 otherwise</p>
+              <p>Convert the <code>str</code> string to an array of octets. The string is parsed as an array
+ of 8bit single-byte coded characters (i.e. ISO/IEC 8859-1, <em>non</em> Unicode).</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        locateSeq = <span class="function"><span class="keyword">function</span> <span class="params">(seq, buffer, offset, length)</span> {</span>
-            <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>, l = length - seq.length + <span class="number">1</span>; i &lt; l; ++i) {
-                <span class="keyword">if</span> (isSeq(seq, buffer, offset + i)) { <span class="keyword">return</span> offset + i; }
+            <div class="content"><div class='highlight'><pre>        seqFromStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(str)</span> {</span>
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = str.length - <span class="hljs-number">1</span>, seq = []; i &gt;= <span class="hljs-number">0</span>; i--) {
+                seq[i] = str.charCodeAt(i);
             }
-            <span class="keyword">return</span> -<span class="number">1</span>;
+            <span class="hljs-keyword">return</span> seq;
         },</pre></div></div>
             
         </li>
@@ -313,15 +292,19 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Locate the first occurrence of non-Unicode null-terminator (i.e. a single zeroed-out
- octet) in DataView <code>buffer</code>. Search starts at given <code>offset</code> and ends after <code>length</code>
- octets. Will return the absolute offset of sequence if found, -1 otherwise</p>
+              <p>Get a value indicating whether given DataView <code>buffer</code> contains the <code>str</code> string
+ at <code>offset</code> index. The buffer is parsed as an array of 8bit single-byte coded characters
+ (i.e. ISO/IEC 8859-1, <em>non</em> Unicode). Will return the string itself if it does, false
+ otherwise. Note that no check is performed for the adequate length of given buffer as
+ this should be carried out be the caller as part of the section-parsing process</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        locateStrTrm = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">return</span> locateSeq([<span class="number">0</span>], buffer, offset, length);
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-comment">/*
+        isStr = function (str, buffer, offset) {
+            return isSeq(seqFromStr(str), buffer, offset) ? str : false;
+        },
+        */</span></pre></div></div>
             
         </li>
         
@@ -332,17 +315,17 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Locate the first occurrence of Unicode null-terminator (i.e. a sequence of two
- zeroed-out octets) in DataView <code>buffer</code>. Search starts at given <code>offset</code> and ends after
- <code>length</code> octets. Will return the absolute offset of sequence if found, -1 otherwise</p>
+              <p>Locate first occurrence of sequence <code>seq</code> (an array of octets) in DataView <code>buffer</code>.
+ Search starts at given <code>offset</code> and ends after <code>length</code> octets. Will return the
+ absolute offset of sequence if found, -1 otherwise</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        locateStrTrmUcs2 = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">var</span> trmOffset = locateSeq([<span class="number">0</span>, <span class="number">0</span>], buffer, offset, length);
-            <span class="keyword">if</span> (trmOffset === -<span class="number">1</span>) { <span class="keyword">return</span> -<span class="number">1</span>; }
-            <span class="keyword">if</span> ((trmOffset - offset) % <span class="number">2</span> !== <span class="number">0</span>) { ++trmOffset; }
-            <span class="keyword">return</span> trmOffset;
+            <div class="content"><div class='highlight'><pre>        locateSeq = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seq, buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = length - seq.length + <span class="hljs-number">1</span>; i &lt; l; ++i) {
+                <span class="hljs-keyword">if</span> (isSeq(seq, buffer, offset + i)) { <span class="hljs-keyword">return</span> offset + i; }
+            }
+            <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
         },</pre></div></div>
             
         </li>
@@ -354,17 +337,14 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Parse DataView <code>buffer</code> begining at <code>offset</code> index and return a string built from
- <code>length</code> octets. The buffer is parsed as an array of 8bit single-byte coded characters
- (i.e. ISO/IEC 8859-1, <em>non</em> Unicode). Will essentially return the string comprised of
- octets [offset, offset + length). Note that no check is performed for the adequate
- length of given buffer as this should be carried out be the caller as part of the
- section-parsing process</p>
+              <p>Locate the first occurrence of non-Unicode null-terminator (i.e. a single zeroed-out
+ octet) in DataView <code>buffer</code>. Search starts at given <code>offset</code> and ends after <code>length</code>
+ octets. Will return the absolute offset of sequence if found, -1 otherwise</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readStr = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">return</span> String.fromCharCode.apply(<span class="literal">null</span>, <span class="keyword">new</span> Uint8Array(buffer.buffer, offset, length));
+            <div class="content"><div class='highlight'><pre>        locateStrTrm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">return</span> locateSeq([<span class="hljs-number">0</span>], buffer, offset, length);
         },</pre></div></div>
             
         </li>
@@ -376,15 +356,17 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
-              <p>Similar to <code>readStr</code> but will check for a null-terminator determining the end of the
- string. The returned string will be of <em>at most</em> <code>length</code> octets</p>
+              <p>Locate the first occurrence of Unicode null-terminator (i.e. a sequence of two
+ zeroed-out octets) in DataView <code>buffer</code>. Search starts at given <code>offset</code> and ends after
+ <code>length</code> octets. Will return the absolute offset of sequence if found, -1 otherwise</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readTrmStr = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">var</span> trmOffset = locateStrTrm(buffer, offset, length);
-            <span class="keyword">if</span> (trmOffset !== -<span class="number">1</span>) { length = trmOffset - offset; }
-            <span class="keyword">return</span> readStr(buffer, offset, length);
+            <div class="content"><div class='highlight'><pre>        locateStrTrmUcs2 = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span> trmOffset = locateSeq([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], buffer, offset, length);
+            <span class="hljs-keyword">if</span> (trmOffset === -<span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; }
+            <span class="hljs-keyword">if</span> ((trmOffset - offset) % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>) { ++trmOffset; }
+            <span class="hljs-keyword">return</span> trmOffset;
         },</pre></div></div>
             
         </li>
@@ -396,11 +378,53 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>UCS-2 version of <code>readStr</code>. UCS-2 is the fixed-width two-byte subset of
- Unicode that can only express values inside the &#39;Basic Multilingual Plane&#39; (BMP). Note
- that this method is generally unsuitable for parsing non-trivial UTF-16 strings
- (containing surrogate pairs). [This is only marginally related as, according to ID3v2,
- all Unicode strings are UCS-2.] Further info:</p>
+              <p>Parse DataView <code>buffer</code> begining at <code>offset</code> index and return a string built from
+ <code>length</code> octets. The buffer is parsed as an array of 8bit single-byte coded characters
+ (i.e. ISO/IEC 8859-1, <em>non</em> Unicode). Will essentially return the string comprised of
+ octets [offset, offset + length). Note that no check is performed for the adequate
+ length of given buffer as this should be carried out be the caller as part of the
+ section-parsing process</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        readStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(buffer.buffer, offset, length));
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Similar to <code>readStr</code> but will check for a null-terminator determining the end of the
+ string. The returned string will be of <em>at most</em> <code>length</code> octets</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        readTrmStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span> trmOffset = locateStrTrm(buffer, offset, length);
+            <span class="hljs-keyword">if</span> (trmOffset !== -<span class="hljs-number">1</span>) { length = trmOffset - offset; }
+            <span class="hljs-keyword">return</span> readStr(buffer, offset, length);
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>UCS-2 (ISO/IEC 10646-1:1993, UCS-2) version of <code>readStr</code>. UCS-2 is the fixed-width
+ two-byte subset of Unicode that can only express values inside the Basic Multilingual
+ Plane (BMP). Note that this method is generally unsuitable for parsing non-trivial
+ UTF-16 strings which may contain surrogate pairs. [This is only marginally related
+ though as, according to ID3v2, all Unicode strings should be UCS-2.] Further info:</p>
 <ul>
 <li><a href="http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String">How to convert ArrayBuffer to and from String</a></li>
 <li><a href="http://encoding.spec.whatwg.org/">The encoding spec</a></li>
@@ -414,50 +438,7 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readStrUcs2 = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-20">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
-              </div>
-              <p>Tweak offset to remove the BOM (LE: FF FE / BE: FE FF)</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (buffer.getUint16(offset) === <span class="number">0xFFFE</span> || buffer.getUint16(offset) === <span class="number">0xFEFF</span>) {
-                offset += <span class="number">2</span>;
-                length -= <span class="number">2</span>;
-            }
-
-            buffer = buffer.buffer;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-21">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
-              </div>
-              <p>When offset happens to be an even number of octets, the array-buffer may be wrapped
- in a Uint16Array. In the event that it&#39;s <em>not</em>, an actual copy has to be made
-(Note that Node &lt;= 0.8 as well as IE &lt;= 10 lack an ArrayBuffer#slice. TODO: shim it)</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (offset % <span class="number">2</span> === <span class="number">1</span>) {
-                buffer = buffer.slice(offset, offset + length);
-                offset = <span class="number">0</span>;
-            }
-
-            <span class="keyword">return</span> String.fromCharCode.apply(<span class="literal">null</span>, <span class="keyword">new</span> Uint16Array(buffer, offset, length / <span class="number">2</span>));
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readStrUcs2 = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span></pre></div></div>
             
         </li>
         
@@ -468,14 +449,16 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <p>Get the number of bytes in a frame given its <code>bitrate</code>, <code>samplingRate</code> and <code>padding</code>.
- Based on <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">magic formula</a></p>
+              <p>Tweak offset to remove the BOM (LE: FF FE / BE: FE FF)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        getFrameByteLength = <span class="function"><span class="keyword">function</span> <span class="params">(bitrate, samplingRate, padding)</span> {</span>
-            <span class="keyword">return</span> Math.floor((<span class="number">144000</span> * bitrate / samplingRate) + padding);
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (buffer.getUint16(offset) === <span class="hljs-number">0xFFFE</span> || buffer.getUint16(offset) === <span class="hljs-number">0xFEFF</span>) {
+                offset += <span class="hljs-number">2</span>;
+                length -= <span class="hljs-number">2</span>;
+            }
+
+            buffer = buffer.buffer;</pre></div></div>
             
         </li>
         
@@ -486,26 +469,18 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              
+              <p>When offset happens to be an even number of octets, the array-buffer may be wrapped
+ in a Uint16Array. In the event that it’s <em>not</em>, an actual copy has to be made
+(Note that Node &lt;= 0.8 as well as IE &lt;= 10 lack an ArrayBuffer#slice. TODO: shim it)</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>        v1l3Bitrates = {
-            <span class="string">"0000"</span>: <span class="string">"free"</span>,
-            <span class="string">"0001"</span>: <span class="number">32</span>,
-            <span class="string">"0010"</span>: <span class="number">40</span>,
-            <span class="string">"0011"</span>: <span class="number">48</span>,
-            <span class="string">"0100"</span>: <span class="number">56</span>,
-            <span class="string">"0101"</span>: <span class="number">64</span>,
-            <span class="string">"0110"</span>: <span class="number">80</span>,
-            <span class="string">"0111"</span>: <span class="number">96</span>,
-            <span class="string">"1000"</span>: <span class="number">112</span>,
-            <span class="string">"1001"</span>: <span class="number">128</span>,
-            <span class="string">"1010"</span>: <span class="number">160</span>,
-            <span class="string">"1011"</span>: <span class="number">192</span>,
-            <span class="string">"1100"</span>: <span class="number">224</span>,
-            <span class="string">"1101"</span>: <span class="number">256</span>,
-            <span class="string">"1110"</span>: <span class="number">320</span>,
-            <span class="string">"1111"</span>: <span class="string">"bad"</span>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (offset % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+                buffer = buffer.slice(offset, offset + length);
+                offset = <span class="hljs-number">0</span>;
+            }
+
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint16Array</span>(buffer, offset, length / <span class="hljs-number">2</span>));
         },</pre></div></div>
             
         </li>
@@ -517,14 +492,13 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              
+              <p>Get the number of bytes in a frame given its <code>bitrate</code>, <code>samplingRate</code> and <code>padding</code>.
+ Based on <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">magic formula</a></p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>        v1l3SamplingRates = {
-            <span class="string">"00"</span>: <span class="number">44100</span>,
-            <span class="string">"01"</span>: <span class="number">48000</span>,
-            <span class="string">"10"</span>: <span class="number">32000</span>,
-            <span class="string">"11"</span>: <span class="string">"reserved"</span>
+            <div class="content"><div class='highlight'><pre>        getFrameByteLength = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(bitrate, samplingRate, padding)</span> {</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.floor((<span class="hljs-number">144000</span> * bitrate / samplingRate) + padding);
         },</pre></div></div>
             
         </li>
@@ -539,11 +513,23 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>        v1l3ChannelModes = {
-            <span class="string">"00"</span>: <span class="string">"Stereo"</span>,
-            <span class="string">"01"</span>: <span class="string">"Joint stereo (Stereo)"</span>,
-            <span class="string">"10"</span>: <span class="string">"Dual channel (Stereo)"</span>,
-            <span class="string">"11"</span>: <span class="string">"Single channel (Mono)"</span>
+            <div class="content"><div class='highlight'><pre>        v1l3Bitrates = {
+            <span class="hljs-string">"0000"</span>: <span class="hljs-string">"free"</span>,
+            <span class="hljs-string">"0001"</span>: <span class="hljs-number">32</span>,
+            <span class="hljs-string">"0010"</span>: <span class="hljs-number">40</span>,
+            <span class="hljs-string">"0011"</span>: <span class="hljs-number">48</span>,
+            <span class="hljs-string">"0100"</span>: <span class="hljs-number">56</span>,
+            <span class="hljs-string">"0101"</span>: <span class="hljs-number">64</span>,
+            <span class="hljs-string">"0110"</span>: <span class="hljs-number">80</span>,
+            <span class="hljs-string">"0111"</span>: <span class="hljs-number">96</span>,
+            <span class="hljs-string">"1000"</span>: <span class="hljs-number">112</span>,
+            <span class="hljs-string">"1001"</span>: <span class="hljs-number">128</span>,
+            <span class="hljs-string">"1010"</span>: <span class="hljs-number">160</span>,
+            <span class="hljs-string">"1011"</span>: <span class="hljs-number">192</span>,
+            <span class="hljs-string">"1100"</span>: <span class="hljs-number">224</span>,
+            <span class="hljs-string">"1101"</span>: <span class="hljs-number">256</span>,
+            <span class="hljs-string">"1110"</span>: <span class="hljs-number">320</span>,
+            <span class="hljs-string">"1111"</span>: <span class="hljs-string">"bad"</span>
         },</pre></div></div>
             
         </li>
@@ -558,81 +544,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>        id3v2TagFrameNames = {
-            AENC: <span class="string">"Audio encryption"</span>,
-            APIC: <span class="string">"Attached picture"</span>,
-            COMM: <span class="string">"Comments"</span>,
-            COMR: <span class="string">"Commercial frame"</span>,
-            ENCR: <span class="string">"Encryption method registration"</span>,
-            EQUA: <span class="string">"Equalization"</span>,
-            ETCO: <span class="string">"Event timing codes"</span>,
-            GEOB: <span class="string">"General encapsulated object"</span>,
-            GRID: <span class="string">"Group identification registration"</span>,
-            IPLS: <span class="string">"Involved people list"</span>,
-            LINK: <span class="string">"Linked information"</span>,
-            MCDI: <span class="string">"Music CD identifier"</span>,
-            MLLT: <span class="string">"MPEG location lookup table"</span>,
-            OWNE: <span class="string">"Ownership frame"</span>,
-            PRIV: <span class="string">"Private frame"</span>,
-            PCNT: <span class="string">"Play counter"</span>,
-            POPM: <span class="string">"Popularimeter"</span>,
-            POSS: <span class="string">"Position synchronisation frame"</span>,
-            RBUF: <span class="string">"Recommended buffer size"</span>,
-            RVAD: <span class="string">"Relative volume adjustment"</span>,
-            RVRB: <span class="string">"Reverb"</span>,
-            SYLT: <span class="string">"Synchronized lyric/text"</span>,
-            SYTC: <span class="string">"Synchronized tempo codes"</span>,
-            TALB: <span class="string">"Album/Movie/Show title"</span>,
-            TBPM: <span class="string">"BPM (beats per minute)"</span>,
-            TCOM: <span class="string">"Composer"</span>,
-            TCON: <span class="string">"Content type"</span>,
-            TCOP: <span class="string">"Copyright message"</span>,
-            TDAT: <span class="string">"Date"</span>,
-            TDLY: <span class="string">"Playlist delay"</span>,
-            TENC: <span class="string">"Encoded by"</span>,
-            TEXT: <span class="string">"Lyricist/Text writer"</span>,
-            TFLT: <span class="string">"File type"</span>,
-            TIME: <span class="string">"Time"</span>,
-            TIT1: <span class="string">"Content group description"</span>,
-            TIT2: <span class="string">"Title/songname/content description"</span>,
-            TIT3: <span class="string">"Subtitle/Description refinement"</span>,
-            TKEY: <span class="string">"Initial key"</span>,
-            TLAN: <span class="string">"Language(s)"</span>,
-            TLEN: <span class="string">"Length"</span>,
-            TMED: <span class="string">"Media type"</span>,
-            TOAL: <span class="string">"Original album/movie/show title"</span>,
-            TOFN: <span class="string">"Original filename"</span>,
-            TOLY: <span class="string">"Original lyricist(s)/text writer(s)"</span>,
-            TOPE: <span class="string">"Original artist(s)/performer(s)"</span>,
-            TORY: <span class="string">"Original release year"</span>,
-            TOWN: <span class="string">"File owner/licensee"</span>,
-            TPE1: <span class="string">"Lead performer(s)/Soloist(s)"</span>,
-            TPE2: <span class="string">"Band/orchestra/accompaniment"</span>,
-            TPE3: <span class="string">"Conductor/performer refinement"</span>,
-            TPE4: <span class="string">"Interpreted, remixed, or otherwise modified by"</span>,
-            TPOS: <span class="string">"Part of a set"</span>,
-            TPUB: <span class="string">"Publisher"</span>,
-            TRCK: <span class="string">"Track number/Position in set"</span>,
-            TRDA: <span class="string">"Recording dates"</span>,
-            TRSN: <span class="string">"Internet radio station name"</span>,
-            TRSO: <span class="string">"Internet radio station owner"</span>,
-            TSIZ: <span class="string">"Size"</span>,
-            TSRC: <span class="string">"ISRC (international standard recording code)"</span>,
-            TSSE: <span class="string">"Software/Hardware and settings used for encoding"</span>,
-            TYER: <span class="string">"Year"</span>,
-            TXXX: <span class="string">"User defined text information frame"</span>,
-            UFID: <span class="string">"Unique file identifier"</span>,
-            USER: <span class="string">"Terms of use"</span>,
-            USLT: <span class="string">"Unsychronized lyric/text transcription"</span>,
-            WCOM: <span class="string">"Commercial information"</span>,
-            WCOP: <span class="string">"Copyright/Legal information"</span>,
-            WOAF: <span class="string">"Official audio file webpage"</span>,
-            WOAR: <span class="string">"Official artist/performer webpage"</span>,
-            WOAS: <span class="string">"Official audio source webpage"</span>,
-            WORS: <span class="string">"Official internet radio station homepage"</span>,
-            WPAY: <span class="string">"Payment"</span>,
-            WPUB: <span class="string">"Publishers official webpage"</span>,
-            WXXX: <span class="string">"User defined URL link frame"</span>
+            <div class="content"><div class='highlight'><pre>        v1l3SamplingRates = {
+            <span class="hljs-string">"00"</span>: <span class="hljs-number">44100</span>,
+            <span class="hljs-string">"01"</span>: <span class="hljs-number">48000</span>,
+            <span class="hljs-string">"10"</span>: <span class="hljs-number">32000</span>,
+            <span class="hljs-string">"11"</span>: <span class="hljs-string">"reserved"</span>
         },</pre></div></div>
             
         </li>
@@ -644,14 +560,14 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <p>Common character sequences converted to byte arrays</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>        seq = {
-            id3: seqFromStr(<span class="string">"ID3"</span>),
-            xing: seqFromStr(<span class="string">"Xing"</span>),
-            info: seqFromStr(<span class="string">"Info"</span>)
+            <div class="content"><div class='highlight'><pre>        v1l3ChannelModes = {
+            <span class="hljs-string">"00"</span>: <span class="hljs-string">"Stereo"</span>,
+            <span class="hljs-string">"01"</span>: <span class="hljs-string">"Joint stereo (Stereo)"</span>,
+            <span class="hljs-string">"10"</span>: <span class="hljs-string">"Dual channel (Stereo)"</span>,
+            <span class="hljs-string">"11"</span>: <span class="hljs-string">"Single channel (Mono)"</span>
         },</pre></div></div>
             
         </li>
@@ -663,23 +579,84 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p>Read the content of a text-information ID3v2 tag frame. These are common and contain
- info such as artist and album. There may only be one text info frame of its kind in a
- tag. If the textstring is followed by a termination (00) all the following information
- should be ignored and not be displayed. All text frame identifiers begin with &quot;T&quot;. Only
- text frame identifiers begin with &quot;T&quot;, with the exception of the &quot;TXXX&quot; frame</p>
-<ul>
-<li>Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
-<li>Information: a text string according to encoding</li>
-</ul>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentT = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">var</span> content = { encoding: buffer.getUint8(offset) };
-            content.value = (content.encoding === <span class="number">0</span> ? readStr :
-                readStrUcs2)(buffer, offset + <span class="number">1</span>, length - <span class="number">1</span>);
-            <span class="keyword">return</span> content;
+            <div class="content"><div class='highlight'><pre>        id3v2TagFrameNames = {
+            AENC: <span class="hljs-string">"Audio encryption"</span>,
+            APIC: <span class="hljs-string">"Attached picture"</span>,
+            COMM: <span class="hljs-string">"Comments"</span>,
+            COMR: <span class="hljs-string">"Commercial frame"</span>,
+            ENCR: <span class="hljs-string">"Encryption method registration"</span>,
+            EQUA: <span class="hljs-string">"Equalization"</span>,
+            ETCO: <span class="hljs-string">"Event timing codes"</span>,
+            GEOB: <span class="hljs-string">"General encapsulated object"</span>,
+            GRID: <span class="hljs-string">"Group identification registration"</span>,
+            IPLS: <span class="hljs-string">"Involved people list"</span>,
+            LINK: <span class="hljs-string">"Linked information"</span>,
+            MCDI: <span class="hljs-string">"Music CD identifier"</span>,
+            MLLT: <span class="hljs-string">"MPEG location lookup table"</span>,
+            OWNE: <span class="hljs-string">"Ownership frame"</span>,
+            PRIV: <span class="hljs-string">"Private frame"</span>,
+            PCNT: <span class="hljs-string">"Play counter"</span>,
+            POPM: <span class="hljs-string">"Popularimeter"</span>,
+            POSS: <span class="hljs-string">"Position synchronisation frame"</span>,
+            RBUF: <span class="hljs-string">"Recommended buffer size"</span>,
+            RVAD: <span class="hljs-string">"Relative volume adjustment"</span>,
+            RVRB: <span class="hljs-string">"Reverb"</span>,
+            SYLT: <span class="hljs-string">"Synchronized lyric/text"</span>,
+            SYTC: <span class="hljs-string">"Synchronized tempo codes"</span>,
+            TALB: <span class="hljs-string">"Album/Movie/Show title"</span>,
+            TBPM: <span class="hljs-string">"BPM (beats per minute)"</span>,
+            TCOM: <span class="hljs-string">"Composer"</span>,
+            TCON: <span class="hljs-string">"Content type"</span>,
+            TCOP: <span class="hljs-string">"Copyright message"</span>,
+            TDAT: <span class="hljs-string">"Date"</span>,
+            TDLY: <span class="hljs-string">"Playlist delay"</span>,
+            TENC: <span class="hljs-string">"Encoded by"</span>,
+            TEXT: <span class="hljs-string">"Lyricist/Text writer"</span>,
+            TFLT: <span class="hljs-string">"File type"</span>,
+            TIME: <span class="hljs-string">"Time"</span>,
+            TIT1: <span class="hljs-string">"Content group description"</span>,
+            TIT2: <span class="hljs-string">"Title/songname/content description"</span>,
+            TIT3: <span class="hljs-string">"Subtitle/Description refinement"</span>,
+            TKEY: <span class="hljs-string">"Initial key"</span>,
+            TLAN: <span class="hljs-string">"Language(s)"</span>,
+            TLEN: <span class="hljs-string">"Length"</span>,
+            TMED: <span class="hljs-string">"Media type"</span>,
+            TOAL: <span class="hljs-string">"Original album/movie/show title"</span>,
+            TOFN: <span class="hljs-string">"Original filename"</span>,
+            TOLY: <span class="hljs-string">"Original lyricist(s)/text writer(s)"</span>,
+            TOPE: <span class="hljs-string">"Original artist(s)/performer(s)"</span>,
+            TORY: <span class="hljs-string">"Original release year"</span>,
+            TOWN: <span class="hljs-string">"File owner/licensee"</span>,
+            TPE1: <span class="hljs-string">"Lead performer(s)/Soloist(s)"</span>,
+            TPE2: <span class="hljs-string">"Band/orchestra/accompaniment"</span>,
+            TPE3: <span class="hljs-string">"Conductor/performer refinement"</span>,
+            TPE4: <span class="hljs-string">"Interpreted, remixed, or otherwise modified by"</span>,
+            TPOS: <span class="hljs-string">"Part of a set"</span>,
+            TPUB: <span class="hljs-string">"Publisher"</span>,
+            TRCK: <span class="hljs-string">"Track number/Position in set"</span>,
+            TRDA: <span class="hljs-string">"Recording dates"</span>,
+            TRSN: <span class="hljs-string">"Internet radio station name"</span>,
+            TRSO: <span class="hljs-string">"Internet radio station owner"</span>,
+            TSIZ: <span class="hljs-string">"Size"</span>,
+            TSRC: <span class="hljs-string">"ISRC (international standard recording code)"</span>,
+            TSSE: <span class="hljs-string">"Software/Hardware and settings used for encoding"</span>,
+            TYER: <span class="hljs-string">"Year"</span>,
+            TXXX: <span class="hljs-string">"User defined text information frame"</span>,
+            UFID: <span class="hljs-string">"Unique file identifier"</span>,
+            USER: <span class="hljs-string">"Terms of use"</span>,
+            USLT: <span class="hljs-string">"Unsychronized lyric/text transcription"</span>,
+            WCOM: <span class="hljs-string">"Commercial information"</span>,
+            WCOP: <span class="hljs-string">"Copyright/Legal information"</span>,
+            WOAF: <span class="hljs-string">"Official audio file webpage"</span>,
+            WOAR: <span class="hljs-string">"Official artist/performer webpage"</span>,
+            WOAS: <span class="hljs-string">"Official audio source webpage"</span>,
+            WORS: <span class="hljs-string">"Official internet radio station homepage"</span>,
+            WPAY: <span class="hljs-string">"Payment"</span>,
+            WPUB: <span class="hljs-string">"Publishers official webpage"</span>,
+            WXXX: <span class="hljs-string">"User defined URL link frame"</span>
         },</pre></div></div>
             
         </li>
@@ -691,21 +668,15 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Read the content of user-defined text-information ID3v2 tag frame. Intended for
- one-string text information concerning the audiofile in a similar way to the other
- &quot;T&quot;-frames. The frame body consists of a description of the string, represented as a
- terminated string, followed by the actual string. There may be more than one &quot;TXXX&quot;
- frame in each tag, but only one with the same description</p>
-<ul>
-<li>Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
-<li>Description: a text string according to encoding (followed by 00 (00))</li>
-<li>Value:       a text string according to encoding</li>
-</ul>
+              <p>Common character sequences converted to byte arrays</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentTxxx = <span class="function"><span class="keyword">function</span>  <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">var</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        seq = {
+            id3: seqFromStr(<span class="hljs-string">"ID3"</span>),
+            xing: seqFromStr(<span class="hljs-string">"Xing"</span>),
+            info: seqFromStr(<span class="hljs-string">"Info"</span>)
+        },</pre></div></div>
             
         </li>
         
@@ -716,11 +687,26 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <p>The content to be returned</p>
+              <p>Read the content of an ID3v2
+ <a href="http://id3.org/id3v2.3.0#Text_information_frames">text-information frame</a>. These are
+ common and contain info such as artist and album. There may only be one text info frame
+ of its kind in a tag. If the textstring is followed by a termination (00) all the
+ following information should be ignored and not be displayed. All text frame
+ identifiers begin with “T”. Only text frame identifiers begin with “T”, with the
+ exception of the “TXXX” frame</p>
+<ul>
+<li>Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2</li>
+<li>Information: a text string according to encoding</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                content = { encoding: buffer.getUint8(offset) },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentT = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span> content = { encoding: buffer.getUint8(offset) };
+            content.value = (content.encoding === <span class="hljs-number">0</span> ? readStr :
+                readStrUcs2)(buffer, offset + <span class="hljs-number">1</span>, length - <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">return</span> content;
+        },</pre></div></div>
             
         </li>
         
@@ -731,12 +717,22 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p>Offsets</p>
+              <p>Read the content of an ID3v2
+ (user-defined text-information frame)[<a href="http://id3.org/id3v2.3.0#User_defined_text_information_frame">http://id3.org/id3v2.3.0#User_defined_text_information_frame</a>].
+ Intended for one-string text information concerning the audiofile in a similar way to
+ the other “T”-frames. The frame body consists of a description of the string,
+ represented as a terminated string, followed by the actual string. There may be more
+ than one “TXXX” frame in each tag, but only one with the same description</p>
+<ul>
+<li>Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2</li>
+<li>Description: a text string according to encoding (followed by 00 (00))</li>
+<li>Value:       a text string according to encoding</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                offsetBeg = offset + <span class="number">1</span>, <span class="comment">// content beginning (description field)</span>
-                offsetTrm,              <span class="comment">// content null-terminator (seperates descr / value fields)</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentTxxx = <span class="hljs-function"><span class="hljs-keyword">function</span>  <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span></pre></div></div>
             
         </li>
         
@@ -747,10 +743,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              
+              <p>The content to be returned</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>                isEncodingUcs2 = content.encoding === <span class="number">1</span>,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                content = { encoding: buffer.getUint8(offset) },</pre></div></div>
             
         </li>
         
@@ -761,11 +758,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <p>Choose appropriate string-reader depending on encoding</p>
+              <p>Offsets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                readS = isEncodingUcs2 ? readStrUcs2 : readStr;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                offsetBeg = offset + <span class="hljs-number">1</span>, <span class="hljs-comment">// content beginning (description field)</span>
+                offsetTrm,              <span class="hljs-comment">// content null-terminator (seperates descr / value fields)</span></pre></div></div>
             
         </li>
         
@@ -776,13 +774,10 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p>Encoding + null term. = at least 2 octets</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (length &lt; <span class="number">2</span>) {
-                <span class="keyword">return</span> content; <span class="comment">// Inadequate length!</span>
-            }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                isEncodingUcs2 = content.encoding === <span class="hljs-number">1</span>,</pre></div></div>
             
         </li>
         
@@ -793,15 +788,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <p>Locate the the null terminator seperating description and URL</p>
+              <p>Choose appropriate string-reader depending on encoding</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
-                locateStrTrm)(buffer, offsetBeg, length - <span class="number">4</span>);
-            <span class="keyword">if</span> (offsetTrm === -<span class="number">1</span>) {
-                <span class="keyword">return</span> content; <span class="comment">// Not found!</span>
-            }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                readS = isEncodingUcs2 ? readStrUcs2 : readStr;</pre></div></div>
             
         </li>
         
@@ -812,16 +803,13 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              <p>Read data</p>
+              <p>Encoding + null term. = at least 2 octets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
-            offsetTrm += isEncodingUcs2 ? <span class="number">2</span> : <span class="number">1</span>; <span class="comment">// Move past terminating sequence</span>
-            content.value = readS(buffer, offsetTrm, offset + length - offsetTrm);
-
-            <span class="keyword">return</span> content;
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-number">2</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Inadequate length!</span>
+            }</pre></div></div>
             
         </li>
         
@@ -832,20 +820,15 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
-              <p>Read the content of a URL-link ID3v2 tag frame. There may only be one URL link frame of
- its kind in a tag, except when stated otherwise in the frame description. If the
- textstring is followed by a termination (00) all the following information should be
- ignored and not be displayed. All URL link frame identifiers begins with &quot;W&quot;. Only URL
- link frame identifiers begins with &quot;W&quot;</p>
-<ul>
-<li>URL: a text string</li>
-</ul>
+              <p>Locate the the null terminator seperating description and URL</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentW = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">return</span> { value: readStr(buffer, offset, length) };
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
+                locateStrTrm)(buffer, offsetBeg, length - <span class="hljs-number">4</span>);
+            <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
+            }</pre></div></div>
             
         </li>
         
@@ -856,21 +839,16 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
-              <p>Read the content of a user-defined URL-link ID3v2 tag frame. Intended for URL links
- concerning the audiofile in a similar way to the other &quot;W&quot;-frames. The frame body
- consists of a description of the string, represented as a terminated string, followed
- by the actual URL. The URL is always encoded with ISO-8859-1. There may be more than
- one &quot;WXXX&quot; frame in each tag, but only one with the same description</p>
-<ul>
-<li>Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
-<li>Description: a text string according to encoding (followed by 00 (00))</li>
-<li>URL:         a text string</li>
-</ul>
+              <p>Read data</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentWxxx = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">var</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
+            offsetTrm += isEncodingUcs2 ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>; <span class="hljs-comment">// Move past terminating sequence</span>
+            content.value = readS(buffer, offsetTrm, offset + length - offsetTrm);
+
+            <span class="hljs-keyword">return</span> content;
+        },</pre></div></div>
             
         </li>
         
@@ -881,11 +859,21 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
-              <p>The content to be returned</p>
+              <p>Read the content of an ID3v2
+ <a href="http://id3.org/id3v2.3.0#URL_link_frames">URL-link frame</a>. There may only be one
+ URL link frame of its kind in a tag, except when stated otherwise in the frame
+ description. If the textstring is followed by a termination (00) all the following
+ information should be ignored and not be displayed. All URL link frame identifiers
+ begins with “W”. Only URL link frame identifiers begins with “W”</p>
+<ul>
+<li>URL: a text string</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                content = { encoding: buffer.getUint8(offset) },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentW = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">return</span> { value: readStr(buffer, offset, length) };
+        },</pre></div></div>
             
         </li>
         
@@ -896,12 +884,23 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
-              <p>Offsets</p>
+              <p>Read the content of an ID3v2
+ <a href="http://id3.org/id3v2.3.0#User_defined_URL_link_frame">user-defined URL-link frame</a>.
+ Intended for URL links concerning the audiofile in a similar way to the other
+ “W”-frames. The frame body consists of a description of the string, represented as a
+ terminated string, followed by the actual URL. The URL is always encoded with
+ ISO-8859-1. There may be more than one “WXXX” frame in each tag, but only one with the
+ same description</p>
+<ul>
+<li>Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2</li>
+<li>Description: a text string according to encoding (followed by 00 (00))</li>
+<li>URL:         a text string</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                offsetBeg = offset + <span class="number">1</span>, <span class="comment">// content beginning (description field)</span>
-                offsetTrm,              <span class="comment">// content null-terminator (seperates descr / URL fields)</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentWxxx = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span></pre></div></div>
             
         </li>
         
@@ -912,10 +911,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
-              
+              <p>The content to be returned</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>                isEncodingUcs2 = content.encoding === <span class="number">1</span>,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                content = { encoding: buffer.getUint8(offset) },</pre></div></div>
             
         </li>
         
@@ -926,11 +926,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
-              <p>Choose appropriate string-reader depending on encoding</p>
+              <p>Offsets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                readS = isEncodingUcs2 ? readStrUcs2 : readStr;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                offsetBeg = offset + <span class="hljs-number">1</span>, <span class="hljs-comment">// content beginning (description field)</span>
+                offsetTrm,              <span class="hljs-comment">// content null-terminator (seperates descr / URL fields)</span></pre></div></div>
             
         </li>
         
@@ -941,13 +942,10 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
-              <p>Encoding + null term. = at least 2 octets</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (length &lt; <span class="number">2</span>) {
-                <span class="keyword">return</span> content; <span class="comment">// Inadequate length!</span>
-            }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                isEncodingUcs2 = content.encoding === <span class="hljs-number">1</span>,</pre></div></div>
             
         </li>
         
@@ -958,15 +956,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
-              <p>Locate the the null terminator seperating description and URL</p>
+              <p>Choose appropriate string-reader depending on encoding</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
-                locateStrTrm)(buffer, offsetBeg, length - <span class="number">4</span>);
-            <span class="keyword">if</span> (offsetTrm === -<span class="number">1</span>) {
-                <span class="keyword">return</span> content; <span class="comment">// Not found!</span>
-            }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                readS = isEncodingUcs2 ? readStrUcs2 : readStr;</pre></div></div>
             
         </li>
         
@@ -977,16 +971,13 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
-              <p>Read data</p>
+              <p>Encoding + null term. = at least 2 octets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
-            offsetTrm += isEncodingUcs2 ? <span class="number">2</span> : <span class="number">1</span>; <span class="comment">// Move past terminating sequence</span>
-            content.value = readStr(buffer, offsetTrm, offset + length - offsetTrm);
-
-            <span class="keyword">return</span> content;
-        },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-number">2</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Inadequate length!</span>
+            }</pre></div></div>
             
         </li>
         
@@ -997,23 +988,15 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
-              <p>Read the content of an ID3v2 tag comment frame. Indended for any kind of full text
- information that does not fit in any other frame. Consists of a frame header followed
- by encoding, language and content descriptors and ends with the actual comment as a
- text string. Newline characters are allowed in the comment text string. There may be
- more than one comment frame in each tag, but only one with the same language and
- content descriptor</p>
-<ul>
-<li>Encoding:    xx (0: ISO-8859-1, 1: 16-bit unicode 2.0 (ISO/IEC 10646-1:1993, UCS-2))</li>
-<li>Language:    xx xx xx (ISO-639-2)</li>
-<li>Short descr: a text string according to encoding (followed by 00 (00))</li>
-<li>Actual text: a text string according to encoding</li>
-</ul>
+              <p>Locate the the null terminator seperating description and URL</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentComm = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, length)</span> {</span>
-            <span class="keyword">var</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
+                locateStrTrm)(buffer, offsetBeg, length - <span class="hljs-number">4</span>);
+            <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
+            }</pre></div></div>
             
         </li>
         
@@ -1024,11 +1007,16 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
-              <p>The content to be returned</p>
+              <p>Read data</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                content = { encoding: buffer.getUint8(offset) },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
+            offsetTrm += isEncodingUcs2 ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>; <span class="hljs-comment">// Move past terminating sequence</span>
+            content.value = readStr(buffer, offsetTrm, offset + length - offsetTrm);
+
+            <span class="hljs-keyword">return</span> content;
+        },</pre></div></div>
             
         </li>
         
@@ -1039,12 +1027,23 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-48">&#182;</a>
               </div>
-              <p>Offsets</p>
+              <p>Read the content of an ID3v2 <a href="http://id3.org/id3v2.3.0#Comments">comment frame</a>.
+ Intended for any kind of full text information that does not fit in any other frame.
+ Consists of a frame header followed by encoding, language and content descriptors and
+ ends with the actual comment as a text string. Newline characters are allowed in the
+ comment text string. There may be more than one comment frame in each tag, but only one
+ with the same language and content descriptor</p>
+<ul>
+<li>Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2</li>
+<li>Language:    3 digit (octet) lang-code (ISO-639-2)</li>
+<li>Short descr: a text string according to encoding (followed by 00 (00))</li>
+<li>Actual text: a text string according to encoding</li>
+</ul>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                offsetBeg = offset + <span class="number">4</span>, <span class="comment">// content beginning (description field)</span>
-                offsetTrm,              <span class="comment">// content null-terminator (seperates descr / text fields)</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentComm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span></pre></div></div>
             
         </li>
         
@@ -1055,10 +1054,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-49">&#182;</a>
               </div>
-              
+              <p>The content to be returned</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>                isEncodingUcs2 = content.encoding === <span class="number">1</span>,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                content = { encoding: buffer.getUint8(offset) },</pre></div></div>
             
         </li>
         
@@ -1069,11 +1069,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-50">&#182;</a>
               </div>
-              <p>Choose appropriate string-reader depending on encoding</p>
+              <p>Offsets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                readS = isEncodingUcs2 ? readStrUcs2 : readStr;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                offsetBeg = offset + <span class="hljs-number">4</span>, <span class="hljs-comment">// content beginning (description field)</span>
+                offsetTrm,              <span class="hljs-comment">// content null-terminator (seperates descr / text fields)</span></pre></div></div>
             
         </li>
         
@@ -1084,13 +1085,10 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-51">&#182;</a>
               </div>
-              <p>Encoding + language + null term. = at least 5 octets</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (length &lt; <span class="number">5</span>) {
-                <span class="keyword">return</span> content; <span class="comment">// Inadequate length!</span>
-            }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                isEncodingUcs2 = content.encoding === <span class="hljs-number">1</span>,</pre></div></div>
             
         </li>
         
@@ -1101,11 +1099,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-52">&#182;</a>
               </div>
-              <p>Read the language field - 3 octets at most</p>
+              <p>Choose appropriate string-reader depending on encoding</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            content.language = readTrmStr(buffer, offset + <span class="number">1</span>, <span class="number">3</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>                readS = isEncodingUcs2 ? readStrUcs2 : readStr;</pre></div></div>
             
         </li>
         
@@ -1116,14 +1114,12 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-53">&#182;</a>
               </div>
-              <p>Locate the the null terminator seperating description and text</p>
+              <p>Encoding + language + null term. = at least 5 octets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
-                locateStrTrm)(buffer, offsetBeg, length - <span class="number">4</span>);
-            <span class="keyword">if</span> (offsetTrm === -<span class="number">1</span>) {
-                <span class="keyword">return</span> content; <span class="comment">// Not found!</span>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-number">5</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Inadequate length!</span>
             }</pre></div></div>
             
         </li>
@@ -1135,16 +1131,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-54">&#182;</a>
               </div>
-              <p>Read data</p>
+              <p>Read the language field - 3 octets at most</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
-            offsetTrm += isEncodingUcs2 ? <span class="number">2</span> : <span class="number">1</span>; <span class="comment">// Move past terminating sequence</span>
-            content.text = readS(buffer, offsetTrm, offset + length - offsetTrm);
-
-            <span class="keyword">return</span> content;
-        };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            content.language = readTrmStr(buffer, offset + <span class="hljs-number">1</span>, <span class="hljs-number">3</span>);</pre></div></div>
             
         </li>
         
@@ -1152,21 +1143,122 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         <li id="section-55">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-55">&#182;</a>
               </div>
-              <h3>Notes</h3>
+              <p>Locate the the null terminator seperating description and text</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            offsetTrm = (isEncodingUcs2 ? locateStrTrmUcs2 :
+                locateStrTrm)(buffer, offsetBeg, length - <span class="hljs-number">4</span>);
+            <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
+            }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p>Read data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            content.description = readS(buffer, offsetBeg, offsetTrm - offsetBeg);
+            offsetTrm += isEncodingUcs2 ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>; <span class="hljs-comment">// Move past terminating sequence</span>
+            content.text = readS(buffer, offsetTrm, offset + length - offsetTrm);
+
+            <span class="hljs-keyword">return</span> content;
+        },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>Read the content of an ID3v2
+ <a href="http://id3.org/id3v2.3.0#Unique_file_identifier">unique file identifier frame</a>. Allows
+ identification of the audio file by means of some database that may contain more
+ information relevant to the content. All frames begin with a null-terminated string - a
+ URL containing an email address, or a link to a location where an email address can be
+ found - that belongs to the organisation responsible for this specific database
+ implementation. The ‘Owner identifier’ must be non-empty (more than just a termination)
+ and is followed by the actual identifier, which may be up to 64 bytes. There may be
+ more than one “UFID” frame in a tag, but only one with the same ‘Owner identifier’.</p>
+<ul>
+<li>Owner identifier: a text string (followed by 00)</li>
+<li>Identifier:       up to 64 bytes of binary data</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        readId3v2TagFrameContentUfid = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>Read up to the first null terminator to get the owner-identifier</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                ownerIdentifier = readTrmStr(buffer, offset, length),</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>Figure out the identifier based on frame length vs owner-identifier length</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                identifier = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DataView</span>(buffer.buffer, offset + ownerIdentifier.length + <span class="hljs-number">1</span>,
+                    length - ownerIdentifier.length - <span class="hljs-number">1</span>);
+
+            <span class="hljs-keyword">return</span> { ownerIdentifier: ownerIdentifier, identifier: identifier };
+        };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <h3 id="notes">Notes</h3>
 <p>The parser exposes a collection of <code>read____</code> methods, each dedicated to reading a specific
  section of the mp3 file. The current implementation includes <code>readFrameHeader</code>, <code>readFrame</code>,
  <code>readId3v2Tag</code> and <code>readXingTag</code>. Each of these accepts a DataView-wrapped ArrayBuffer,
  which should contain the actual mp3 data, and optionally an offset into the buffer.</p>
 <p>All methods return a description of the section read in the form of a hash containing
  key-value pairs relevant to the section. For example the hash returned from
- <code>readFrameHeader</code> always contains an <code>mpegAudioVersion</code> key of value &quot;MPEG Version 1
- (ISO/IEC 11172-3)&quot; and a <code>layerDescription</code> key of value &quot;Layer III&quot;. A description will
+ <code>readFrameHeader</code> always contains an <code>mpegAudioVersion</code> key of value “MPEG Version 1
+ (ISO/IEC 11172-3)” and a <code>layerDescription</code> key of value “Layer III”. A description will
  always have a <code>_section</code> hash with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p>
 <ul>
-<li><code>type</code>: &quot;frame&quot;, &quot;frameHeader&quot;, &quot;Xing&quot; or &quot;ID3&quot;</li>
+<li><code>type</code>: “frame”, “frameHeader”, “Xing” or “ID3”</li>
 <li><code>byteLenfth</code>: Size of the section in bytes</li>
 <li><code>offset</code>: Buffer offset at which this section resides</li>
 </ul>
@@ -1178,121 +1270,22 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         </li>
         
         
-        <li id="section-56">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-56">&#182;</a>
-              </div>
-              <h3>Read a Frame Header</h3>
-<p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
- that no frame header is found at <code>offset</code></p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readFrameHeader = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
-        offset || (offset = <span class="number">0</span>);
-
-        <span class="keyword">var</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-57">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-57">&#182;</a>
-              </div>
-              <p>The header&#39;s four bytes</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            b1, b2, b3, b4,</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-58">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-58">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            header = {
-                _section: {
-                    type: <span class="string">"frameHeader"</span>,
-                    byteLength: <span class="number">4</span>,
-                    offset: offset
-                }
-            };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-59">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-59">&#182;</a>
-              </div>
-              <p>There should be more than 4bytes ahead</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (buffer.byteLength - offset &lt;= <span class="number">4</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
-
-        b1 = buffer.getUint8(offset);
-        b2 = buffer.getUint8(offset + <span class="number">1</span>);
-        b3 = buffer.getUint8(offset + <span class="number">2</span>);
-        b4 = buffer.getUint8(offset + <span class="number">3</span>);</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-60">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-60">&#182;</a>
-              </div>
-              <p>First octet: <code>11111111</code>: Frame sync (all bits must be set)</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (b1 !== <span class="number">255</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
-            
-        </li>
-        
-        
         <li id="section-61">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-61">&#182;</a>
               </div>
-              <p>Second octet: <code>11111011</code> or <code>11111010</code></p>
-<ul>
-<li><code>111.....</code>: Rest of frame sync (all bits must be set)</li>
-<li><code>...11...</code>: MPEG Audio version ID (11 -&gt; MPEG Version 1 (ISO/IEC 11172-3))</li>
-<li><code>.....01.</code>: Layer description (01 -&gt; Layer III)</li>
-<li><code>.......1</code>: Protection bit (1 = Not protected)</li>
-</ul>
-<p>Require the seven most significant bits to be <code>1111101</code> (&gt;= 250)</p>
+              <h3 id="read-a-frame-header">Read a Frame Header</h3>
+<p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
+ that no frame header is found at <code>offset</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (b2 &lt; <span class="number">250</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readFrameHeader = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
 
-        header.mpegAudioVersionBits = <span class="string">"11"</span>;
-        header.mpegAudioVersion = <span class="string">"MPEG Version 1 (ISO/IEC 11172-3)"</span>;
-        header.layerDescriptionBits = <span class="string">"01"</span>;
-        header.layerDescription = <span class="string">"Layer III"</span>;
-        header.isProtected = b2 &amp; <span class="number">1</span>; <span class="comment">// Just check if last bit is set</span>
-        header.protectionBit = header.isProtected ? <span class="string">"1"</span> : <span class="string">"0"</span>;</pre></div></div>
+        <span class="hljs-keyword">var</span></pre></div></div>
             
         </li>
         
@@ -1302,6 +1295,117 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>The header’s four bytes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            b1, b2, b3, b4,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            header = {
+                _section: {
+                    type: <span class="hljs-string">"frameHeader"</span>,
+                    byteLength: <span class="hljs-number">4</span>,
+                    offset: offset
+                }
+            };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-64">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>There should be more than 4bytes ahead</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (buffer.byteLength - offset &lt;= <span class="hljs-number">4</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        b1 = buffer.getUint8(offset);
+        b2 = buffer.getUint8(offset + <span class="hljs-number">1</span>);
+        b3 = buffer.getUint8(offset + <span class="hljs-number">2</span>);
+        b4 = buffer.getUint8(offset + <span class="hljs-number">3</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>First octet: <code>11111111</code>: Frame sync (all bits must be set)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (b1 !== <span class="hljs-number">255</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-66">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-66">&#182;</a>
+              </div>
+              <p>Second octet: <code>11111011</code> or <code>11111010</code></p>
+<ul>
+<li><code>111.....</code>: Rest of frame sync (all bits must be set)</li>
+<li><code>...11...</code>: MPEG Audio version ID (11 -&gt; MPEG Version 1 (ISO/IEC 11172-3))</li>
+<li><code>.....01.</code>: Layer description (01 -&gt; Layer III)</li>
+<li><code>.......1</code>: Protection bit (1 = Not protected)</li>
+</ul>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-67">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-67">&#182;</a>
+              </div>
+              <p>Require the seven most significant bits to be <code>1111101</code> (&gt;= 250)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (b2 &lt; <span class="hljs-number">250</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        header.mpegAudioVersionBits = <span class="hljs-string">"11"</span>;
+        header.mpegAudioVersion = <span class="hljs-string">"MPEG Version 1 (ISO/IEC 11172-3)"</span>;
+        header.layerDescriptionBits = <span class="hljs-string">"01"</span>;
+        header.layerDescription = <span class="hljs-string">"Layer III"</span>;
+        header.isProtected = b2 &amp; <span class="hljs-number">1</span>; <span class="hljs-comment">// Just check if last bit is set</span>
+        header.protectionBit = header.isProtected ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-68">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
               </div>
               <p>Third octet: <code>EEEEFFGH</code></p>
 <ul>
@@ -1314,28 +1418,28 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             </div>
             
             <div class="content"><div class='highlight'><pre>        b3 = octetToBinRep(b3);
-        header.bitrateBits = b3.substr(<span class="number">0</span>, <span class="number">4</span>);
+        header.bitrateBits = b3.substr(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>);
         header.bitrate = v1l3Bitrates[header.bitrateBits];
-        <span class="keyword">if</span> (header.bitrate === <span class="string">"bad"</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+        <span class="hljs-keyword">if</span> (header.bitrate === <span class="hljs-string">"bad"</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 
-        header.samplingRateBits = b3.substr(<span class="number">4</span>, <span class="number">2</span>);
+        header.samplingRateBits = b3.substr(<span class="hljs-number">4</span>, <span class="hljs-number">2</span>);
         header.samplingRate = v1l3SamplingRates[header.samplingRateBits];
-        <span class="keyword">if</span> (header.samplingRate === <span class="string">"reserved"</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }
+        <span class="hljs-keyword">if</span> (header.samplingRate === <span class="hljs-string">"reserved"</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 
-        header.frameIsPaddedBit = b3.substr(<span class="number">6</span>, <span class="number">1</span>);
-        header.frameIsPadded = header.frameIsPaddedBit === <span class="string">"1"</span>;
-        header.framePadding = header.frameIsPadded ? <span class="number">1</span> : <span class="number">0</span>;
+        header.frameIsPaddedBit = b3.substr(<span class="hljs-number">6</span>, <span class="hljs-number">1</span>);
+        header.frameIsPadded = header.frameIsPaddedBit === <span class="hljs-string">"1"</span>;
+        header.framePadding = header.frameIsPadded ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;
 
-        header.privateBit = b3.substr(<span class="number">7</span>, <span class="number">1</span>);</pre></div></div>
+        header.privateBit = b3.substr(<span class="hljs-number">7</span>, <span class="hljs-number">1</span>);</pre></div></div>
             
         </li>
         
         
-        <li id="section-63">
+        <li id="section-69">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-63">&#182;</a>
+                <a class="pilcrow" href="#section-69">&#182;</a>
               </div>
               <p>Fourth octet: <code>IIJJKLMM</code></p>
 <ul>
@@ -1349,123 +1453,10 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
             </div>
             
             <div class="content"><div class='highlight'><pre>        b4 = octetToBinRep(b4);
-        header.channelModeBits = b4.substr(<span class="number">0</span>, <span class="number">2</span>);
+        header.channelModeBits = b4.substr(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>);
         header.channelMode = v1l3ChannelModes[header.channelModeBits];
 
-        <span class="keyword">return</span> header;
-    };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-64">
-            <div class="annotation">
-              
-              <div class="pilwrap for-h3">
-                <a class="pilcrow" href="#section-64">&#182;</a>
-              </div>
-              <h3>Read a Frame</h3>
-<p>Read frame located at <code>offset</code> of DataView <code>buffer</code>. Will acquire the frame header (see
- <code>readFrameHeader</code>) plus some basic information about the frame - notably the length if the
- frame in bytes. If <code>requireNextFrame</code> is set, the presence of a next valid frame will be
- required for <em>this</em> frame to be regarded as valid. Returns null in the event that no frame
- is found at <code>offset</code></p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readFrame = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, requireNextFrame)</span> {</span>
-        offset || (offset = <span class="number">0</span>);
-
-        <span class="keyword">var</span> frame = {
-                _section: {
-                    type: <span class="string">"frame"</span>,
-                    offset: offset
-                },
-                header: mp3Parser.readFrameHeader(buffer, offset)
-            };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-65">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-65">&#182;</a>
-              </div>
-              <p>Frame should always begin with a valid header</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!frame.header) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-66">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-66">&#182;</a>
-              </div>
-              <p>The num of samples per v1l3 frame is constant - always 1152</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame._section.sampleLength = <span class="number">1152</span>;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-67">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-67">&#182;</a>
-              </div>
-              
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame._section.byteLength = getFrameByteLength(frame.header.bitrate, frame.header.samplingRate, frame.header.framePadding);
-        frame._section.nextFrameIndex = offset + frame._section.byteLength;</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-68">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-68">&#182;</a>
-              </div>
-              <p>No &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36 - this would indicate that this
- is in fact a Xing tag masquerading as a frame</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (isSeq(seq.xing, buffer, offset + <span class="number">36</span>) || isSeq(seq.info, buffer, offset + <span class="number">36</span>)) {
-            <span class="keyword">return</span> <span class="literal">null</span>;
-        }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-69">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-69">&#182;</a>
-              </div>
-              <p>If a next frame is required then the data at <code>frame._section.nextFrameIndex</code> should be
- a valid frame header</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (requireNextFrame &amp;&amp; !mp3Parser.readFrameHeader(buffer, frame._section.nextFrameIndex)) {
-            <span class="keyword">return</span> <span class="literal">null</span>;
-        }
-
-        <span class="keyword">return</span> frame;
+        <span class="hljs-keyword">return</span> header;
     };</pre></div></div>
             
         </li>
@@ -1474,26 +1465,28 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         <li id="section-70">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-70">&#182;</a>
               </div>
-              <h3>Read the Last Frame</h3>
-<p>Locate and read the very last valid frame in given DataView <code>buffer</code>. The search is carried
- out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code> is ommitted) to the
- first octet in the buffer. If <code>requireNextFrame</code> is set, the presence of a next valid frame
- will be required for any found frame to be regarded as valid (causing the method to
- essentially return the next-to-last frame on success). Returns null in the event that no
- frame is found at <code>offset</code></p>
+              <h3 id="read-a-frame">Read a Frame</h3>
+<p>Read frame located at <code>offset</code> of DataView <code>buffer</code>. Will acquire the frame header (see
+ <code>readFrameHeader</code>) plus some basic information about the frame - notably the length if the
+ frame in bytes. If <code>requireNextFrame</code> is set, the presence of a next valid frame will be
+ required for <em>this</em> frame to be regarded as valid. Returns null in the event that no frame
+ is found at <code>offset</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readLastFrame = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset, requireNextFrame)</span> {</span>
-        offset || (offset = buffer.byteLength - <span class="number">1</span>);
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, requireNextFrame)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
 
-        <span class="keyword">var</span> lastFrame = <span class="literal">null</span>;
-
-        <span class="keyword">for</span> (; offset &gt;= <span class="number">0</span>; --offset) {
-            <span class="keyword">if</span> (buffer.getUint8(offset) === <span class="number">255</span>) {</pre></div></div>
+        <span class="hljs-keyword">var</span> frame = {
+                _section: {
+                    type: <span class="hljs-string">"frame"</span>,
+                    offset: offset
+                },
+                header: mp3Parser.readFrameHeader(buffer, offset)
+            };</pre></div></div>
             
         </li>
         
@@ -1504,17 +1497,11 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-71">&#182;</a>
               </div>
-              <p>Located a candidate frame as 255 is a possible frame-sync byte</p>
+              <p>Frame should always begin with a valid header</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                lastFrame = mp3Parser.readFrame(buffer, offset, requireNextFrame);
-                <span class="keyword">if</span> (lastFrame) { <span class="keyword">return</span> lastFrame; }
-            }
-        }
-
-        <span class="keyword">return</span> <span class="literal">null</span>;
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (!frame.header) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }</pre></div></div>
             
         </li>
         
@@ -1522,16 +1509,14 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
         <li id="section-72">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-72">&#182;</a>
               </div>
-              <h3>Read an ID3v2 Tag Frame</h3>
-<p>Read <a href="http://id3.org/id3v2.3.0#Declared_ID3v2_frames">ID3v2 Tag frame</a> located at <code>offset</code>
- of DataView <code>buffer</code>. Returns null in the event that no tag-frame is found at <code>offset</code></p>
+              <p>The num of samples per v1l3 frame is constant - always 1152</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readId3v2TagFrame = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>        frame._section.sampleLength = <span class="hljs-number">1152</span>;</pre></div></div>
             
         </li>
         
@@ -1541,6 +1526,125 @@ Copyright (c) 2013 Alex Lambiris</code></pre>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-73">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        frame._section.byteLength = getFrameByteLength(frame.header.bitrate, frame.header.samplingRate, frame.header.framePadding);
+        frame._section.nextFrameIndex = offset + frame._section.byteLength;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-74">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-74">&#182;</a>
+              </div>
+              <p>No “Xing” or “Info” identifier should reside at octet 36 - this would indicate that this
+ is in fact a Xing tag masquerading as a frame</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (isSeq(seq.xing, buffer, offset + <span class="hljs-number">36</span>) || isSeq(seq.info, buffer, offset + <span class="hljs-number">36</span>)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-75">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-75">&#182;</a>
+              </div>
+              <p>If a next frame is required then the data at <code>frame._section.nextFrameIndex</code> should be
+ a valid frame header</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (requireNextFrame &amp;&amp; !mp3Parser.readFrameHeader(buffer, frame._section.nextFrameIndex)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+
+        <span class="hljs-keyword">return</span> frame;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-76">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-76">&#182;</a>
+              </div>
+              <h3 id="read-the-last-frame">Read the Last Frame</h3>
+<p>Locate and read the very last valid frame in given DataView <code>buffer</code>. The search is carried
+ out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code> is ommitted) to the
+ first octet in the buffer. If <code>requireNextFrame</code> is set, the presence of a next valid frame
+ will be required for any found frame to be regarded as valid (causing the method to
+ essentially return the next-to-last frame on success). Returns null in the event that no
+ frame is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readLastFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, requireNextFrame)</span> {</span>
+        offset || (offset = buffer.byteLength - <span class="hljs-number">1</span>);
+
+        <span class="hljs-keyword">var</span> lastFrame = <span class="hljs-literal">null</span>;
+
+        <span class="hljs-keyword">for</span> (; offset &gt;= <span class="hljs-number">0</span>; --offset) {
+            <span class="hljs-keyword">if</span> (buffer.getUint8(offset) === <span class="hljs-number">255</span>) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-77">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-77">&#182;</a>
+              </div>
+              <p>Located a candidate frame as 255 is a possible frame-sync byte</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                lastFrame = mp3Parser.readFrame(buffer, offset, requireNextFrame);
+                <span class="hljs-keyword">if</span> (lastFrame) { <span class="hljs-keyword">return</span> lastFrame; }
+            }
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-78">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-78">&#182;</a>
+              </div>
+              <h3 id="read-an-id3v2-tag-frame">Read an ID3v2 Tag Frame</h3>
+<p>Read <a href="http://id3.org/id3v2.3.0#Declared_ID3v2_frames">ID3v2 Tag frame</a> located at <code>offset</code>
+ of DataView <code>buffer</code>. Returns null in the event that no tag-frame is found at <code>offset</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readId3v2TagFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-79">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-79">&#182;</a>
               </div>
               <p>All frames consist of a frame header followed by one or more fields containing the actual
 information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF</code>, where</p>
@@ -1552,104 +1656,14 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">var</span> frame = {
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">var</span> frame = {
                 header: {
-                    id: readStr(buffer, offset, <span class="number">4</span>),
-                    size: buffer.getUint32(offset + <span class="number">4</span>),
-                    flagsOctet1: buffer.getUint8(offset + <span class="number">8</span>),
-                    flagsOctet2: buffer.getUint8(offset + <span class="number">9</span>)
+                    id: readStr(buffer, offset, <span class="hljs-number">4</span>),
+                    size: buffer.getUint32(offset + <span class="hljs-number">4</span>),
+                    flagsOctet1: buffer.getUint8(offset + <span class="hljs-number">8</span>),
+                    flagsOctet2: buffer.getUint8(offset + <span class="hljs-number">9</span>)
                 }
             };</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-74">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-74">&#182;</a>
-              </div>
-              <p>Frame&#39;s friendly name</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame.name = id3v2TagFrameNames[frame.header.id];</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-75">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-75">&#182;</a>
-              </div>
-              <p>An ID3v2 tag frame must have a length of at least 1 octet, excluding the header</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (frame.size &lt; <span class="number">1</span>) { <span class="keyword">return</span> frame; }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-76">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-76">&#182;</a>
-              </div>
-              <p>Read frame&#39;s content</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        frame.content = (<span class="function"><span class="keyword">function</span> <span class="params">(id)</span> {</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-77">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-77">&#182;</a>
-              </div>
-              <p>User-defined text-information frames</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id === <span class="string">"TXXX"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentTxxx; }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-78">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-78">&#182;</a>
-              </div>
-              <p>Text-information frames</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id.charAt(<span class="number">0</span>) === <span class="string">"T"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentT; }</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-79">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-79">&#182;</a>
-              </div>
-              <p>User-defined URL-link frames</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id === <span class="string">"WXXX"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentWxxx; }</pre></div></div>
             
         </li>
         
@@ -1660,11 +1674,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-80">&#182;</a>
               </div>
-              <p>URL-link frames</p>
+              <p>Frame’s friendly name</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id.charAt(<span class="number">0</span>) === <span class="string">"W"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentW; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        frame.name = id3v2TagFrameNames[frame.header.id];</pre></div></div>
             
         </li>
         
@@ -1675,11 +1689,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-81">&#182;</a>
               </div>
-              <p>Comment frames</p>
+              <p>An ID3v2 tag frame must have a length of at least 1 octet, excluding the header</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (id === <span class="string">"COMM"</span>) { <span class="keyword">return</span> readId3v2TagFrameContentComm; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (frame.size &lt; <span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> frame; }</pre></div></div>
             
         </li>
         
@@ -1690,15 +1704,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-82">&#182;</a>
               </div>
-              <p>Unknown frame - &#39;parse it&#39; using a no-op returning <code>undefined</code> content</p>
+              <p>Read frame’s content</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">return</span> noOp;
-        }(frame.header.id))(buffer, offset + <span class="number">10</span>, frame.header.size);
-
-        <span class="keyword">return</span> frame;
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        frame.content = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> {</span></pre></div></div>
             
         </li>
         
@@ -1706,17 +1716,14 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         <li id="section-83">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-83">&#182;</a>
               </div>
-              <h3>Read the ID3v2 Tag</h3>
-<p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
- null in the event that no tag is found at <code>offset</code></p>
+              <p>User-defined text-information frames</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readId3v2Tag = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
-        offset || (offset = <span class="number">0</span>);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"TXXX"</span>) { <span class="hljs-keyword">return</span> readId3v2TagFrameContentTxxx; }</pre></div></div>
             
         </li>
         
@@ -1727,19 +1734,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-84">&#182;</a>
               </div>
-              <p>The ID3v2 tag header, which should be the first information in the file, is 10 octets
- long and laid out as <code>IIIVVFSSSS</code>, where</p>
-<ul>
-<li><code>III.......</code>: id, always &quot;ID3&quot; (0x49/73, 0x44/68, 0x33/51)</li>
-<li><code>...VV.....</code>: version (major version + revision number)</li>
-<li><code>.....F....</code>: flags: abc00000. a:unsynchronisation, b:extended header, c:experimental</li>
-<li><code>......SSSS</code>: tag&#39;s size as a synchsafe integer</li>
-</ul>
-<p>There should be at least 10 bytes ahead</p>
+              <p>Text-information frames</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (buffer.byteLength - offset &lt; <span class="number">10</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (id.charAt(<span class="hljs-number">0</span>) === <span class="hljs-string">"T"</span>) { <span class="hljs-keyword">return</span> readId3v2TagFrameContentT; }</pre></div></div>
             
         </li>
         
@@ -1750,13 +1749,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-85">&#182;</a>
               </div>
-              <p>The &#39;ID3&#39; identifier is expected at given offset</p>
+              <p>User-defined URL-link frames</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!isSeq(seq.id3, buffer, offset)) { <span class="keyword">return</span> <span class="literal">null</span>; }
-
-        <span class="keyword">var</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"WXXX"</span>) { <span class="hljs-keyword">return</span> readId3v2TagFrameContentWxxx; }</pre></div></div>
             
         </li>
         
@@ -1767,10 +1764,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-86">&#182;</a>
               </div>
-              
+              <p>URL-link frames</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>            flagsOctet = buffer.getUint8(offset + <span class="number">5</span>),</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (id.charAt(<span class="hljs-number">0</span>) === <span class="hljs-string">"W"</span>) { <span class="hljs-keyword">return</span> readId3v2TagFrameContentW; }</pre></div></div>
             
         </li>
         
@@ -1781,25 +1779,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-87">&#182;</a>
               </div>
-              
+              <p>Comment frames</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>            tag = {
-                _section: {
-                    type: <span class="string">"ID3v2"</span>,
-                    offset: offset
-                },
-                header: {
-                    majorVersion: buffer.getUint8(offset + <span class="number">3</span>),
-                    minorRevision: buffer.getUint8(offset + <span class="number">4</span>),
-                    flagsOctet: flagsOctet,
-                    unsynchronisationFlag: (flagsOctet &amp; <span class="number">128</span>) === <span class="number">128</span>,
-                    extendedHeaderFlag: (flagsOctet &amp; <span class="number">64</span>) === <span class="number">64</span>,
-                    experimentalIndicatorFlag: (flagsOctet &amp; <span class="number">32</span>) === <span class="number">32</span>,
-                    size: unsynchsafe(buffer.getUint32(offset + <span class="number">6</span>))
-                },
-                frames: []
-            },</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"COMM"</span>) { <span class="hljs-keyword">return</span> readId3v2TagFrameContentComm; }</pre></div></div>
             
         </li>
         
@@ -1810,12 +1794,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-88">&#182;</a>
               </div>
-              <p>Index of octet following tag&#39;s last octet: The tag spans [offset, tagEnd)
- (including the first 10 header octets)</p>
+              <p>Unique-file-identifier frames</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            tagEnd,</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"UFID"</span>) { <span class="hljs-keyword">return</span> readId3v2TagFrameContentUfid; }</pre></div></div>
             
         </li>
         
@@ -1826,11 +1809,15 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-89">&#182;</a>
               </div>
-              <p>To store frames as they&#39;re discovered while paring the tag</p>
+              <p>Unknown frame - ‘parse it’ using a no-op returning <code>undefined</code> content</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            frame;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">return</span> noOp;
+        }(frame.header.id))(buffer, offset + <span class="hljs-number">10</span>, frame.header.size);
+
+        <span class="hljs-keyword">return</span> frame;
+    };</pre></div></div>
             
         </li>
         
@@ -1841,14 +1828,14 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-90">&#182;</a>
               </div>
-              <p>The size as expressed in the header is the size of the complete tag after
- unsychronisation, including padding, excluding the header but not excluding the
- extended header (total tag size - 10)</p>
+              <h3 id="read-the-id3v2-tag">Read the ID3v2 Tag</h3>
+<p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
+ null in the event that no tag is found at <code>offset</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = tag.header.size + <span class="number">10</span>;
-        tagEnd = offset + tag._section.byteLength;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);</pre></div></div>
             
         </li>
         
@@ -1859,13 +1846,16 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-91">&#182;</a>
               </div>
-              <p>TODO: Process extended header if present. The presence of an extended header will affect
- the offset. Currently, it is asummed that no extended header is present so the offset
- is fixed at 10 octets</p>
+              <p>The ID3v2 tag header, which should be the first information in the file, is 10 octets
+ long and laid out as <code>IIIVVFSSSS</code>, where</p>
+<ul>
+<li><code>III.......</code>: id, always “ID3” (0x49/73, 0x44/68, 0x33/51)</li>
+<li><code>...VV.....</code>: version (major version + revision number)</li>
+<li><code>.....F....</code>: flags: abc00000. a:unsynchronisation, b:extended header, c:experimental</li>
+<li><code>......SSSS</code>: tag’s size as a synchsafe integer</li>
+</ul>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (tag.header.extendedHeaderFlag) {}</pre></div></div>
             
         </li>
         
@@ -1876,12 +1866,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-92">&#182;</a>
               </div>
-              <p>Go on to read individual frames but only if the tag version is v2.3. This is the only
- version currently supported</p>
+              <p>There should be at least 10 bytes ahead</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (tag.header.majorVersion !== <span class="number">3</span>) { <span class="keyword">return</span> tag; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (buffer.byteLength - offset &lt; <span class="hljs-number">10</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }</pre></div></div>
             
         </li>
         
@@ -1892,12 +1881,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-93">&#182;</a>
               </div>
-              <p>Move offset past the end of the tag header to start reading tag frames</p>
+              <p>The ‘ID3’ identifier is expected at given offset</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        offset += <span class="number">10</span>;
-        <span class="keyword">while</span> (offset &lt; tagEnd) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (!isSeq(seq.id3, buffer, offset)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        <span class="hljs-keyword">var</span></pre></div></div>
             
         </li>
         
@@ -1908,14 +1898,10 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-94">&#182;</a>
               </div>
-              <p>Locating a frame with a zeroed out id indicates that all valid frames have already
- been parsed. It&#39;s all dead space hereon so practically we&#39;re done</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (buffer.getUint32(offset) === <span class="number">0</span>) { <span class="keyword">break</span>; }
-
-            frame = mp3Parser.readId3v2TagFrame(buffer, offset);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            flagsOctet = buffer.getUint8(offset + <span class="hljs-number">5</span>),</pre></div></div>
             
         </li>
         
@@ -1926,18 +1912,25 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-95">&#182;</a>
               </div>
-              <p>Couldn&#39;t parse this frame so bail out</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">if</span> (!frame) { <span class="keyword">break</span>; }
-
-            tag.frames.push(frame);
-            offset += frame.header.size + <span class="number">10</span>;
-        }
-
-        <span class="keyword">return</span> tag;
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            tag = {
+                _section: {
+                    type: <span class="hljs-string">"ID3v2"</span>,
+                    offset: offset
+                },
+                header: {
+                    majorVersion: buffer.getUint8(offset + <span class="hljs-number">3</span>),
+                    minorRevision: buffer.getUint8(offset + <span class="hljs-number">4</span>),
+                    flagsOctet: flagsOctet,
+                    unsynchronisationFlag: (flagsOctet &amp; <span class="hljs-number">128</span>) === <span class="hljs-number">128</span>,
+                    extendedHeaderFlag: (flagsOctet &amp; <span class="hljs-number">64</span>) === <span class="hljs-number">64</span>,
+                    experimentalIndicatorFlag: (flagsOctet &amp; <span class="hljs-number">32</span>) === <span class="hljs-number">32</span>,
+                    size: unsynchsafe(buffer.getUint32(offset + <span class="hljs-number">6</span>))
+                },
+                frames: []
+            },</pre></div></div>
             
         </li>
         
@@ -1945,25 +1938,15 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         <li id="section-96">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-96">&#182;</a>
               </div>
-              <h3>Read the Xing Tag</h3>
-<p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
- DataView <code>buffer</code>. Returns null in the event that no frame is found at <code>offset</code></p>
+              <p>Index of octet following tag’s last octet: The tag spans [offset, tagEnd)
+ (including the first 10 header octets)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readXingTag = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
-        offset || (offset = <span class="number">0</span>);
-
-        <span class="keyword">var</span> tag = {
-                _section: {
-                    type: <span class="string">"Xing"</span>,
-                    offset: offset
-                },
-                header: mp3Parser.readFrameHeader(buffer, offset)
-            };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            tagEnd,</pre></div></div>
             
         </li>
         
@@ -1974,11 +1957,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-97">&#182;</a>
               </div>
-              <p>The Xing header should begin with a valid frame header</p>
+              <p>To store frames as they’re discovered while paring the tag</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (!tag.header) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            frame;</pre></div></div>
             
         </li>
         
@@ -1989,11 +1972,14 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-98">&#182;</a>
               </div>
-              <p>There should be at least 36 + 4 = 40 bytes ahead</p>
+              <p>The size as expressed in the header is the size of the complete tag after
+ unsychronisation, including padding, excluding the header but not excluding the
+ extended header (total tag size - 10)</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">if</span> (buffer.byteLength &lt; offset + <span class="number">40</span>) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = tag.header.size + <span class="hljs-number">10</span>;
+        tagEnd = offset + tag._section.byteLength;</pre></div></div>
             
         </li>
         
@@ -2004,13 +1990,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-99">&#182;</a>
               </div>
-              <p>A &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36</p>
+              <p>TODO: Process extended header if present. The presence of an extended header will affect
+ the offset. Currently, it is asummed that no extended header is present so the offset
+ is fixed at 10 octets</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        (tag.identifier = isSeq(seq.xing, buffer, offset + <span class="number">36</span>)) ||
-        (tag.identifier = isSeq(seq.info, buffer, offset + <span class="number">36</span>));
-        <span class="keyword">if</span> (!tag.identifier) { <span class="keyword">return</span> <span class="literal">null</span>; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (tag.header.extendedHeaderFlag) {}</pre></div></div>
             
         </li>
         
@@ -2021,14 +2007,12 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-100">&#182;</a>
               </div>
-              
+              <p>Go on to read individual frames but only if the tag version is v2.3. This is the only
+ version currently supported</p>
+
             </div>
             
-            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = getFrameByteLength(tag.header.bitrate, tag.header.samplingRate, tag.header.framePadding);
-        tag._section.nextFrameIndex = offset + tag._section.byteLength;
-
-        <span class="keyword">return</span> tag;
-    };</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (tag.header.majorVersion !== <span class="hljs-number">3</span>) { <span class="hljs-keyword">return</span> tag; }</pre></div></div>
             
         </li>
         
@@ -2036,25 +2020,15 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         <li id="section-101">
             <div class="annotation">
               
-              <div class="pilwrap for-h3">
+              <div class="pilwrap ">
                 <a class="pilcrow" href="#section-101">&#182;</a>
               </div>
-              <h3>Read all Tags up to First Frame</h3>
-<p>( See <a href="http://www.rengels.de/computer/mp3tags.html">this</a> and
- <a href="http://stackoverflow.com/a/5013505">this</a> )</p>
+              <p>Move offset past the end of the tag header to start reading tag frames</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    mp3Parser.readTags = <span class="function"><span class="keyword">function</span> <span class="params">(buffer, offset)</span> {</span>
-        offset || (offset = <span class="number">0</span>);
-
-        <span class="keyword">var</span> sections = [],
-            section = <span class="literal">null</span>,
-            readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame],
-            foundFirstFrame = <span class="literal">false</span>,
-            i = <span class="number">0</span>,
-            numOfReaders = readers.length,
-            bufferLength = buffer.byteLength;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        offset += <span class="hljs-number">10</span>;
+        <span class="hljs-keyword">while</span> (offset &lt; tagEnd) {</pre></div></div>
             
         </li>
         
@@ -2065,11 +2039,14 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-102">&#182;</a>
               </div>
-              <p>While we haven&#39;t located the first frame, pick the next offset ..</p>
+              <p>Locating a frame with a zeroed out id indicates that all valid frames have already
+ been parsed. It’s all dead space hereon so practically we’re done</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="keyword">for</span> (; offset &lt; bufferLength &amp;&amp; !foundFirstFrame; ++offset) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (buffer.getUint32(offset) === <span class="hljs-number">0</span>) { <span class="hljs-keyword">break</span>; }
+
+            frame = mp3Parser.readId3v2TagFrame(buffer, offset);</pre></div></div>
             
         </li>
         
@@ -2080,12 +2057,18 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-103">&#182;</a>
               </div>
-              <p>.. and try out each of the &#39;readers&#39; on it</p>
+              <p>Couldn’t parse this frame so bail out</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; numOfReaders; ++i) {
-                section = readers[i](buffer, offset);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> (!frame) { <span class="hljs-keyword">break</span>; }
+
+            tag.frames.push(frame);
+            offset += frame.header.size + <span class="hljs-number">10</span>;
+        }
+
+        <span class="hljs-keyword">return</span> tag;
+    };</pre></div></div>
             
         </li>
         
@@ -2096,11 +2079,22 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-104">&#182;</a>
               </div>
-              <p>If one of the readers successfully parses a section ..</p>
+              <h3 id="read-the-xing-tag">Read the Xing Tag</h3>
+<p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
+ DataView <code>buffer</code>. Returns null in the event that no frame is found at <code>offset</code></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="keyword">if</span> (section) {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readXingTag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">var</span> tag = {
+                _section: {
+                    type: <span class="hljs-string">"Xing"</span>,
+                    offset: offset
+                },
+                header: mp3Parser.readFrameHeader(buffer, offset)
+            };</pre></div></div>
             
         </li>
         
@@ -2111,11 +2105,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-105">&#182;</a>
               </div>
-              <p>.. store it ..</p>
+              <p>The Xing header should begin with a valid frame header</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    sections.push(section);</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (!tag.header) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }</pre></div></div>
             
         </li>
         
@@ -2126,13 +2120,11 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-106">&#182;</a>
               </div>
-              <p>.. and push the offset to the very end of end of that section. This way,
- we avoid iterating over offsets which definately aren&#39;t the begining of
- some section (they&#39;re part of the located section)</p>
+              <p>There should be at least 36 + 4 = 40 bytes ahead</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    offset += section._section.byteLength;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">if</span> (buffer.byteLength &lt; offset + <span class="hljs-number">40</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }</pre></div></div>
             
         </li>
         
@@ -2143,16 +2135,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-107">&#182;</a>
               </div>
-              <p>If the section we just parsed is a frame then we&#39;ve actually located the
- first frame. Break out of the readers-loop making sure to set
- foundFirstFrame (so that we also exit the outer loop)</p>
+              <p>A “Xing” or “Info” identifier should reside at octet 36</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    <span class="keyword">if</span> (section._section.type === <span class="string">"frame"</span>) {
-                        foundFirstFrame = <span class="literal">true</span>;
-                        <span class="keyword">break</span>;
-                    }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>        (tag.identifier = isSeq(seq.xing, buffer, offset + <span class="hljs-number">36</span>)) ||
+        (tag.identifier = isSeq(seq.info, buffer, offset + <span class="hljs-number">36</span>));
+        <span class="hljs-keyword">if</span> (!tag.identifier) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }</pre></div></div>
             
         </li>
         
@@ -2163,17 +2152,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-108">&#182;</a>
               </div>
-              <p>The section is <em>not</em> the first frame. So, having pushed the offset
- appropriately, retry all readers</p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre>                    i = -<span class="number">1</span>;
-                }
-            }
-        }
+            <div class="content"><div class='highlight'><pre>        tag._section.byteLength = getFrameByteLength(tag.header.bitrate, tag.header.samplingRate, tag.header.framePadding);
+        tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
-        <span class="keyword">return</span> sections;
+        <span class="hljs-keyword">return</span> tag;
     };</pre></div></div>
             
         </li>
@@ -2185,11 +2170,22 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-109">&#182;</a>
               </div>
-              <p>Attach the <code>version</code> property to mp3 Parser and return it</p>
+              <h3 id="read-all-tags-up-to-first-frame">Read all Tags up to First Frame</h3>
+<p>( See <a href="http://www.rengels.de/computer/mp3tags.html">this</a> and
+ <a href="http://stackoverflow.com/a/5013505">this</a> )</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    Object.defineProperties(mp3Parser, {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    mp3Parser.readTags = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">var</span> sections = [],
+            section = <span class="hljs-literal">null</span>,
+            readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame],
+            foundFirstFrame = <span class="hljs-literal">false</span>,
+            i = <span class="hljs-number">0</span>,
+            numOfReaders = readers.length,
+            bufferLength = buffer.byteLength;</pre></div></div>
             
         </li>
         
@@ -2200,14 +2196,149 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-110">&#182;</a>
               </div>
+              <p>While we haven’t located the first frame, pick the next offset ..</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-keyword">for</span> (; offset &lt; bufferLength &amp;&amp; !foundFirstFrame; ++offset) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-111">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-111">&#182;</a>
+              </div>
+              <p>.. and try out each of the ‘readers’ on it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; numOfReaders; ++i) {
+                section = readers[i](buffer, offset);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-112">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-112">&#182;</a>
+              </div>
+              <p>If one of the readers successfully parses a section ..</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> (section) {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-113">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-113">&#182;</a>
+              </div>
+              <p>.. store it ..</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    sections.push(section);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-114">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-114">&#182;</a>
+              </div>
+              <p>.. and push the offset to the very end of end of that section. This way,
+ we avoid iterating over offsets which definately aren’t the begining of
+ some section (they’re part of the located section)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    offset += section._section.byteLength;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-115">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-115">&#182;</a>
+              </div>
+              <p>If the section we just parsed is a frame then we’ve actually located the
+ first frame. Break out of the readers-loop making sure to set
+ foundFirstFrame (so that we also exit the outer loop)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    <span class="hljs-keyword">if</span> (section._section.type === <span class="hljs-string">"frame"</span>) {
+                        foundFirstFrame = <span class="hljs-literal">true</span>;
+                        <span class="hljs-keyword">break</span>;
+                    }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-116">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-116">&#182;</a>
+              </div>
+              <p>The section is <em>not</em> the first frame. So, having pushed the offset
+ appropriately, retry all readers</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    i = -<span class="hljs-number">1</span>;
+                }
+            }
+        }
+
+        <span class="hljs-keyword">return</span> sections;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-117">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-117">&#182;</a>
+              </div>
+              <p>Attach the <code>version</code> property to mp3 Parser and return it</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-built_in">Object</span>.defineProperties(mp3Parser, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-118">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-118">&#182;</a>
+              </div>
               <p>Get current version of mp3-parser</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        version: { get: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span> <span class="keyword">return</span> <span class="string">"0.1.13"</span>; } }
+            <div class="content"><div class='highlight'><pre>        version: { get: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> <span class="hljs-string">"0.1.14"</span>; } }
     });
 
-    <span class="keyword">return</span> mp3Parser;
+    <span class="hljs-keyword">return</span> mp3Parser;
 }));</pre></div></div>
             
         </li>
