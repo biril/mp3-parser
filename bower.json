@@ -1,0 +1,22 @@
+{
+  "name": "mp3-parser",
+  "main": "mp3-parser.js",
+  "version": "0.1.13",
+  "homepage": "https://github.com/biril/mp3-parser",
+  "authors": [
+    "biril <alexlambiris@gmail.com>"
+  ],
+  "description": "Read mp3 frames & tags",
+  "keywords": ["mp3"],
+  "dependencies": { "underscore": "1.5.x" },
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules/",
+    "bower_components/",
+    "test/",
+    "examples/",
+    "Makefile",
+    "package.json"
+  ]
+}

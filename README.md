@@ -3,6 +3,7 @@ mp3 Parser
 
 [![Build Status](https://travis-ci.org/biril/mp3-parser.png)](https://travis-ci.org/biril/mp3-parser)
 [![NPM version](https://badge.fury.io/js/mp3-parser.png)](http://badge.fury.io/js/mp3-parser)
+[![Bower version](https://badge.fury.io/bo/mp3-parser.png)](http://badge.fury.io/bo/mp3-parser)
 
 Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For each of
 these sections present within a given mp3 file, mp3 Parser will provide data indicating their
@@ -15,10 +16,16 @@ d'etre) for this initial revision is performing precise cuts at frame / tag boun
 Set up
 ------
 
+To get mp3 Parser
+
+* install with bower, `bower install mp3-parser`,
+* install with npm, `npm install mp3-parser` or
+* just include [`mp3-parser.js`](https://raw.github.com/biril/mp3-parser/master/mp3-parser.js)
+    in your project.
+
 mp3 Parser may be used as a CommonJS module on Node or in a browser, either through a plain
 `<script>` tag or as an AMD module. It will be automatically exported in the correct format
-depending on the detected environment. To get it, `git clone git://github.com/biril/mp3-parser` or
-`npm install mp3-parser`.
+depending on the detected environment:
 
 * In projects targetting _browsers, without an AMD module loader_, include mp3-parser.js:
 
