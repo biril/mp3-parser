@@ -6,10 +6,10 @@
 
 /*jshint browser:true */
 /*global exports, define */
-(function (root, createModule) {
+(function (globalObject, createModule) {
     "use strict";
 
-    // Expose as a module or global depending on the detected environment:
+    // Export as a module or global depending on the detected environment:
 
     // Global `define` method with `amd` property signifies an AMD loader (require.js, curl.js, ..)
     if (typeof define === "function" && define.amd) {
@@ -19,25 +19,16 @@
     // Global `exports` object signifies CommonJS enviroments with `module.exports`, e.g. Node
     if (typeof exports === "object") { return createModule(exports); }
 
-    // If none of the above, then assume a browser, without AMD
-    root.mp3Parser = createModule({});
+    // If none of the above, then assume a browser sans AMD (also attach a `noConflict`)
+    var previousMp3Parser = globalObject.mp3Parser;
+    createModule(globalObject.mp3Parser = {
+        noConflict: function () {
+            var mp3Parser = globalObject.mp3Parser;
+            globalObject.mp3Parser = previousMp3Parser;
+            return (this.noConflict = function () { return mp3Parser; }).call();
+        }
+    });
 
-    // Attach a `noConflict` method onto the `mp3Parser` global
-    root.mp3Parser.noConflict = (function () {
-
-        // Save a reference to the previous value of 'mp3Parser', so that it can be restored later
-        //  on, if 'noConflict' is used
-        var previousMp3Parser = root.mp3Parser;
-
-        // Run in no-conflict mode, setting the `mp3Parser` global to to its previous value.
-        //  Returns `mp3Parser`
-        return function () {
-            var mp3Parser = root.mp3Parser;
-            root.mp3Parser = previousMp3Parser;
-            mp3Parser.noConflict = function () { return mp3Parser; };
-            return mp3Parser;
-        };
-    }());
 }(this, function (mp3Parser) {
     "use strict";
 
@@ -900,12 +891,7 @@
         return sections;
     };
 
-    // Attach the `version` property to mp3 Parser and return it
-    Object.defineProperties(mp3Parser, {
+    // Attach the `version` property
+    Object.defineProperties(mp3Parser, { version: { get: function () { return "0.1.14"; } } });
 
-        // Get current version of mp3-parser
-        version: { get: function () { return "0.1.14"; } }
-    });
-
-    return mp3Parser;
 }));
