@@ -2,7 +2,7 @@
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
-//     Copyright (c) 2013 Alex Lambiris
+//     Copyright (c) 2013-2014 Alex Lambiris
 
 /*jshint browser:true */
 /*global exports, define */
