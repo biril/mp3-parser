@@ -16,45 +16,50 @@ d'etre) for this initial revision is performing precise cuts at frame / tag boun
 Set up
 ------
 
-To get mp3 Parser
+To use mp3 Parser
 
-* install with bower, `bower install mp3-parser`,
+* install with bower, `bower install mp3-parser` or
 * install with npm, `npm install mp3-parser` or
-* just include [`mp3-parser.js`](https://raw.github.com/biril/mp3-parser/master/mp3-parser.js)
-    in your project.
+* just include the relevant files (see below), in case you're targeting a browser and don't want to
+    go over npm or bower.
 
-mp3 Parser may be used as a CommonJS module on Node or in a browser, either through a plain
-`<script>` tag or as an AMD module. It will be automatically exported in the correct format
-depending on the detected environment:
+mp3 Parser may be used as a CommonJS module on Node or in a browser, either as an AMD module or
+through plain `<script>` tags. It's automatically exported in the appropriate format depending on
+the current environment:
 
-* In projects targetting _browsers, without an AMD module loader_, include mp3-parser.js:
-
-    ```html
-    ...
-    <script type="text/javascript" src="mp3-parser.js"></script>
-    ...
-    ```
-
-    This will export the `mp3Parser` global:
-
-    ```javascript
-    console.log("mp3 Parser version: " + mp3Parser.version);
-    ```
-
-* `require` when working _with CommonJS_ (e.g. Node). Assuming mp3 Parser is `npm install`ed:
+* When working _with CommonJS_ (e.g. Node), assuming mp3 Parser is `npm install`ed:
 
     ```javascript
     var mp3Parser = require("mp3-parser");
-    console.log("mp3 Parser version: " + mp3Parser.version);
+    var mp3Tags = mp3Parser.readTags(someMp3DataView);
     ```
 
-* Or list as a dependency when working *with an AMD loader* (e.g. require.js):
+* When working _with an AMD loader_ (e.g. require.js):
 
     ```javascript
     // Your module
     define(["mp3-parser"], function (mp3Parser) {
-    	console.log("mp3 Parser version: " + mp3Parser.version);
+        var mp3Tags = mp3Parser.readTags(someMp3DataView);
     });
+    ```
+
+* Setting up mp3 Parser in projects targetting _browsers, without an AMD module loader_, is
+    unfortunately quite verbose as a number of files need to be included (in specific order). This
+    should be mitigated in the future, but for now you would need:
+
+    ```html
+    ...
+    <script type="text/javascript" src="path/to/mp3-parser/lib/lib.js"></script>
+    <script type="text/javascript" src="path/to/mp3-parser/lib/xing.js"></script>
+    <script type="text/javascript" src="path/to/mp3-parser/lib/id3v2.js"></script>
+    <script type="text/javascript" src="path/to/mp3-parser/mp3-parser.js"></script>
+    ...
+    ```
+
+    which would export the `mp3Parser` global:
+
+    ```javascript
+    var mp3Tags = mp3Parser.readTags(someMp3DataView);
     ```
 
 
