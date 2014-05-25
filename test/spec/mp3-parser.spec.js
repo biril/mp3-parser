@@ -18,8 +18,4 @@ describe("mp3 parser", function () {
         expect(mp3Parser).toBeDefined();
     });
 
-    it("should report its version", function() {
-        expect(mp3Parser.version).toMatch(/^\d+\.\d+\.\d+$/);
-    });
-
 });
