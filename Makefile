@@ -4,4 +4,7 @@ test:
 lint:
 	./node_modules/.bin/jshint --show-non-errors mp3-parser.js test/spec/
 
-.PHONY: test lint
+generate-docs:
+	./node_modules/.bin/grock --glob './lib/*.js' --glob './mp3-parser.js' --glob './README.md' --index 'README.md' --verbose
+
+.PHONY: test lint generate-docs
