@@ -16,6 +16,7 @@
     "bower_components/",
     "test/",
     "examples/",
+    "docs/",
     "Makefile",
     "package.json"
   ]
