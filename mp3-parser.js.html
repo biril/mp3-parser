@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> - mp3-parser.js</title>
+
+  <link rel="stylesheet" href="assets/style.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+  <meta name="groc-relative-root" content=""/>
+  <meta name="groc-document-path" content="mp3-parser.js"/>
+  
+</head>
+<body>
+  <div id="file-area">
+    <div id="meta">
+      <code class="file-path">
+      
+        <a href="https://github.com/biril/mp3-parser/blob/master/mp3-parser.js">mp3-parser.js</a>
+      
+      </code>
+    </div>
+    <div id="document">
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span> v0<span class="hljs-number">.1</span><span class="hljs-number">.14</span>
+</code></pre></div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><pre><code><span class="hljs-keyword">https</span>://github.com/biril/mp3-parser
+Licensed <span class="hljs-operator">and</span> freely distributed under <span class="hljs-operator">the</span> MIT License
+Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2014</span> Alex Lambiris
+</code></pre></div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><hr>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
+<span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Export as a module or global depending on environment:</p>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Global <code>define</code> method with <code>amd</code> property signifies an AMD loader (require.js, curl.js, ..)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">"function"</span> &amp;&amp; define.amd) {
+        <span class="hljs-keyword">return</span> define([<span class="hljs-string">"exports"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(exports)</span> {</span>
+            <span class="hljs-keyword">return</span> createModule(exports, <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/lib"</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/id3v2"</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/xing"</span>));
+        });
+    }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Global <code>exports</code> object signifies CommonJS enviroments with <code>module.exports</code>, e.g. Node</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">"object"</span>) {
+        <span class="hljs-keyword">return</span> createModule(exports, <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/lib"</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/id3v2"</span>), <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib/xing"</span>));
+    }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>If none of the above, then assume a browser sans AMD (also attach a <code>noConflict</code>)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> previousMp3Parser = globalObject.mp3Parser;
+    createModule(globalObject.mp3Parser = {
+        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> mp3Parser = globalObject.mp3Parser;
+            globalObject.mp3Parser = previousMp3Parser;
+            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> mp3Parser; }).call();
+        }
+    }, globalObject.lib, globalObject.mp3Id3v2Parser, globalObject.mp3XingParser);
+
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser, lib, id3v2Parser, xingParser)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="tl-dr"><a href="#tl-dr" class="anchor"></a>TL;DR</h3><p>The parser exposes a collection of <code>read____</code> methods, each dedicated to reading a specific
+ section of the mp3 file. The current implementation includes <code>readFrameHeader</code>, <code>readFrame</code>,
+ <code>readId3v2Tag</code> and <code>readXingTag</code>. Each of these accepts a DataView-wrapped ArrayBuffer,
+ which should contain the actual mp3 data, and optionally an offset into the buffer.
+All methods return a description of the section read in the form of a hash containing
+ key-value pairs relevant to the section. For example the hash returned from
+ <code>readFrameHeader</code> always contains an <code>mpegAudioVersion</code> key of value &quot;MPEG Version 1
+ (ISO/IEC 11172-3)&quot; and a <code>layerDescription</code> key of value &quot;Layer III&quot;. A description will
+ always have a <code>_section</code> hash with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p>
+<ul>
+<li><code>type</code>: &quot;frame&quot;, &quot;frameHeader&quot;, &quot;Xing&quot; or &quot;ID3&quot;</li>
+<li><code>byteLenfth</code>: Size of the section in bytes</li>
+<li><code>offset</code>: Buffer offset at which this section resides</li>
+</ul>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><hr>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-a-frame-header"><a href="#read-a-frame-header" class="anchor"></a>Read a Frame Header</h3><p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
+ that no frame header is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    mp3Parser.readFrameHeader = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        <span class="hljs-keyword">return</span> lib.readFrameHeader(buffer, offset);
+    };
+
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-a-frame"><a href="#read-a-frame" class="anchor"></a>Read a Frame</h3><p>Read frame located at <code>offset</code> of DataView <code>buffer</code>. Will acquire the frame header (see
+ <code>readFrameHeader</code>) plus some basic information about the frame - notably the frame&#39;s length
+ in bytes. If <code>requireNextFrame</code> is set, the presence of a <em>next</em> valid frame will be
+ required for <em>this</em> frame to be regarded as valid. Returns null in the event that no frame
+ is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    mp3Parser.readFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, requireNextFrame)</span> {</span>
+        <span class="hljs-keyword">return</span> lib.readFrame(buffer, offset, requireNextFrame);
+    };
+
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-the-last-frame"><a href="#read-the-last-frame" class="anchor"></a>Read the Last Frame</h3><p>Locate and read the very last valid frame in given DataView <code>buffer</code>. The search is carried
+ out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code> is ommitted) to the
+ first octet in the buffer. If <code>requireNextFrame</code> is set, the presence of a next valid frame
+ will be required for any found frame to be regarded as valid (causing the method to
+ essentially return the next-to-last frame on success). Returns null in the event that no
+ frame is found</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    mp3Parser.readLastFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, requireNextFrame)</span> {</span>
+        offset || (offset = buffer.byteLength - <span class="hljs-number">1</span>);
+
+        <span class="hljs-keyword">var</span> lastFrame = <span class="hljs-literal">null</span>;
+
+        <span class="hljs-keyword">for</span> (; offset &gt;= <span class="hljs-number">0</span>; --offset) {
+            <span class="hljs-keyword">if</span> (buffer.getUint8(offset) === <span class="hljs-number">255</span>) {</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Located a candidate frame as 255 is a possible frame-sync byte</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                lastFrame = mp3Parser.readFrame(buffer, offset, requireNextFrame);
+                <span class="hljs-keyword">if</span> (lastFrame) { <span class="hljs-keyword">return</span> lastFrame; }
+            }
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+    };
+
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-the-id3v2-tag"><a href="#read-the-id3v2-tag" class="anchor"></a>Read the ID3v2 Tag</h3><p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
+ null in the event that no tag is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    mp3Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        <span class="hljs-keyword">return</span> id3v2Parser.readId3v2Tag(buffer, offset);
+    };
+
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-the-xing-tag"><a href="#read-the-xing-tag" class="anchor"></a>Read the Xing Tag</h3><p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
+ DataView <code>buffer</code>. Returns null in the event that no frame is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    mp3Parser.readXingTag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        <span class="hljs-keyword">return</span> xingParser.readXingTag(buffer, offset);
+    };
+
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-all-tags-up-to-first-frame"><a href="#read-all-tags-up-to-first-frame" class="anchor"></a>Read all Tags up to First Frame</h3><p>( See <a href="http://www.rengels.de/computer/mp3tags.html">this</a> and
+ <a href="http://stackoverflow.com/a/5013505">this</a> )</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    mp3Parser.readTags = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">var</span> sections = [],
+            section = <span class="hljs-literal">null</span>,
+            readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame],
+            foundFirstFrame = <span class="hljs-literal">false</span>,
+            i = <span class="hljs-number">0</span>,
+            numOfReaders = readers.length,
+            bufferLength = buffer.byteLength;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>While we haven&#39;t located the first frame, pick the next offset ..</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">for</span> (; offset &lt; bufferLength &amp;&amp; !foundFirstFrame; ++offset) {
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>.. and try out each of the &#39;readers&#39; on it</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; numOfReaders; ++i) {
+                section = readers[i](buffer, offset);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>If one of the readers successfully parses a section ..</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                <span class="hljs-keyword">if</span> (section) {
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>.. store it ..</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                    sections.push(section);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>.. and push the offset to the very end of end of that section. This way,
+ we avoid iterating over offsets which definately aren&#39;t the begining of
+ some section (they&#39;re part of the located section)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                    offset += section._section.byteLength;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>If the section we just parsed is a frame then we&#39;ve actually located the
+ first frame. Break out of the readers-loop making sure to set
+ foundFirstFrame (so that we also exit the outer loop)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                    <span class="hljs-keyword">if</span> (section._section.type === <span class="hljs-string">"frame"</span>) {
+                        foundFirstFrame = <span class="hljs-literal">true</span>;
+                        <span class="hljs-keyword">break</span>;
+                    }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>The section is <em>not</em> the first frame. So, having pushed the offset
+ appropriately, retry all readers</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                    i = -<span class="hljs-number">1</span>;
+                }
+            }
+        }
+
+        <span class="hljs-keyword">return</span> sections;
+    };
+
+}));
+</div></div>
+      
+      </div>
+    
+    </div>
+  </div>
+
+  <script src="toc.js"></script>
+  <script src="assets/libs.js"></script>
+  <script src="assets/behavior.js"></script>
+</body>
+</html>

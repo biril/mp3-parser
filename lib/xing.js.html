@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> - xing.js</title>
+
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+  <meta name="groc-relative-root" content="../"/>
+  <meta name="groc-document-path" content="lib/xing.js"/>
+  
+</head>
+<body>
+  <div id="file-area">
+    <div id="meta">
+      <code class="file-path">
+      
+        <a href="https://github.com/biril/mp3-parser/blob/master/lib/xing.js">lib/xing.js</a>
+      
+      </code>
+    </div>
+    <div id="document">
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/xing v0<span class="hljs-number">.1</span><span class="hljs-number">.14</span>
+</code></pre></div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><pre><code><span class="hljs-keyword">https</span>://github.com/biril/mp3-parser
+Licensed <span class="hljs-operator">and</span> freely distributed under <span class="hljs-operator">the</span> MIT License
+Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2014</span> Alex Lambiris
+</code></pre></div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><hr>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
+<span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Export as a module or global depending on environment:</p>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Global <code>define</code> method with <code>amd</code> property signifies an AMD loader (require.js, curl.js, ..)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">"function"</span> &amp;&amp; define.amd) {
+        <span class="hljs-keyword">return</span> define([<span class="hljs-string">"exports"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(exports)</span> {</span>
+            <span class="hljs-keyword">return</span> createModule(exports, <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib"</span>));
+        });
+    }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Global <code>exports</code> object signifies CommonJS enviroments with <code>module.exports</code>, e.g. Node</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">"object"</span>) {
+        <span class="hljs-keyword">return</span> createModule(exports, <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib"</span>));
+    }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>If none of the above, then assume a browser sans AMD (also attach a <code>noConflict</code>)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> previousMp3XingParser = globalObject.mp3XingParser;
+    createModule(globalObject.mp3XingParser = {
+        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> mp3XingParser = globalObject.mp3XingParser;
+            globalObject.mp3XingParser = previousMp3XingParser;
+            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> mp3XingParser; }).call();
+        }
+    }, globalObject.lib);
+
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xingParser, lib)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Common character sequences converted to handy byte arrays</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> xingSeq = lib.seqFromStr(<span class="hljs-string">"Xing"</span>),
+        infoSeq = lib.seqFromStr(<span class="hljs-string">"Info"</span>);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-the-xing-tag"><a href="#read-the-xing-tag" class="anchor"></a>Read the Xing Tag</h3><p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
+ DataView <code>buffer</code>. Returns null in the event that no frame is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    xingParser.readXingTag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">var</span> tag = {
+                _section: {
+                    type: <span class="hljs-string">"Xing"</span>,
+                    offset: offset
+                },
+                header: lib.readFrameHeader(buffer, offset)
+            };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>The Xing header should begin with a valid frame header</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!tag.header) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>There should be at least 36 + 4 = 40 bytes ahead</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (buffer.byteLength &lt; offset + <span class="hljs-number">40</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>A &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        (tag.identifier = lib.isSeq(xingSeq, buffer, offset + <span class="hljs-number">36</span>)) ||
+        (tag.identifier = lib.isSeq(infoSeq, buffer, offset + <span class="hljs-number">36</span>));
+        <span class="hljs-keyword">if</span> (!tag.identifier) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        tag._section.byteLength = lib.getFrameByteLength(tag.header.bitrate, tag.header.samplingRate, tag.header.framePadding);
+        tag._section.nextFrameIndex = offset + tag._section.byteLength;
+
+        <span class="hljs-keyword">return</span> tag;
+    };
+}));
+</div></div>
+      
+      </div>
+    
+    </div>
+  </div>
+
+  <script src="../toc.js"></script>
+  <script src="../assets/libs.js"></script>
+  <script src="../assets/behavior.js"></script>
+</body>
+</html>

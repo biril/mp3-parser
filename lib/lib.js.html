@@ -1,0 +1,731 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> - lib.js</title>
+
+  <link rel="stylesheet" href="../assets/style.css">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
+  <meta name="groc-relative-root" content="../"/>
+  <meta name="groc-document-path" content="lib/lib.js"/>
+  
+</head>
+<body>
+  <div id="file-area">
+    <div id="meta">
+      <code class="file-path">
+      
+        <a href="https://github.com/biril/mp3-parser/blob/master/lib/lib.js">lib/lib.js</a>
+      
+      </code>
+    </div>
+    <div id="document">
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><pre><code>mp3-parser/<span class="hljs-keyword">lib</span> v0<span class="hljs-number">.1</span><span class="hljs-number">.14</span>
+</code></pre></div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><pre><code><span class="hljs-keyword">https</span>://github.com/biril/mp3-parser
+Licensed <span class="hljs-operator">and</span> freely distributed under <span class="hljs-operator">the</span> MIT License
+Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2014</span> Alex Lambiris
+</code></pre></div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><hr>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
+<span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Export as a module or global depending on environment:</p>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Global <code>define</code> method with <code>amd</code> property signifies an AMD loader (require.js, curl.js, ..)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">"function"</span> &amp;&amp; define.amd) {
+        <span class="hljs-keyword">return</span> define([<span class="hljs-string">"exports"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(exports)</span> {</span> <span class="hljs-keyword">return</span> createModule(exports); });
+    }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Global <code>exports</code> object signifies CommonJS enviroments with <code>module.exports</code>, e.g. Node</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports === <span class="hljs-string">"object"</span>) { <span class="hljs-keyword">return</span> createModule(exports); }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>If none of the above, then assume a browser sans AMD (also attach a <code>noConflict</code>)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> previousMp3ParserLib = globalObject.mp3Parserlib;
+    createModule(globalObject.mp3Parserlib = {
+        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> lib = globalObject.mp3Parserlib;
+            globalObject.mp3Parserlib = previousMp3ParserLib;
+            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> lib; }).call();
+        }
+    });
+
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(lib)</span> {</span>
+<span class="hljs-pi">    "use strict"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Produce octet&#39;s binary representation as a string</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> octetToBinRep = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+            <span class="hljs-keyword">var</span> b = []; <span class="hljs-comment">// The binary representation</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(octet)</span> {</span>
+                b[<span class="hljs-number">0</span>] = ((octet &amp; <span class="hljs-number">128</span>) === <span class="hljs-number">128</span> ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">1</span>] = ((octet &amp; <span class="hljs-number">64</span>)  === <span class="hljs-number">64</span>  ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">2</span>] = ((octet &amp; <span class="hljs-number">32</span>)  === <span class="hljs-number">32</span>  ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">3</span>] = ((octet &amp; <span class="hljs-number">16</span>)  === <span class="hljs-number">16</span>  ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">4</span>] = ((octet &amp; <span class="hljs-number">8</span>)   === <span class="hljs-number">8</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">5</span>] = ((octet &amp; <span class="hljs-number">4</span>)   === <span class="hljs-number">4</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">6</span>] = ((octet &amp; <span class="hljs-number">2</span>)   === <span class="hljs-number">2</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                b[<span class="hljs-number">7</span>] = ((octet &amp; <span class="hljs-number">1</span>)   === <span class="hljs-number">1</span>   ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>);
+                <span class="hljs-keyword">return</span> b.join(<span class="hljs-string">""</span>);
+            };
+        }());
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Get the number of bytes in a frame given its <code>bitrate</code>, <code>samplingRate</code> and <code>padding</code>.
+ Based on <a href="http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm">magic formula</a></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.getFrameByteLength = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(bitrate, samplingRate, padding)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.floor((<span class="hljs-number">144000</span> * bitrate / samplingRate) + padding);
+    };
+
+    lib.v1l3Bitrates = {
+        <span class="hljs-string">"0000"</span>: <span class="hljs-string">"free"</span>,
+        <span class="hljs-string">"0001"</span>: <span class="hljs-number">32</span>,
+        <span class="hljs-string">"0010"</span>: <span class="hljs-number">40</span>,
+        <span class="hljs-string">"0011"</span>: <span class="hljs-number">48</span>,
+        <span class="hljs-string">"0100"</span>: <span class="hljs-number">56</span>,
+        <span class="hljs-string">"0101"</span>: <span class="hljs-number">64</span>,
+        <span class="hljs-string">"0110"</span>: <span class="hljs-number">80</span>,
+        <span class="hljs-string">"0111"</span>: <span class="hljs-number">96</span>,
+        <span class="hljs-string">"1000"</span>: <span class="hljs-number">112</span>,
+        <span class="hljs-string">"1001"</span>: <span class="hljs-number">128</span>,
+        <span class="hljs-string">"1010"</span>: <span class="hljs-number">160</span>,
+        <span class="hljs-string">"1011"</span>: <span class="hljs-number">192</span>,
+        <span class="hljs-string">"1100"</span>: <span class="hljs-number">224</span>,
+        <span class="hljs-string">"1101"</span>: <span class="hljs-number">256</span>,
+        <span class="hljs-string">"1110"</span>: <span class="hljs-number">320</span>,
+        <span class="hljs-string">"1111"</span>: <span class="hljs-string">"bad"</span>
+    };
+
+    lib.v1l3SamplingRates = {
+        <span class="hljs-string">"00"</span>: <span class="hljs-number">44100</span>,
+        <span class="hljs-string">"01"</span>: <span class="hljs-number">48000</span>,
+        <span class="hljs-string">"10"</span>: <span class="hljs-number">32000</span>,
+        <span class="hljs-string">"11"</span>: <span class="hljs-string">"reserved"</span>
+    };
+
+    lib.v1l3ChannelModes = {
+        <span class="hljs-string">"00"</span>: <span class="hljs-string">"Stereo"</span>,
+        <span class="hljs-string">"01"</span>: <span class="hljs-string">"Joint stereo (Stereo)"</span>,
+        <span class="hljs-string">"10"</span>: <span class="hljs-string">"Dual channel (Stereo)"</span>,
+        <span class="hljs-string">"11"</span>: <span class="hljs-string">"Single channel (Mono)"</span>
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Convert the <code>str</code> string to an array of octets. The string is parsed as an array
+ of 8bit single-byte coded characters (i.e. ISO/IEC 8859-1, <em>non</em> Unicode).</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.seqFromStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(str)</span> {</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = str.length - <span class="hljs-number">1</span>, seq = []; i &gt;= <span class="hljs-number">0</span>; i--) {
+            seq[i] = str.charCodeAt(i);
+        }
+        <span class="hljs-keyword">return</span> seq;
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Common character sequences converted to byte arrays</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.seq = {
+        id3: lib.seqFromStr(<span class="hljs-string">"ID3"</span>),
+        xing: lib.seqFromStr(<span class="hljs-string">"Xing"</span>),
+        info: lib.seqFromStr(<span class="hljs-string">"Info"</span>)
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>A handy no-op to reuse</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.noOp = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>};
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Decode a <a href="http://en.wikipedia.org/wiki/Synchsafe">synchsafe</a> value. Synchsafes are used
+ in ID3 tags, instead of regular ints, to avoid the unintended introduction of bogus
+ frame-syncs</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.unsynchsafe = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(value)</span> {</span>
+        <span class="hljs-keyword">var</span> out = <span class="hljs-number">0</span>,
+            mask = <span class="hljs-number">0x7F000000</span>;
+
+        <span class="hljs-keyword">while</span> (mask) {
+            out &gt;&gt;= <span class="hljs-number">1</span>;
+            out |= value &amp; mask;
+            mask &gt;&gt;= <span class="hljs-number">8</span>;
+        }
+
+        <span class="hljs-keyword">return</span> out;
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Get a value indicating whether given DataView <code>buffer</code> contains the <code>seq</code> sequence (array
+ of octets) at <code>offset</code> index. Note that no check is performed for the adequate length of
+ given buffer as this should be carried out by the caller</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.isSeq = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seq, buffer, offset)</span> {</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = seq.length - <span class="hljs-number">1</span>; i &gt;= <span class="hljs-number">0</span>; i--) {
+            <span class="hljs-keyword">if</span> (seq[i] !== buffer.getUint8(offset + i)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>; }
+        }
+        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Get a value indicating whether given DataView <code>buffer</code> contains the <code>str</code> string
+ at <code>offset</code> index. The buffer is parsed as an array of 8bit single-byte coded characters
+ (i.e. ISO/IEC 8859-1, <em>non</em> Unicode). Will return the string itself if it does, false
+ otherwise. Note that no check is performed for the adequate length of given buffer as
+ this should be carried out be the caller as part of the section-parsing process
+isStr = function (str, buffer, offset) {
+    return isSeq(lib.seqFromStr(str), buffer, offset) ? str : false;
+};</p>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Locate first occurrence of sequence <code>seq</code> (an array of octets) in DataView <code>buffer</code>.
+ Search starts at given <code>offset</code> and ends after <code>length</code> octets. Will return the
+ absolute offset of sequence if found, -1 otherwise</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.locateSeq = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(seq, buffer, offset, length)</span> {</span>
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, l = length - seq.length + <span class="hljs-number">1</span>; i &lt; l; ++i) {
+            <span class="hljs-keyword">if</span> (lib.isSeq(seq, buffer, offset + i)) { <span class="hljs-keyword">return</span> offset + i; }
+        }
+        <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Locate the first occurrence of non-Unicode null-terminator (i.e. a single zeroed-out
+ octet) in DataView <code>buffer</code>. Search starts at given <code>offset</code> and ends after <code>length</code>
+ octets. Will return the absolute offset of sequence if found, -1 otherwise</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.locateStrTrm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <span class="hljs-keyword">return</span> lib.locateSeq([<span class="hljs-number">0</span>], buffer, offset, length);
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Locate the first occurrence of Unicode null-terminator (i.e. a sequence of two
+ zeroed-out octets) in DataView <code>buffer</code>. Search starts at given <code>offset</code> and ends after
+ <code>length</code> octets. Will return the absolute offset of sequence if found, -1 otherwise</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.locateStrTrmUcs2 = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <span class="hljs-keyword">var</span> trmOffset = lib.locateSeq([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], buffer, offset, length);
+        <span class="hljs-keyword">if</span> (trmOffset === -<span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; }
+        <span class="hljs-keyword">if</span> ((trmOffset - offset) % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>) { ++trmOffset; }
+        <span class="hljs-keyword">return</span> trmOffset;
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Parse DataView <code>buffer</code> begining at <code>offset</code> index and return a string built from
+ <code>length</code> octets. The buffer is parsed as an array of 8bit single-byte coded characters
+ (i.e. ISO/IEC 8859-1, <em>non</em> Unicode). Will essentially return the string comprised of
+ octets [offset, offset + length). Note that no check is performed for the adequate
+ length of given buffer as this should be carried out be the caller as part of the
+ section-parsing process</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.readStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(buffer.buffer, offset, length));
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Similar to <code>readStr</code> but will check for a null-terminator determining the end of the
+ string. The returned string will be of <em>at most</em> <code>length</code> octets</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.readTrmStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <span class="hljs-keyword">var</span> trmOffset = lib.locateStrTrm(buffer, offset, length);
+        <span class="hljs-keyword">if</span> (trmOffset !== -<span class="hljs-number">1</span>) { length = trmOffset - offset; }
+        <span class="hljs-keyword">return</span> lib.readStr(buffer, offset, length);
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>UCS-2 (ISO/IEC 10646-1:1993, UCS-2) version of <code>readStr</code>. UCS-2 is the fixed-width
+ two-byte subset of Unicode that can only express values inside the Basic Multilingual
+ Plane (BMP). Note that this method is generally unsuitable for parsing non-trivial
+ UTF-16 strings which may contain surrogate pairs. [This is only marginally related
+ though as, according to ID3v2, all Unicode strings should be UCS-2.] Further info:</p>
+<ul>
+<li><a href="http://updates.html5rocks.com/2012/06/How-to-convert-ArrayBuffer-to-and-from-String">How to convert ArrayBuffer to and from String</a></li>
+<li><a href="http://encoding.spec.whatwg.org/">The encoding spec</a></li>
+<li><a href="https://code.google.com/p/stringencoding/">stringencoding shim</a>
+About the BOM: The current implementation removes the leading BOM from given buffer to
+avoid invisible characters that mess up the resulting strings. Tests performed with
+UCS-2 LE encoded frames indicate that String.fromCharCode correctly converts byte array
+to string but no tests have been made for UCS-2 BE. (Kid3, the ID3v2 Tag generator used
+at the time of this writing, goes totally weird when switched to BE)</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.readStrUcs2 = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span></div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Tweak offset to remove the BOM (LE: FF FE / BE: FE FF)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (buffer.getUint16(offset) === <span class="hljs-number">0xFFFE</span> || buffer.getUint16(offset) === <span class="hljs-number">0xFEFF</span>) {
+            offset += <span class="hljs-number">2</span>;
+            length -= <span class="hljs-number">2</span>;
+        }
+
+        buffer = buffer.buffer;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>When offset happens to be an even number of octets, the array-buffer may be wrapped
+ in a Uint16Array. In the event that it&#39;s <em>not</em>, an actual copy has to be made
+(Note that Node &lt;= 0.8 as well as IE &lt;= 10 lack an ArrayBuffer#slice. TODO: shim it)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (offset % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+            buffer = buffer.slice(offset, offset + length);
+            offset = <span class="hljs-number">0</span>;
+        }
+
+        <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint16Array</span>(buffer, offset, length / <span class="hljs-number">2</span>));
+    };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-a-frame-header"><a href="#read-a-frame-header" class="anchor"></a>Read a Frame Header</h3><p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
+ that no frame header is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.readFrameHeader = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">var</span></div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>The header&#39;s four bytes</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            b1, b2, b3, b4,
+
+            header = {
+                _section: {
+                    type: <span class="hljs-string">"frameHeader"</span>,
+                    byteLength: <span class="hljs-number">4</span>,
+                    offset: offset
+                }
+            };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>There should be more than 4bytes ahead</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (buffer.byteLength - offset &lt;= <span class="hljs-number">4</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        b1 = buffer.getUint8(offset);
+        b2 = buffer.getUint8(offset + <span class="hljs-number">1</span>);
+        b3 = buffer.getUint8(offset + <span class="hljs-number">2</span>);
+        b4 = buffer.getUint8(offset + <span class="hljs-number">3</span>);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>First octet: <code>11111111</code>: Frame sync (all bits must be set)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (b1 !== <span class="hljs-number">255</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Second octet: <code>11111011</code> or <code>11111010</code></p>
+<ul>
+<li><code>111.....</code>: Rest of frame sync (all bits must be set)</li>
+<li><code>...11...</code>: MPEG Audio version ID (11 -&gt; MPEG Version 1 (ISO/IEC 11172-3))</li>
+<li><code>.....01.</code>: Layer description (01 -&gt; Layer III)</li>
+<li><code>.......1</code>: Protection bit (1 = Not protected)</li>
+</ul>
+</div>
+        </div>
+      
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Require the seven most significant bits to be <code>1111101</code> (&gt;= 250)</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (b2 &lt; <span class="hljs-number">250</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        header.mpegAudioVersionBits = <span class="hljs-string">"11"</span>;
+        header.mpegAudioVersion = <span class="hljs-string">"MPEG Version 1 (ISO/IEC 11172-3)"</span>;
+        header.layerDescriptionBits = <span class="hljs-string">"01"</span>;
+        header.layerDescription = <span class="hljs-string">"Layer III"</span>;
+        header.isProtected = b2 &amp; <span class="hljs-number">1</span>; <span class="hljs-comment">// Just check if last bit is set</span>
+        header.protectionBit = header.isProtected ? <span class="hljs-string">"1"</span> : <span class="hljs-string">"0"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Third octet: <code>EEEEFFGH</code></p>
+<ul>
+<li><code>EEEE....</code>: Bitrate index. 1111 is invalid, everything else is accepted</li>
+<li><code>....FF..</code>: Sampling rate, 00=44100, 01=48000, 10=32000, 11=reserved</li>
+<li><code>......G.</code>: Padding bit, 0=frame not padded, 1=frame padded</li>
+<li><code>.......H</code>: Private bit. This is informative</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        b3 = octetToBinRep(b3);
+        header.bitrateBits = b3.substr(<span class="hljs-number">0</span>, <span class="hljs-number">4</span>);
+        header.bitrate = lib.v1l3Bitrates[header.bitrateBits];
+        <span class="hljs-keyword">if</span> (header.bitrate === <span class="hljs-string">"bad"</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        header.samplingRateBits = b3.substr(<span class="hljs-number">4</span>, <span class="hljs-number">2</span>);
+        header.samplingRate = lib.v1l3SamplingRates[header.samplingRateBits];
+        <span class="hljs-keyword">if</span> (header.samplingRate === <span class="hljs-string">"reserved"</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        header.frameIsPaddedBit = b3.substr(<span class="hljs-number">6</span>, <span class="hljs-number">1</span>);
+        header.frameIsPadded = header.frameIsPaddedBit === <span class="hljs-string">"1"</span>;
+        header.framePadding = header.frameIsPadded ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>;
+
+        header.privateBit = b3.substr(<span class="hljs-number">7</span>, <span class="hljs-number">1</span>);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Fourth octet: <code>IIJJKLMM</code></p>
+<ul>
+<li><code>II......</code>: Channel mode</li>
+<li><code>..JJ....</code>: Mode extension (only if joint stereo)</li>
+<li><code>....K...</code>: Copyright</li>
+<li><code>.....L..</code>: Original</li>
+<li><code>......MM</code>: Emphasis</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        b4 = octetToBinRep(b4);
+        header.channelModeBits = b4.substr(<span class="hljs-number">0</span>, <span class="hljs-number">2</span>);
+        header.channelMode = lib.v1l3ChannelModes[header.channelModeBits];
+
+        <span class="hljs-keyword">return</span> header;
+    };
+
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><h3 id="read-a-frame"><a href="#read-a-frame" class="anchor"></a>Read a Frame</h3><p>Read frame located at <code>offset</code> of DataView <code>buffer</code>. Will acquire the frame header (see
+ <code>readFrameHeader</code>) plus some basic information about the frame - notably the frame&#39;s length
+ in bytes. If <code>requireNextFrame</code> is set, the presence of a <em>next</em> valid frame will be
+ required for <em>this</em> frame to be regarded as valid. Returns null in the event that no frame
+ is found at <code>offset</code></p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">    lib.readFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, requireNextFrame)</span> {</span>
+        offset || (offset = <span class="hljs-number">0</span>);
+
+        <span class="hljs-keyword">var</span> frame = {
+                _section: {
+                    type: <span class="hljs-string">"frame"</span>,
+                    offset: offset
+                },
+                header: lib.readFrameHeader(buffer, offset)
+            };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Frame should always begin with a valid header</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!frame.header) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>The num of samples per v1l3 frame is constant - always 1152</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        frame._section.sampleLength = <span class="hljs-number">1152</span>;
+
+        frame._section.byteLength = lib.getFrameByteLength(frame.header.bitrate, frame.header.samplingRate, frame.header.framePadding);
+        frame._section.nextFrameIndex = offset + frame._section.byteLength;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>No &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36 - this would indicate that this
+ is in fact a Xing tag masquerading as a frame</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (lib.isSeq(lib.seq.xing, buffer, offset + <span class="hljs-number">36</span>) || lib.isSeq(lib.seq.info, buffer, offset + <span class="hljs-number">36</span>)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>If a next frame is required then the data at <code>frame._section.nextFrameIndex</code> should be
+ a valid frame header</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (requireNextFrame &amp;&amp; !lib.readFrameHeader(buffer, frame._section.nextFrameIndex)) {
+            <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
+        }
+
+        <span class="hljs-keyword">return</span> frame;
+    };
+}));
+</div></div>
+      
+      </div>
+    
+    </div>
+  </div>
+
+  <script src="../toc.js"></script>
+  <script src="../assets/libs.js"></script>
+  <script src="../assets/behavior.js"></script>
+</body>
+</html>
