@@ -4,6 +4,8 @@
 //     Licensed and freely distributed under the MIT License
 //     Copyright (c) 2013-2014 Alex Lambiris
 
+// ----
+
 /*jshint browser:true */
 /*global exports:false, define:false, require:false */
 (function (globalObject, createModule) {
@@ -36,7 +38,7 @@
 }(this, function (mp3Parser, lib, id3v2Parser, xingParser) {
     "use strict";
 
-    // ### Notes
+    // ### TL;DR
     //
     // The parser exposes a collection of `read____` methods, each dedicated to reading a specific
     //  section of the mp3 file. The current implementation includes `readFrameHeader`, `readFrame`,
@@ -52,7 +54,8 @@
     //  * `type`: "frame", "frameHeader", "Xing" or "ID3"
     //  * `byteLenfth`: Size of the section in bytes
     //  * `offset`: Buffer offset at which this section resides
-    mp3Parser;
+
+    // ----
 
 
     // ### Read a Frame Header
@@ -61,7 +64,7 @@
     //  that no frame header is found at `offset`
     mp3Parser.readFrameHeader = function (buffer, offset) {
         return lib.readFrameHeader(buffer, offset);
-    }
+    };
 
 
     // ### Read a Frame
