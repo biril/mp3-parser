@@ -17,7 +17,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
         matchers = require(__dirname + "/../matchers.js"),
 
-        mp3Parser = require(__dirname + "/../../mp3-parser.js"),
+        mp3Parser = require(__dirname + "/../../main.js"),
 
         filePath = __dirname + "/../id3v2.3-iso-8859-1.mp3",
 

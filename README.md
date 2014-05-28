@@ -34,14 +34,34 @@ the current environment:
     var mp3Tags = mp3Parser.readTags(someMp3DataView);
     ```
 
-* When working _with an AMD loader_ (e.g. require.js):
+* When working _with an AMD loader_ (e.g. requireJS):
 
     ```javascript
     // Your module
+    define(["path/to/mp3-parser/main"], function (mp3Parser) {
+        var mp3Tags = mp3Parser.readTags(someMp3DataView);
+    });
+    ```
+
+    In the example above, it is assumed that mp3-parser source files live in
+    `path/to/mp3-parser` (relative to the root path used for module lookups). When using requireJS
+    you may prefer to [treat mp3-parser as a package](http://requirejs.org/docs/api.html#packages):
+
+    ```javascript
+    // Configure requireJS for the mp3-parser package ..
+    require.config({
+        packages: [{
+            name: "mp3-parser",
+            location: "path/to/mp3-parser"
+        }]
+    })
+
+    // .. and refer to mp3-parser module by its given package name
     define(["mp3-parser"], function (mp3Parser) {
         var mp3Tags = mp3Parser.readTags(someMp3DataView);
     });
     ```
+
 
 * Setting up mp3 Parser in projects targetting _browsers, without an AMD module loader_, is
     unfortunately quite verbose as a number of files need to be included (in specific order). This
@@ -52,7 +72,7 @@ the current environment:
     <script type="text/javascript" src="path/to/mp3-parser/lib/lib.js"></script>
     <script type="text/javascript" src="path/to/mp3-parser/lib/xing.js"></script>
     <script type="text/javascript" src="path/to/mp3-parser/lib/id3v2.js"></script>
-    <script type="text/javascript" src="path/to/mp3-parser/mp3-parser.js"></script>
+    <script type="text/javascript" src="path/to/mp3-parser/main.js"></script>
     ...
     ```
 

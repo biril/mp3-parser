@@ -10,7 +10,7 @@
 
 describe("mp3 parser", function () {
 
-    var mp3Parser = require(__dirname + "/../../mp3-parser.js");
+    var mp3Parser = require(__dirname + "/../../main.js");
 
     // beforeEach(function () { });
 

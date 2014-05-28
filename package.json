@@ -4,7 +4,7 @@
   "author": "biril <alexlambiris@gmail.com>",
   "description": "Read mp3 frames & tags",
   "contributors": [],
-  "main": "./mp3-parser.js",
+  "main": "main.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/biril/mp3-parser"
@@ -24,8 +24,8 @@
   },
   "scripts": {
     "test": "jasmine-node --verbose --color --captureExceptions ./test/spec/",
-    "lint": "jshint --show-non-errors mp3-parser.js test/spec/",
-    "generate-docs": "grock --glob './lib/*.js' --glob './mp3-parser.js' --glob './README.md' --index 'README.md' --verbose"
+    "lint": "jshint --show-non-errors main.js test/spec/",
+    "generate-docs": "grock --glob './lib/*.js' --glob './main.js' --glob './README.md' --index 'README.md' --verbose"
   },
   "engines": {
     "node": ">=0.10"

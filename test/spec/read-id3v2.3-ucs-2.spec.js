@@ -18,7 +18,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
 
         _ = require("underscore"),
 
-        mp3Parser = require(__dirname + "/../../mp3-parser.js"),
+        mp3Parser = require(__dirname + "/../../main.js"),
 
         filePath = __dirname + "/../id3v2.3-ucs-2.mp3",
 

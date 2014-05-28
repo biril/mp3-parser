@@ -1,6 +1,6 @@
 {
   "name": "mp3-parser",
-  "main": "mp3-parser.js",
+  "main": "main.js",
   "version": "0.2.0",
   "homepage": "https://github.com/biril/mp3-parser",
   "authors": [
