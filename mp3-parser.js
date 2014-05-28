@@ -15,9 +15,7 @@
 
     // Global `define` method with `amd` property signifies an AMD loader (require.js, curl.js, ..)
     if (typeof define === "function" && define.amd) {
-        return define(["exports"], function (exports) {
-            return createModule(exports, require("./lib/lib"), require("./lib/id3v2"), require("./lib/xing"));
-        });
+        return define(["exports", "./lib/lib", "./lib/id3v2", "./lib/xing"], createModule);
     }
 
     // Global `exports` object signifies CommonJS enviroments with `module.exports`, e.g. Node
