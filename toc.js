@@ -52,10 +52,10 @@ window.files = [
   ]
 },
 {
-  "path": "mp3-parser.js.html",
-  "originalName": "mp3-parser.js",
-  "originalPath": "mp3-parser.js",
-  "name": "mp3-parser.js.html",
+  "path": "main.js.html",
+  "originalName": "main.js",
+  "originalPath": "main.js",
+  "name": "main.js.html",
   "lang": "javascript",
   "toc": [
     {

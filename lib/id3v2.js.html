@@ -25,7 +25,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0<span class="hljs-number">.2</span><span class="hljs-number">.0</span>
+          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0<span class="hljs-number">.2</span><span class="hljs-number">.1</span>
 </code></pre></div>
         </div>
       
@@ -79,9 +79,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
       
         <div class="code"><div class="wrapper">    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> define === <span class="hljs-string">"function"</span> &amp;&amp; define.amd) {
-        <span class="hljs-keyword">return</span> define([<span class="hljs-string">"exports"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(exports)</span> {</span>
-            <span class="hljs-keyword">return</span> createModule(exports, <span class="hljs-built_in">require</span>(<span class="hljs-string">"./lib"</span>));
-        });
+        <span class="hljs-keyword">return</span> define([<span class="hljs-string">"exports"</span>, <span class="hljs-string">"./lib"</span>], createModule);
     }
 </div></div>
       
