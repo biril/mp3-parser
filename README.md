@@ -103,8 +103,9 @@ and `offset` keys:
 
 Further documentation is forthcoming. You can also
 
-* View the [annotated version](http://biril.github.io/mp3-parser/) of the source.
-* Try the example script `examples/node/parse.js`. Run it with `node parse.js <mp3-file>`
+* View the [annotated version of the source](http://biril.github.io/mp3-parser/).
+* Try out the [browser](https://github.com/biril/mp3-parser/tree/master/examples/browser)
+    & [node](https://github.com/biril/mp3-parser/tree/master/examples/node) examples.
 
 
 License
