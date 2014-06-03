@@ -1,4 +1,4 @@
-//     mp3-parser v0.2.1
+//     mp3-parser v0.2.2
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
