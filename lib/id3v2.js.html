@@ -25,7 +25,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0<span class="hljs-number">.2</span><span class="hljs-number">.1</span>
+          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0<span class="hljs-number">.2</span><span class="hljs-number">.2</span>
 </code></pre></div>
         </div>
       
@@ -196,19 +196,6 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
             WPUB: <span class="hljs-string">"Publishers official webpage"</span>,
             WXXX: <span class="hljs-string">"User defined URL link frame"</span>
         },
-</div></div>
-      
-      </div>
-    
-      <div class="segment">
-      
-        <div class="comments ">
-          <div class="wrapper"><p>&#39;ID3&#39; character sequence converted to a handy byte array</p>
-</div>
-        </div>
-      
-      
-        <div class="code"><div class="wrapper">        id3Seq = lib.seqFromStr(<span class="hljs-string">"ID3"</span>),
 </div></div>
       
       </div>
@@ -899,7 +886,7 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!lib.isSeq(id3Seq, buffer, offset)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!lib.isSeq(lib.seq.id3, buffer, offset)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 
         <span class="hljs-keyword">var</span>
             flagsOctet = buffer.getUint8(offset + <span class="hljs-number">5</span>),
