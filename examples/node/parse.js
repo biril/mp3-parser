@@ -3,7 +3,7 @@
 
 var fs = require("fs"),
     util = require("util"),
-    mp3Parser = require(__dirname + "/../../mp3-parser"),
+    mp3Parser = require(__dirname + "/../../main"),
     pathToMp3 = process.argv[2],
     toArrayBuffer = function (buffer) {
         var bufferLength = buffer.length, i = 0,
