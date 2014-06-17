@@ -224,14 +224,14 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         var capturedFrames = getCapturedFrames("UFID"),
 
             // Get expected and actual frames for the case of a short UFID
-            expectedShortFrame = id3v2TagFrames["UFID"].expected.shortish,
+            expectedShortFrame = id3v2TagFrames.UFID.expected.shortish,
             shortFrame,
             shortFrames = _(capturedFrames).filter(function (frame) {
                 return frame.content.ownerIdentifier === expectedShortFrame.ownerIdentifier;
             }),
 
             // Get expected and actual frames for the case of a long UFID
-            expectedLongFrame = id3v2TagFrames["UFID"].expected.longish,
+            expectedLongFrame = id3v2TagFrames.UFID.expected.longish,
             longFrame,
             longFrames = _(capturedFrames).filter(function (frame) {
                 return frame.content.ownerIdentifier === expectedLongFrame.ownerIdentifier;
@@ -255,14 +255,14 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         var capturedFrames = getCapturedFrames("COMM"),
 
             // Get expected and actual comment frames, for the case of no lang-field
-            expectedFrameWithoutLang = id3v2TagFrames["COMM"].expected.withoutLang,
+            expectedFrameWithoutLang = id3v2TagFrames.COMM.expected.withoutLang,
             frameWithoutLang = null,
             framesWithoutLang = _(capturedFrames).filter(function (frame) {
                 return frame.content.description === expectedFrameWithoutLang.description;
             }),
 
             // Get expected and actual comment frames, for the case of lang-field present
-            expectedFrameWithLang = id3v2TagFrames["COMM"].expected.withLang,
+            expectedFrameWithLang = id3v2TagFrames.COMM.expected.withLang,
             frameWithLang = null,
             framesWithLang = _(capturedFrames).filter(function (frame) {
                 return frame.content.description === expectedFrameWithLang.description;
@@ -270,7 +270,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
             // Get expected and actual comment frames, for the case of lang-field of inadequate
             //  length present
-            expectedFrameWithHalfLang = id3v2TagFrames["COMM"].expected.withHalfLang,
+            expectedFrameWithHalfLang = id3v2TagFrames.COMM.expected.withHalfLang,
             frameWithHalfLang = null,
             framesWithHalfLang = _(capturedFrames).filter(function (frame) {
                 return frame.content.description === expectedFrameWithHalfLang.description;

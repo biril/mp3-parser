@@ -216,14 +216,14 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
         var capturedFrames = getCapturedFrames("COMM"),
 
             // Get expected and actual comment frames, for the case of no lang-field
-            expectedFrameWithoutLang = id3v2TagFrames["COMM"].expected.withoutLang,
+            expectedFrameWithoutLang = id3v2TagFrames.COMM.expected.withoutLang,
             frameWithoutLang = null,
             framesWithoutLang = _(capturedFrames).filter(function (frame) {
                 return frame.content.description === expectedFrameWithoutLang.description;
             }),
 
             // Get expected and actual comment frames, for the case of lang-field present
-            expectedFrameWithLang = id3v2TagFrames["COMM"].expected.withLang,
+            expectedFrameWithLang = id3v2TagFrames.COMM.expected.withLang,
             frameWithLang = null,
             framesWithLang = _(capturedFrames).filter(function (frame) {
                 return frame.content.description === expectedFrameWithLang.description;
@@ -231,7 +231,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
 
             // Get expected and actual comment frames, for the case of lang-field of inadequate
             //  length present
-            expectedFrameWithHalfLang = id3v2TagFrames["COMM"].expected.withHalfLang,
+            expectedFrameWithHalfLang = id3v2TagFrames.COMM.expected.withHalfLang,
             frameWithHalfLang = null,
             framesWithHalfLang = _(capturedFrames).filter(function (frame) {
                 return frame.content.description === expectedFrameWithHalfLang.description;
