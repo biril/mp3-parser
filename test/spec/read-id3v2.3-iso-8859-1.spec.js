@@ -96,9 +96,18 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             GRID: {
                 name: "Group identification registration",
                 expected: { } },
+
             IPLS: {
                 name: "Involved people list",
-                expected: { } },
+                expected: {
+                    values: [
+                        "Involvement 1",
+                        "Involvee 1",
+                        "Involvement 2",
+                        "Involvee 2",
+                        "Involvement 3"
+                    ]
+                } },
             LINK: {
                 name: "Linked information",
                 expected: { } },
@@ -199,9 +208,11 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                         identifier: _.range(64)
                     }
                 } },
+
             USER: {
                 name: "Terms of use",
                 expected: { } },
+
             USLT: {
                 name: "Unsychronized lyric/text transcription",
                 expected: { } },
@@ -358,6 +369,26 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         expect(f.content.encoding).toBe(0);
         expect(f.content.description).toBe(id3v2TagFrames.WXXX.name + " description");
         expect(f.content.value).toBe(id3v2TagFrames.WXXX.name);
+    });
+
+    // According to the standard, 'the body simply contains a terminated string with the
+    //  involvement directly followed by a terminated string with the involvee followed by a new
+    //  involvement and so on'. In the current implementation however, the frame's content is
+    //  parsed as a collection of strings without attaching special meaning. There may only be one
+    //  "IPLS" frame in each tag
+    it("should read IPLS: Involved People List Frame", function () {
+        var capturedFrames = getCapturedFrames("IPLS"),
+            f = null;
+
+        expect(capturedFrames.length).toBe(1);
+        f = capturedFrames[0];
+
+        expect(f.content.encoding).toBe(0);
+        expect(f.content.values[0]).toBe("Involvement 1");
+        expect(f.content.values[1]).toBe("Involvee 1");
+        expect(f.content.values[2]).toBe("Involvement 2");
+        expect(f.content.values[3]).toBe("Involvee 2");
+        expect(f.content.values[4]).toBe("Involvement 3");
     });
 
 });
