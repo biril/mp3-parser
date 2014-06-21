@@ -211,7 +211,10 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
             USER: {
                 name: "Terms of use",
-                expected: { } },
+                expected: {
+                    text: "Terms of use",
+                    language: "eng"
+                } },
 
             USLT: {
                 name: "Unsychronized lyric/text transcription",
@@ -389,6 +392,19 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         expect(f.content.values[2]).toBe("Involvement 2");
         expect(f.content.values[3]).toBe("Involvee 2");
         expect(f.content.values[4]).toBe("Involvement 3");
+    });
+
+    //
+    it("should read USER: Terms of use frame", function () {
+        var capturedFrames = getCapturedFrames("USER"),
+            f = null;
+
+        expect(capturedFrames.length).toBe(1);
+        f = capturedFrames[0];
+
+        expect(f.content.encoding).toBe(0);
+        expect(f.content.language).toBe("eng");
+        expect(f.content.text).toBe("Terms of use");
     });
 
 });

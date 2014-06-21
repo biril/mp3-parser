@@ -200,9 +200,13 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
             UFID: {
                 name: "Unique file identifier",
                 expected: { } },
+
             USER: {
                 name: "Terms of use",
-                expected: { } },
+                expected: {
+                    language: "",
+                    text: ""
+                } },
             USLT: {
                 name: "Unsychronized lyric/text transcription",
                 expected: { } },
@@ -333,6 +337,19 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
         expect(f.content.values[2]).toBe("αβγ Involvement 2");
         expect(f.content.values[3]).toBe("αβγ Involvee 2");
         expect(f.content.values[4]).toBe("αβγ Involvement 3");
+    });
+
+    //
+    it("should read USER: Terms of use frame", function () {
+        var capturedFrames = getCapturedFrames("USER"),
+            f = null;
+
+        expect(capturedFrames.length).toBe(1);
+        f = capturedFrames[0];
+
+        expect(f.content.encoding).toBe(1);
+        expect(f.content.language).toBe("eng");
+        expect(f.content.text).toBe("αβγ Terms of use");
     });
 
 });
