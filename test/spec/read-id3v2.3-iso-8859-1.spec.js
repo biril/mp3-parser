@@ -46,6 +46,20 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             });
         },
 
+        // Expect that `numOfFrames` of `id` were captured. Returns an array of relevant
+        //  captured frames - unless the `numOfFrames` expectation fails
+        expectCapturedFrames = function (id, numOfFrames) {
+            var capturedFrames = getCapturedFrames(id);
+            expect(capturedFrames.length).toBe(numOfFrames);
+            return capturedFrames;
+        },
+
+        // Expect that a single (exactly one) frame of given `id` was captured. Returns the
+        //  relevant frame - unless the `numOfFrames` expectation fails
+        expectSingleCapturedFrame = function (id) {
+            return expectCapturedFrames(id, 1)[0];
+        },
+
         // All [ID3v2 tag frames](http://id3.org/id3v2.3.0#Declared_ID3v2_frames) along with their
         //  'friendly names' as defined in the spec and, in certain cases, an `expected` hash which
         //  defines values to test against
@@ -235,7 +249,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
     beforeEach(function () { this.addMatchers(matchers); });
 
     it("should read UFID: Unique file identifier (multiple)", function () {
-        var capturedFrames = getCapturedFrames("UFID"),
+        var capturedFrames = expectCapturedFrames("UFID", 2),
 
             // Get expected and actual frames for the case of a short UFID
             expectedShortFrame = id3v2TagFrames.UFID.expected.shortish,
@@ -266,7 +280,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
     });
 
     it("should read COMM: Comments frame", function () {
-        var capturedFrames = getCapturedFrames("COMM"),
+        var capturedFrames = expectCapturedFrames("COMM", 3),
 
             // Get expected and actual comment frames, for the case of no lang-field
             expectedFrameWithoutLang = id3v2TagFrames.COMM.expected.withoutLang,
@@ -321,12 +335,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             return frame.id.charAt(0) === "T" && frame.id !== "TXXX";
         }).each(function (frame) {
             it("should read " + frame.id + ": " + frame.name, function () {
-                var capturedFrames = getCapturedFrames(frame.id),
-                    f = null;
-
-                expect(capturedFrames.length).toBe(1);
-                f = capturedFrames[0];
-
+                var f = expectSingleCapturedFrame(frame.id);
                 expect(f.content.encoding).toBe(0);
                 expect(f.content.value).toBe(frame.expected ? frame.expected.value : frame.name);
             });
@@ -334,11 +343,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
     //
     it("should read TXXX: User defined text information frame", function () {
-        var capturedFrames = getCapturedFrames("TXXX"),
-            f = null;
-
-        expect(capturedFrames.length).toBe(1);
-        f = capturedFrames[0];
+        var f = expectSingleCapturedFrame("TXXX");
 
         expect(f.content.encoding).toBe(0);
         expect(f.content.description).toBe(id3v2TagFrames.TXXX.name + " description");
@@ -354,20 +359,14 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             return frame.id.charAt(0) === "W" && frame.id !== "WXXX";
         }).each(function (frame) {
             it("should read " + frame.id + ": " + frame.name, function () {
-                var capturedFrames = getCapturedFrames(frame.id);
-
-                expect(capturedFrames.length).toBe(1);
-                expect(capturedFrames[0].content.value).toBe(frame.name);
+                var f = expectSingleCapturedFrame(frame.id);
+                expect(f.content.value).toBe(frame.name);
             });
         });
 
     //
     it("should read WXXX: User defined URL link frame", function () {
-        var capturedFrames = getCapturedFrames("WXXX"),
-            f = null;
-
-        expect(capturedFrames.length).toBe(1);
-        f = capturedFrames[0];
+        var f = expectSingleCapturedFrame("WXXX");
 
         expect(f.content.encoding).toBe(0);
         expect(f.content.description).toBe(id3v2TagFrames.WXXX.name + " description");
@@ -380,11 +379,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
     //  parsed as a collection of strings without attaching special meaning. There may only be one
     //  "IPLS" frame in each tag
     it("should read IPLS: Involved People List Frame", function () {
-        var capturedFrames = getCapturedFrames("IPLS"),
-            f = null;
-
-        expect(capturedFrames.length).toBe(1);
-        f = capturedFrames[0];
+        var f = expectSingleCapturedFrame("IPLS");
 
         expect(f.content.encoding).toBe(0);
         expect(f.content.values[0]).toBe("Involvement 1");
@@ -396,11 +391,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
     //
     it("should read USER: Terms of use frame", function () {
-        var capturedFrames = getCapturedFrames("USER"),
-            f = null;
-
-        expect(capturedFrames.length).toBe(1);
-        f = capturedFrames[0];
+        var f = expectSingleCapturedFrame("USER");
 
         expect(f.content.encoding).toBe(0);
         expect(f.content.language).toBe("eng");
