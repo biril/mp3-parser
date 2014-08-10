@@ -25,7 +25,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span> v0<span class="hljs-number">.2</span><span class="hljs-number">.3</span>
+          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span> v0<span class="hljs-number">.2</span><span class="hljs-number">.4</span>
 </code></pre></div>
         </div>
       
@@ -159,8 +159,8 @@ All methods return a description of the section read in the form of a hash conta
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-a-frame-header"><a href="#read-a-frame-header" class="anchor"></a>Read a Frame Header</h3><p>Read header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns null in the event
- that no frame header is found at <code>offset</code></p>
+          <div class="wrapper"><h3 id="read-a-frame-header"><a href="#read-a-frame-header" class="anchor"></a>Read a Frame Header</h3><p>Read and return description of header of frame located at <code>offset</code> of DataView <code>buffer</code>.
+ Returns <code>null</code> in the event that no frame header is found at <code>offset</code></p>
 </div>
         </div>
       
@@ -176,11 +176,11 @@ All methods return a description of the section read in the form of a hash conta
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-a-frame"><a href="#read-a-frame" class="anchor"></a>Read a Frame</h3><p>Read frame located at <code>offset</code> of DataView <code>buffer</code>. Will acquire the frame header (see
- <code>readFrameHeader</code>) plus some basic information about the frame - notably the frame&#39;s length
- in bytes. If <code>requireNextFrame</code> is set, the presence of a <em>next</em> valid frame will be
- required for <em>this</em> frame to be regarded as valid. Returns null in the event that no frame
- is found at <code>offset</code></p>
+          <div class="wrapper"><h3 id="read-a-frame"><a href="#read-a-frame" class="anchor"></a>Read a Frame</h3><p>Read and return description of frame located at <code>offset</code> of DataView <code>buffer</code>. Includes the
+ frame header description (see <code>readFrameHeader</code>) plus some basic information about the
+ frame - notably the frame&#39;s length in bytes. If <code>requireNextFrame</code> is set, the presence of
+ a <em>next</em> valid frame will be required for <em>this</em> frame to be regarded as valid. Returns
+ null in the event that no frame is found at <code>offset</code></p>
 </div>
         </div>
       
@@ -196,12 +196,12 @@ All methods return a description of the section read in the form of a hash conta
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-the-last-frame"><a href="#read-the-last-frame" class="anchor"></a>Read the Last Frame</h3><p>Locate and read the very last valid frame in given DataView <code>buffer</code>. The search is carried
- out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code> is ommitted) to the
- first octet in the buffer. If <code>requireNextFrame</code> is set, the presence of a next valid frame
- will be required for any found frame to be regarded as valid (causing the method to
- essentially return the next-to-last frame on success). Returns null in the event that no
- frame is found</p>
+          <div class="wrapper"><h3 id="read-the-last-frame"><a href="#read-the-last-frame" class="anchor"></a>Read the Last Frame</h3><p>Locate and return description of the very last valid frame in given DataView <code>buffer</code>. The
+ search is carried out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code>
+ is ommitted) to the first octet in the buffer. If <code>requireNextFrame</code> is set, the presence
+ of a next valid frame will be required for any found frame to be regarded as valid (causing
+ the method to essentially return the next-to-last frame on success). Returns <code>null</code> in the
+ event that no frame is found at <code>offset</code></p>
 </div>
         </div>
       
@@ -239,8 +239,10 @@ All methods return a description of the section read in the form of a hash conta
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-the-id3v2-tag"><a href="#read-the-id3v2-tag" class="anchor"></a>Read the ID3v2 Tag</h3><p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
- null in the event that no tag is found at <code>offset</code></p>
+          <div class="wrapper"><h3 id="read-the-id3v2-tag"><a href="#read-the-id3v2-tag" class="anchor"></a>Read the ID3v2 Tag</h3><p>Read and return description of <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of
+ DataView <code>buffer</code>. (This will include any and all
+ <a href="https://github.com/biril/mp3-parser/wiki">currently supported ID3v2 frames</a> located within
+ the tag). Returns <code>null</code> in the event that no tag is found at <code>offset</code></p>
 </div>
         </div>
       
@@ -256,8 +258,9 @@ All methods return a description of the section read in the form of a hash conta
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-the-xing-tag"><a href="#read-the-xing-tag" class="anchor"></a>Read the Xing Tag</h3><p>Read <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
- DataView <code>buffer</code>. Returns null in the event that no frame is found at <code>offset</code></p>
+          <div class="wrapper"><h3 id="read-the-xing-tag"><a href="#read-the-xing-tag" class="anchor"></a>Read the Xing Tag</h3><p>Read and return description of
+ <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a> located at <code>offset</code> of
+ DataView <code>buffer</code>. Returns <code>null</code> in the event that no frame is found at <code>offset</code></p>
 </div>
         </div>
       
@@ -273,7 +276,10 @@ All methods return a description of the section read in the form of a hash conta
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-all-tags-up-to-first-frame"><a href="#read-all-tags-up-to-first-frame" class="anchor"></a>Read all Tags up to First Frame</h3><p>( See <a href="http://www.rengels.de/computer/mp3tags.html">this</a> and
+          <div class="wrapper"><h3 id="read-all-tags-up-to-first-frame"><a href="#read-all-tags-up-to-first-frame" class="anchor"></a>Read all Tags up to First Frame</h3><p>Read and return descriptions of all tags found up to (and including) the very first frame.
+ Returns an array of sections which may include a description of a located ID3V2 tag, a
+ description of located Xing / Lame tag and a description of the a located first frame
+ ( See <a href="http://www.rengels.de/computer/mp3tags.html">this</a> and
  <a href="http://stackoverflow.com/a/5013505">this</a> )</p>
 </div>
         </div>

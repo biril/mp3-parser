@@ -118,6 +118,41 @@ window.files = [
       "title": "Usage"
     },
     {
+      "level": 3,
+      "slug": "readframeheader-buffer-offset-",
+      "title": "readFrameHeader(buffer, [offset])"
+    },
+    {
+      "level": 3,
+      "slug": "readframe-buffer-offset-requirenextframe-",
+      "title": "readFrame(buffer, [offset[, requireNextFrame]])"
+    },
+    {
+      "level": 3,
+      "slug": "readlastframe-buffer-offset-requirenextframe-",
+      "title": "readLastFrame(buffer, [offset[, requireNextFrame]])"
+    },
+    {
+      "level": 3,
+      "slug": "readid3v2tag-buffer-offset-",
+      "title": "readId3v2Tag(buffer[, offset])"
+    },
+    {
+      "level": 3,
+      "slug": "readxingtag-buffer-offset-",
+      "title": "readXingTag(buffer[, offset])"
+    },
+    {
+      "level": 3,
+      "slug": "readtags-buffer-offset-",
+      "title": "readTags(buffer[, offset])"
+    },
+    {
+      "level": 2,
+      "slug": "i-suggest-that-you-also",
+      "title": "I suggest that you also"
+    },
+    {
       "level": 2,
       "slug": "license",
       "title": "License"

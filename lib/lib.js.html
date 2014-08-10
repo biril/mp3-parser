@@ -25,7 +25,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-parser/<span class="hljs-keyword">lib</span> v0<span class="hljs-number">.2</span><span class="hljs-number">.3</span>
+          <div class="wrapper"><pre><code>mp3-parser/<span class="hljs-keyword">lib</span> v0<span class="hljs-number">.2</span><span class="hljs-number">.4</span>
 </code></pre></div>
         </div>
       
@@ -324,7 +324,8 @@ isStr = function (str, buffer, offset) {
         }
         <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
     };
-</div></div>
+
+    lib.locateStrTrm = {</div></div>
       
       </div>
     
@@ -338,9 +339,9 @@ isStr = function (str, buffer, offset) {
         </div>
       
       
-        <div class="code"><div class="wrapper">    lib.locateStrTrm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
-        <span class="hljs-keyword">return</span> lib.locateSeq([<span class="hljs-number">0</span>], buffer, offset, length);
-    };
+        <div class="code"><div class="wrapper">        iso: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">return</span> lib.locateSeq([<span class="hljs-number">0</span>], buffer, offset, length);
+        },
 </div></div>
       
       </div>
@@ -355,13 +356,15 @@ isStr = function (str, buffer, offset) {
         </div>
       
       
-        <div class="code"><div class="wrapper">    lib.locateStrTrmUcs2 = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
-        <span class="hljs-keyword">var</span> trmOffset = lib.locateSeq([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], buffer, offset, length);
-        <span class="hljs-keyword">if</span> (trmOffset === -<span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; }
-        <span class="hljs-keyword">if</span> ((trmOffset - offset) % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>) { ++trmOffset; }
-        <span class="hljs-keyword">return</span> trmOffset;
-    };
-</div></div>
+        <div class="code"><div class="wrapper">        ucs: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span> trmOffset = lib.locateSeq([<span class="hljs-number">0</span>, <span class="hljs-number">0</span>], buffer, offset, length);
+            <span class="hljs-keyword">if</span> (trmOffset === -<span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>; }
+            <span class="hljs-keyword">if</span> ((trmOffset - offset) % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>) { ++trmOffset; }
+            <span class="hljs-keyword">return</span> trmOffset;
+        }
+    },
+
+    lib.readStr = {</div></div>
       
       </div>
     
@@ -378,27 +381,9 @@ isStr = function (str, buffer, offset) {
         </div>
       
       
-        <div class="code"><div class="wrapper">    lib.readStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(buffer.buffer, offset, length));
-    };
-</div></div>
-      
-      </div>
-    
-      <div class="segment">
-      
-        <div class="comments ">
-          <div class="wrapper"><p>Similar to <code>readStr</code> but will check for a null-terminator determining the end of the
- string. The returned string will be of <em>at most</em> <code>length</code> octets</p>
-</div>
-        </div>
-      
-      
-        <div class="code"><div class="wrapper">    lib.readTrmStr = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
-        <span class="hljs-keyword">var</span> trmOffset = lib.locateStrTrm(buffer, offset, length);
-        <span class="hljs-keyword">if</span> (trmOffset !== -<span class="hljs-number">1</span>) { length = trmOffset - offset; }
-        <span class="hljs-keyword">return</span> lib.readStr(buffer, offset, length);
-    };
+        <div class="code"><div class="wrapper">        iso: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint8Array</span>(buffer.buffer, offset, length));
+        },
 </div></div>
       
       </div>
@@ -419,13 +404,13 @@ About the BOM: The current implementation removes the leading BOM from given buf
 avoid invisible characters that mess up the resulting strings. Tests performed with
 UCS-2 LE encoded frames indicate that String.fromCharCode correctly converts byte array
 to string but no tests have been made for UCS-2 BE. (Kid3, the ID3v2 Tag generator used
-at the time of this writing, goes totally weird when switched to BE)</li>
+for tests at the time of this writing, goes totally weird when switched to BE)</li>
 </ul>
 </div>
         </div>
       
       
-        <div class="code"><div class="wrapper">    lib.readStrUcs2 = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span></div></div>
+        <div class="code"><div class="wrapper">        ucs: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span></div></div>
       
       </div>
     
@@ -437,12 +422,12 @@ at the time of this writing, goes totally weird when switched to BE)</li>
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (buffer.getUint16(offset) === <span class="hljs-number">0xFFFE</span> || buffer.getUint16(offset) === <span class="hljs-number">0xFEFF</span>) {
-            offset += <span class="hljs-number">2</span>;
-            length -= <span class="hljs-number">2</span>;
-        }
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (buffer.getUint16(offset) === <span class="hljs-number">0xFFFE</span> || buffer.getUint16(offset) === <span class="hljs-number">0xFEFF</span>) {
+                offset += <span class="hljs-number">2</span>;
+                length -= <span class="hljs-number">2</span>;
+            }
 
-        buffer = buffer.buffer;
+            buffer = buffer.buffer;
 </div></div>
       
       </div>
@@ -457,13 +442,52 @@ at the time of this writing, goes totally weird when switched to BE)</li>
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (offset % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
-            buffer = buffer.slice(offset, offset + length);
-            offset = <span class="hljs-number">0</span>;
-        }
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (offset % <span class="hljs-number">2</span> === <span class="hljs-number">1</span>) {
+                buffer = buffer.slice(offset, offset + length);
+                offset = <span class="hljs-number">0</span>;
+            }
 
-        <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint16Array</span>(buffer, offset, length / <span class="hljs-number">2</span>));
-    };
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint16Array</span>(buffer, offset, length / <span class="hljs-number">2</span>));
+        },
+    },
+
+    lib.readTrmStr = {</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Similar to <code>readStr.iso</code> but will check for a null-terminator determining the end of the
+ string. The returned string will be of <em>at most</em> <code>length</code> octets</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        iso: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span> trmOffset = lib.locateStrTrm.iso(buffer, offset, length);
+            <span class="hljs-keyword">if</span> (trmOffset !== -<span class="hljs-number">1</span>) { length = trmOffset - offset; }
+            <span class="hljs-keyword">return</span> lib.readStr.iso(buffer, offset, length);
+        },
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Similar to <code>readStr.ucs</code> but will check for a null-terminator determining the end of the
+ string. The returned string will be of <em>at most</em> <code>length</code> octets</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        ucs: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+            <span class="hljs-keyword">var</span> trmOffset = lib.locateStrTrm.ucs(buffer, offset, length);
+            <span class="hljs-keyword">if</span> (trmOffset !== -<span class="hljs-number">1</span>) { length = trmOffset - offset; }
+            <span class="hljs-keyword">return</span> lib.readStr.ucs(buffer, offset, length);
+        }
+    },
 </div></div>
       
       </div>
