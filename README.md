@@ -87,13 +87,14 @@ Usage
 -----
 
 The parser exposes a collection of `read____` methods, each dedicated to reading a specific section
-of the mp3 file. The current implementation includes `readFrameHeader`, `readFrame`, `readId3v2Tag`
-and `readXingTag`. Each of these accepts a DataView-wrapped ArrayBuffer, which should contain the
-actual mp3 data, and optionally an offset into the buffer.
+of the mp3 file. The current implementation includes `readFrameHeader`, `readFrame`,
+`readLastFrame`, `readId3v2Tag`, `readXingTag` and `readTags`. Each of these accepts a
+[DataView](http://www.khronos.org/registry/typedarray/specs/latest/#8)-wrapped ArrayBuffer
+containing the mp3 data, and optionally an offset into the buffer.
 
-All methods return a description of the section read in the form of a hash containing key-value
-pairs relevant to the section. For example the hash returned by `readFrameHeader` always contains
-an `mpegAudioVersion` key of value "MPEG Version 1 (ISO/IEC 11172-3)" and a `layerDescription` key
+In all cases, a 'description' will be returned - a hash containing key-value pairs relevant to the
+specific mp3 section being read. For example the hash returned by `readFrameHeader` will include an
+`mpegAudioVersion` key of value "MPEG Version 1 (ISO/IEC 11172-3)" and a `layerDescription` key
 of value "Layer III". A description will always have a `_section` hash with `type`, `byteLength`
 and `offset` keys:
 
@@ -101,7 +102,58 @@ and `offset` keys:
 * `byteLenfth`: Size of the section in bytes
 * `offset`: Buffer offset at which this section resides
 
-Further documentation is forthcoming. You can also
+In further detail:
+
+
+### readFrameHeader(buffer, [offset])
+
+Read and return description of header of frame located at `offset` of DataView `buffer`. Returns
+`null` in the event that no frame header is found at `offset`.
+
+
+### readFrame(buffer, [offset[, requireNextFrame]])
+
+Read and return description of frame located at `offset` of DataView `buffer`. Includes the frame
+header description (see `readFrameHeader`) plus some basic information about the frame - notably
+the frame's length in bytes. If `requireNextFrame` is set, the presence of a _next_ valid frame
+will be required for _this_ frame to be regarded as valid. Returns `null` in the event that no
+frame is found at `offset`.
+
+
+### readLastFrame(buffer, [offset[, requireNextFrame]])
+
+Locate and return description of the very last valid frame in given DataView `buffer`. The search
+is carried out in reverse, from given `offset` (or the very last octet if `offset` is ommitted) to
+the first octet in the buffer. If `requireNextFrame` is set, the presence of a next valid frame
+will be required for any found frame to be regarded as valid (causing the method to essentially
+return the next-to-last frame on success). Returns `null` in the event that no frame is found at
+`offset`.
+
+
+### readId3v2Tag(buffer[, offset])
+
+Read and return description of [ID3v2 Tag](http://id3.org/id3v2.3.0) located at `offset` of
+DataView `buffer`. (This will include any and all
+[currently supported ID3v2 frames](https://github.com/biril/mp3-parser/wiki) located within the
+tag). Returns `null` in the event that no tag is found at `offset`.
+
+
+### readXingTag(buffer[, offset])
+
+Read and return description of [Xing / Lame Tag](http://gabriel.mp3-tech.org/mp3infotag.html)
+located at `offset` of DataView `buffer`. Returns `null` in the event that no frame is found at
+`offset`.
+
+
+### readTags(buffer[, offset])
+
+Read and return descriptions of all tags found up to (and additionally including) the very first
+frame. Returns an array of descriptions which may include that of a located ID3V2 tag, of a located
+Xing / Lame tag and of a located first frame.
+
+
+I suggest that you also
+-----------------------
 
 * View the [annotated version of the source](http://biril.github.io/mp3-parser/).
 * Try out the [browser](https://github.com/biril/mp3-parser/tree/master/examples/browser)

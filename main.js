@@ -58,8 +58,8 @@
 
     // ### Read a Frame Header
     //
-    // Read header of frame located at `offset` of DataView `buffer`. Returns null in the event
-    //  that no frame header is found at `offset`
+    // Read and return description of header of frame located at `offset` of DataView `buffer`.
+    //  Returns `null` in the event that no frame header is found at `offset`
     mp3Parser.readFrameHeader = function (buffer, offset) {
         return lib.readFrameHeader(buffer, offset);
     };
@@ -67,11 +67,11 @@
 
     // ### Read a Frame
     //
-    // Read frame located at `offset` of DataView `buffer`. Will acquire the frame header (see
-    //  `readFrameHeader`) plus some basic information about the frame - notably the frame's length
-    //  in bytes. If `requireNextFrame` is set, the presence of a _next_ valid frame will be
-    //  required for _this_ frame to be regarded as valid. Returns null in the event that no frame
-    //  is found at `offset`
+    // Read and return description of frame located at `offset` of DataView `buffer`. Includes the
+    //  frame header description (see `readFrameHeader`) plus some basic information about the
+    //  frame - notably the frame's length in bytes. If `requireNextFrame` is set, the presence of
+    //  a _next_ valid frame will be required for _this_ frame to be regarded as valid. Returns
+    //  null in the event that no frame is found at `offset`
     mp3Parser.readFrame = function (buffer, offset, requireNextFrame) {
         return lib.readFrame(buffer, offset, requireNextFrame);
     };
@@ -79,12 +79,12 @@
 
     // ### Read the Last Frame
     //
-    // Locate and read the very last valid frame in given DataView `buffer`. The search is carried
-    //  out in reverse, from given `offset` (or the very last octet if `offset` is ommitted) to the
-    //  first octet in the buffer. If `requireNextFrame` is set, the presence of a next valid frame
-    //  will be required for any found frame to be regarded as valid (causing the method to
-    //  essentially return the next-to-last frame on success). Returns null in the event that no
-    //  frame is found
+    // Locate and return description of the very last valid frame in given DataView `buffer`. The
+    //  search is carried out in reverse, from given `offset` (or the very last octet if `offset`
+    //  is ommitted) to the first octet in the buffer. If `requireNextFrame` is set, the presence
+    //  of a next valid frame will be required for any found frame to be regarded as valid (causing
+    //  the method to essentially return the next-to-last frame on success). Returns `null` in the
+    //  event that no frame is found at `offset`
     mp3Parser.readLastFrame = function (buffer, offset, requireNextFrame) {
         offset || (offset = buffer.byteLength - 1);
 
@@ -104,8 +104,10 @@
 
     // ### Read the ID3v2 Tag
     //
-    // Read [ID3v2 Tag](http://id3.org/id3v2.3.0) located at `offset` of DataView `buffer`. Returns
-    //  null in the event that no tag is found at `offset`
+    // Read and return description of [ID3v2 Tag](http://id3.org/id3v2.3.0) located at `offset` of
+    //  DataView `buffer`. (This will include any and all
+    //  [currently supported ID3v2 frames](https://github.com/biril/mp3-parser/wiki) located within
+    //  the tag). Returns `null` in the event that no tag is found at `offset`
     mp3Parser.readId3v2Tag = function (buffer, offset) {
         return id3v2Parser.readId3v2Tag(buffer, offset);
     };
@@ -113,16 +115,19 @@
 
     // ### Read the Xing Tag
     //
-    // Read [Xing / Lame Tag](http://gabriel.mp3-tech.org/mp3infotag.html) located at `offset` of
-    //  DataView `buffer`. Returns null in the event that no frame is found at `offset`
+    // Read and return description of
+    //  [Xing / Lame Tag](http://gabriel.mp3-tech.org/mp3infotag.html) located at `offset` of
+    //  DataView `buffer`. Returns `null` in the event that no frame is found at `offset`
     mp3Parser.readXingTag = function (buffer, offset) {
         return xingParser.readXingTag(buffer, offset);
     };
 
 
     // ### Read all Tags up to First Frame
-    //
-    // ( See [this](http://www.rengels.de/computer/mp3tags.html) and
+    // Read and return descriptions of all tags found up to (and including) the very first frame.
+    //  Returns an array of sections which may include a description of a located ID3V2 tag, a
+    //  description of located Xing / Lame tag and a description of the a located first frame
+    //  ( See [this](http://www.rengels.de/computer/mp3tags.html) and
     //  [this](http://stackoverflow.com/a/5013505) )
     mp3Parser.readTags = function (buffer, offset) {
         offset || (offset = 0);
