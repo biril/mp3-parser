@@ -398,4 +398,31 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         expect(f.content.text).toBe("Terms of use");
     });
 
+    //
+    it("should read PCNT: Play counter", function () {
+        var f = expectSingleCapturedFrame("PCNT");
+        expect(f.content.counter).toBe(303);
+    });
+
+    //
+    it("should read POPM: Popularimeter", function () {
+
+        var capturedFrames = expectCapturedFrames("POPM", 2),
+            frame1 = _(capturedFrames).find(function (frame) {
+                return frame.content.email === "Email to user first";
+            }),
+            frame2 = _(capturedFrames).find(function (frame) {
+                return frame.content.email === "Email to user second";
+            });
+
+        expect(frame1).toBeTruthy();
+        expect(frame2).toBeTruthy();
+
+        expect(frame1.content.rating).toBe(128);
+        expect(frame2.content.rating).toBe(255);
+
+        expect(frame1.content.counter).toBe(101);
+        expect(frame2.content.counter).toBe(202);
+    });
+
 });
