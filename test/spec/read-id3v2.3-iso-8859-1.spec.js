@@ -405,7 +405,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
     });
 
     //
-    it("should read POPM: Popularimeter", function () {
+    it("should read POPM: Popularimeter (multiple)", function () {
 
         var capturedFrames = expectCapturedFrames("POPM", 2),
             frame1 = _(capturedFrames).find(function (frame) {
