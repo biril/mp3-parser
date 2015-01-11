@@ -136,7 +136,16 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                 expected: { } },
             PRIV: {
                 name: "Private frame",
-                expected: { } },
+                expected: {
+                    shortish: {
+                        ownerIdentifier: "http://ufid/owner/for32BytePrivateData",
+                        privateData: _.range(32)
+                    },
+                    longish: {
+                        ownerIdentifier: "http://ufid/owner/for64BytePrivateData",
+                        privateData: _.range(64)
+                    }
+                } },
             PCNT: {
                 name: "Play counter",
                 expected: { } },
@@ -396,6 +405,35 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         expect(f.content.encoding).toBe(0);
         expect(f.content.language).toBe("eng");
         expect(f.content.text).toBe("Terms of use");
+    });
+
+    //
+    it("should read PRIV: Private frame (multiple)", function () {
+        var capturedFrames = expectCapturedFrames("PRIV", 2),
+
+            // Get expected and actual frames for the case of a short PRIV
+            expectedShortFrame = id3v2TagFrames.PRIV.expected.shortish,
+            shortFrame,
+            shortFrames = _(capturedFrames).filter(function (frame) {
+                return frame.content.ownerIdentifier === expectedShortFrame.ownerIdentifier;
+            }),
+
+            // Get expected and actual frames for the case of a long PRIV
+            expectedLongFrame = id3v2TagFrames.PRIV.expected.longish,
+            longFrame,
+            longFrames = _(capturedFrames).filter(function (frame) {
+                return frame.content.ownerIdentifier === expectedLongFrame.ownerIdentifier;
+            });
+
+        expect(shortFrames.length).toBe(1);
+        shortFrame = shortFrames[0];
+        expect(shortFrame.content.ownerIdentifier).toBe(expectedShortFrame.ownerIdentifier);
+        expect(shortFrame.content.privateData).asDataViewToEqual(expectedShortFrame.privateData);
+
+        expect(longFrames.length).toBe(1);
+        longFrame = longFrames[0];
+        expect(longFrame.content.ownerIdentifier).toBe(expectedLongFrame.ownerIdentifier);
+        expect(longFrame.content.privateData).asDataViewToEqual(expectedLongFrame.privateData);
     });
 
     //
