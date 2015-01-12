@@ -222,8 +222,24 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
                     text: ""
                 } },
             USLT: {
-                name: "Unsychronized lyric/text transcription",
-                expected: { } },
+                name: "Unsychronised lyrics/text transcription",
+                expected: {
+                    withoutLang: {
+                        description: "lyricsWithoutLang",
+                        text: "αβγ This lyrics frame has an empty language field",
+                        language: ""
+                    },
+                    withLang: {
+                        description: "lyricsWithLang",
+                        text: "αβγ This lyrics frame has a language field of value 'eng'",
+                        language: "eng"
+                    },
+                    withHalfLang: {
+                        description: "lyricsWithHalfLang",
+                        text: "αβγ This lyrics frame has a language field of value 'en' (inadequate length)",
+                        language: "en"
+                    }
+                } },
 
             // WCOM: { name: "Commercial information" },
             // WCOP: { name: "Copyright/Legal information" },
@@ -278,6 +294,48 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
         frameWithHalfLang = framesWithHalfLang[0];
         expect(frameWithHalfLang.content.language).toBe(expectedFrameWithHalfLang.language);
         expect(frameWithHalfLang.content.text).toBe(expectedFrameWithHalfLang.text);
+    });
+
+    // The USLT frame's structure is basically identical to the COMM's
+    it("should read USLT: Unsychronised lyrics/text transcription frame", function () {
+        var capturedFrames = expectCapturedFrames("USLT", 3),
+
+            // Get expected and actual frames, for the case of no lang-field
+            expectedWithoutLang = id3v2TagFrames.USLT.expected.withoutLang,
+            frameWithoutLang = null,
+            framesWithoutLang = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedWithoutLang.description;
+            }),
+
+            // Get expected and actual frames, for the case of lang-field present
+            expectedWithLang = id3v2TagFrames.USLT.expected.withLang,
+            frameWithLang = null,
+            framesWithLang = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedWithLang.description;
+            }),
+
+            // Get expected and actual frames, for the case of lang-field of inadequate
+            //  length present
+            expectedWithHalfLang = id3v2TagFrames.USLT.expected.withHalfLang,
+            frameWithHalfLang = null,
+            framesWithHalfLang = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedWithHalfLang.description;
+            });
+
+        expect(framesWithoutLang.length).toBe(1);
+        frameWithoutLang = framesWithoutLang[0];
+        expect(frameWithoutLang.content.language).toBe(expectedWithoutLang.language);
+        expect(frameWithoutLang.content.text).toBe(expectedWithoutLang.text);
+
+        expect(framesWithLang.length).toBe(1);
+        frameWithLang = framesWithLang[0];
+        expect(frameWithLang.content.language).toBe(expectedWithLang.language);
+        expect(frameWithLang.content.text).toBe(expectedWithLang.text);
+
+        expect(framesWithHalfLang.length).toBe(1);
+        frameWithHalfLang = framesWithHalfLang[0];
+        expect(frameWithHalfLang.content.language).toBe(expectedWithHalfLang.language);
+        expect(frameWithHalfLang.content.text).toBe(expectedWithHalfLang.text);
     });
 
     // Pick text-information frames only, preprocess them and test each one. For frames that
