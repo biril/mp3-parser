@@ -66,11 +66,12 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         id3v2TagFrames = {
             AENC: {
                 name: "Audio encryption",
-                expected: { } },
+                expected: {}
+            },
             APIC: {
                 name: "Attached picture",
-                expected: { } },
-
+                expected: {}
+            },
             COMM: {
                 name: "Comments",
                 expected: {
@@ -91,25 +92,30 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                     }
                 }
             },
-
             COMR: {
                 name: "Commercial frame",
-                expected: { } },
+                expected: {}
+            },
             ENCR: {
                 name: "Encryption method registration",
-                expected: { } },
+                expected: {}
+            },
             EQUA: {
                 name: "Equalization",
-                expected: { } },
+                expected: {}
+            },
             ETCO: {
                 name: "Event timing codes",
-                expected: { } },
+                expected: {}
+            },
             GEOB: {
                 name: "General encapsulated object",
-                expected: { } },
+                expected: {}
+            },
             GRID: {
                 name: "Group identification registration",
-                expected: { } },
+                expected: {}
+            },
 
             IPLS: {
                 name: "Involved people list",
@@ -124,16 +130,20 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                 } },
             LINK: {
                 name: "Linked information",
-                expected: { } },
+                expected: {}
+            },
             MCDI: {
                 name: "Music CD identifier",
-                expected: { } },
+                expected: {}
+            },
             MLLT: {
                 name: "MPEG location lookup table",
-                expected: { } },
+                expected: {}
+            },
             OWNE: {
                 name: "Ownership frame",
-                expected: { } },
+                expected: {}
+            },
             PRIV: {
                 name: "Private frame",
                 expected: {
@@ -145,32 +155,40 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                         ownerIdentifier: "http://ufid/owner/for64BytePrivateData",
                         privateData: _.range(64)
                     }
-                } },
+                }
+            },
             PCNT: {
                 name: "Play counter",
-                expected: { } },
+                expected: {}
+            },
             POPM: {
                 name: "Popularimeter",
-                expected: { } },
+                expected: {}
+            },
             POSS: {
                 name: "Position synchronisation frame",
-                expected: { } },
+                expected: {}
+            },
             RBUF: {
                 name: "Recommended buffer size",
-                expected: { } },
+                expected: {}
+            },
             RVAD: {
                 name: "Relative volume adjustment",
-                expected: { } },
+                expected: {}
+            },
             RVRB: {
                 name: "Reverb",
-                expected: { } },
+                expected: {}
+            },
             SYLT: {
                 name: "Synchronized lyric/text",
-                expected: { } },
+                expected: {}
+            },
             SYTC: {
                 name: "Synchronized tempo codes",
-                expected: { } },
-
+                expected: {}
+            },
             // Text information frames. For some of these (which are commented below), the standard
             //  contains specific formatting instructions. They are however T-frames and as such
             //  their content is of variable length and encoding. As a result the formatting
@@ -230,15 +248,15 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                         ownerIdentifier: "http://ufid/owner/for64ByteIdentifier",
                         identifier: _.range(64)
                     }
-                } },
-
+                }
+            },
             USER: {
                 name: "Terms of use",
                 expected: {
                     text: "Terms of use",
                     language: "eng"
-                } },
-
+                }
+            },
             USLT: {
                 name: "Unsychronised lyrics/text transcription",
                 expected: {
@@ -257,8 +275,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                         text: "This lyrics frame has a language field of value 'en' (inadequate length)",
                         language: "en"
                     }
-                } },
-
+                }
+            },
             WCOM: { name: "Commercial information" },
             WCOP: { name: "Copyright/Legal information" },
             WOAF: { name: "Official audio file webpage" },
