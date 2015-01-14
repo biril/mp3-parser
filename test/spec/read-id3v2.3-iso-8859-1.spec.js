@@ -70,7 +70,20 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             },
             APIC: {
                 name: "Attached picture",
-                expected: {}
+                expected: {
+                    frame1: {
+                        mimeType: 'MIME type 1',
+                        pictureType: 3, // code of 'Cover (front)' picture type
+                        description: "Description of the first attached picture",
+                        pictureData: _.range(32)
+                    },
+                    frame2: {
+                        mimeType: 'MIME type 2',
+                        pictureType: 4, // code of 'Cover (back)' picture type
+                        description: "Description of the second attached picture",
+                        pictureData: _.range(64)
+                    }
+                }
             },
             COMM: {
                 name: "Comments",
@@ -537,6 +550,41 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
         expect(frame1.content.counter).toBe(101);
         expect(frame2.content.counter).toBe(202);
+    });
+
+    //
+    it("should read APIC: Attached picture", function () {
+        var capturedFrames = expectCapturedFrames("APIC", 2),
+
+            // Note that APIC frames are differentiated by description - According to the standard,
+            //  there may be several pictures attached to one file, each in their individual "APIC"
+            //  frame, but only one with the same content descriptor
+
+            // Get expected and actual frames for the case of the first APIC test frame
+            expectedFrame1 = id3v2TagFrames.APIC.expected.frame1,
+            frame1,
+            frame1s = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedFrame1.description;
+            }),
+
+            // Get expected and actual frames for the case of the second APIC test frame
+            expectedFrame2 = id3v2TagFrames.APIC.expected.frame2,
+            frame2,
+            frame2s = _(capturedFrames).filter(function (frame) {
+                return frame.content.description === expectedFrame2.description;
+            });
+
+        expect(frame1s.length).toBe(1);
+        frame1 = frame1s[0];
+        expect(frame1.content.mimeType).toBe(expectedFrame1.mimeType);
+        expect(frame1.content.pictureType).toBe(expectedFrame1.pictureType);
+        expect(frame1.content.pictureData).asDataViewToEqual(expectedFrame1.pictureData);
+
+        expect(frame2s.length).toBe(1);
+        frame2 = frame2s[0];
+        expect(frame2.content.mimeType).toBe(expectedFrame2.mimeType);
+        expect(frame2.content.pictureType).toBe(expectedFrame2.pictureType);
+        expect(frame2.content.pictureData).asDataViewToEqual(expectedFrame2.pictureData);
     });
 
 });
