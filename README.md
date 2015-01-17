@@ -105,24 +105,24 @@ and `offset` keys:
 In further detail:
 
 
-### readFrameHeader(buffer, [offset])
+### readFrameHeader(view, [offset])
 
-Read and return description of header of frame located at `offset` of DataView `buffer`. Returns
+Read and return description of header of frame located at `offset` of DataView `view`. Returns
 `null` in the event that no frame header is found at `offset`.
 
 
-### readFrame(buffer, [offset[, requireNextFrame]])
+### readFrame(view, [offset[, requireNextFrame]])
 
-Read and return description of frame located at `offset` of DataView `buffer`. Includes the frame
+Read and return description of frame located at `offset` of DataView `view`. Includes the frame
 header description (see `readFrameHeader`) plus some basic information about the frame - notably
 the frame's length in bytes. If `requireNextFrame` is set, the presence of a _next_ valid frame
 will be required for _this_ frame to be regarded as valid. Returns `null` in the event that no
 frame is found at `offset`.
 
 
-### readLastFrame(buffer, [offset[, requireNextFrame]])
+### readLastFrame(view, [offset[, requireNextFrame]])
 
-Locate and return description of the very last valid frame in given DataView `buffer`. The search
+Locate and return description of the very last valid frame in given DataView `view`. The search
 is carried out in reverse, from given `offset` (or the very last octet if `offset` is ommitted) to
 the first octet in the buffer. If `requireNextFrame` is set, the presence of a next valid frame
 will be required for any found frame to be regarded as valid (causing the method to essentially
@@ -130,22 +130,22 @@ return the next-to-last frame on success). Returns `null` in the event that no f
 `offset`.
 
 
-### readId3v2Tag(buffer[, offset])
+### readId3v2Tag(view[, offset])
 
 Read and return description of [ID3v2 Tag](http://id3.org/id3v2.3.0) located at `offset` of
-DataView `buffer`. (This will include any and all
+DataView `view`. (This will include any and all
 [currently supported ID3v2 frames](https://github.com/biril/mp3-parser/wiki) located within the
 tag). Returns `null` in the event that no tag is found at `offset`.
 
 
-### readXingTag(buffer[, offset])
+### readXingTag(view[, offset])
 
 Read and return description of [Xing / Lame Tag](http://gabriel.mp3-tech.org/mp3infotag.html)
-located at `offset` of DataView `buffer`. Returns `null` in the event that no frame is found at
+located at `offset` of DataView `view`. Returns `null` in the event that no frame is found at
 `offset`.
 
 
-### readTags(buffer[, offset])
+### readTags(view[, offset])
 
 Read and return descriptions of all tags found up to (and additionally including) the very first
 frame. Returns an array of descriptions which may include that of a located ID3V2 tag, of a located
