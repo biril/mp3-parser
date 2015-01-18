@@ -5,12 +5,10 @@ mp3 Parser
 [![NPM version](https://badge.fury.io/js/mp3-parser.png)](http://badge.fury.io/js/mp3-parser)
 [![Bower version](https://badge.fury.io/bo/mp3-parser.png)](http://badge.fury.io/bo/mp3-parser)
 
-Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For each of
-these sections present within a given mp3 file, mp3 Parser will provide data indicating their
-presence, their boundaries within the file, as well as any available informative data. In the
-current implementation, the latter is strictly true only for frames as thorough parsing and
-data-extraction from ID3v2 and Xing/Lame tags is work in progress. The primary use case (and raison
-d'etre) for this initial revision is performing precise cuts at frame / tag boundaries.
+Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For any of
+these found within a given mp3 buffer, mp3 Parser will provide data indicating their presence,
+their position within the buffer, as well as relevant informative data (with varying degrees of
+detail).
 
 
 Set up
@@ -64,8 +62,8 @@ the current environment:
 
 
 * Setting up mp3 Parser in projects targetting _browsers, without an AMD module loader_, is
-    unfortunately quite verbose as a number of files need to be included (in specific order). This
-    should be mitigated in the future, but for now you would need:
+    unfortunately quite verbose as it relies on the (order-specific) inclusion of a number of
+    sources. This should be mitigated in the future, but for now you would need:
 
     ```html
     ...
@@ -86,7 +84,7 @@ the current environment:
 Usage
 -----
 
-The parser exposes a collection of `read____` methods, each dedicated to reading a specific section
+The parser's API consists of `read____` methods, each dedicated to reading a specific section
 of the mp3 file. The current implementation includes `readFrameHeader`, `readFrame`,
 `readLastFrame`, `readId3v2Tag`, `readXingTag` and `readTags`. Each of these accepts a
 [DataView](http://www.khronos.org/registry/typedarray/specs/latest/#8)-wrapped ArrayBuffer
@@ -95,8 +93,8 @@ containing the mp3 data, and optionally an offset into the buffer.
 In all cases, a 'description' will be returned - a hash containing key-value pairs relevant to the
 specific mp3 section being read. For example the hash returned by `readFrameHeader` will include an
 `mpegAudioVersion` key of value "MPEG Version 1 (ISO/IEC 11172-3)" and a `layerDescription` key
-of value "Layer III". A description will always have a `_section` hash with `type`, `byteLength`
-and `offset` keys:
+of value "Layer III". A section description will always include a `_section` attribute - a hash
+with `type`, `byteLength` and `offset` keys:
 
 * `type`: "frame", "frameHeader", "Xing" or "ID3v2"
 * `byteLenfth`: Size of the section in bytes
@@ -123,7 +121,7 @@ frame is found at `offset`.
 ### readLastFrame(view, [offset[, requireNextFrame]])
 
 Locate and return description of the very last valid frame in given DataView `view`. The search
-is carried out in reverse, from given `offset` (or the very last octet if `offset` is ommitted) to
+is carried out in reverse, from given `offset` (or the very last octet if `offset` is omitted) to
 the first octet in the buffer. If `requireNextFrame` is set, the presence of a next valid frame
 will be required for any found frame to be regarded as valid (causing the method to essentially
 return the next-to-last frame on success). Returns `null` in the event that no frame is found at
@@ -152,8 +150,8 @@ frame. Returns an array of descriptions which may include that of a located ID3V
 Xing / Lame tag and of a located first frame.
 
 
-I suggest that you also
------------------------
+You may also want to
+--------------------
 
 * View the [annotated version of the source](http://biril.github.io/mp3-parser/).
 * Try out the [browser](https://github.com/biril/mp3-parser/tree/master/examples/browser)
@@ -167,4 +165,4 @@ License
 
 Licensed and freely distributed under the MIT License (LICENSE.txt).
 
-Copyright (c) 2013-2014 Alex Lambiris
+Copyright (c) 2013-2015 Alex Lambiris
