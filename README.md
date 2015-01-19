@@ -108,24 +108,66 @@ In further detail:
 Read and return description of header of frame located at `offset` of DataView `view`. Returns
 `null` in the event that no frame header is found at `offset`.
 
+As an example description:
+
+```javascript
+{
+    _section: {
+        type: 'frameHeader',
+        offset: 99934,
+        byteLength: 4
+    },
+    mpegAudioVersionBits: '11',
+    mpegAudioVersion: 'MPEG Version 1 (ISO/IEC 11172-3)',
+    layerDescriptionBits: '01',
+    layerDescription: 'Layer III',
+    isProtected: 1,
+    protectionBit: '1',
+    bitrateBits: '1001',
+    bitrate: 128,
+    samplingRateBits: '00',
+    samplingRate: 44100,
+    frameIsPaddedBit: '1',
+    frameIsPadded: true,
+    framePadding: 1,
+    privateBit: '0',
+    channelModeBits: '01',
+    channelMode: 'Joint stereo (Stereo)'
+}
+```
+
 
 ### readFrame(view, [offset[, requireNextFrame]])
 
 Read and return description of frame located at `offset` of DataView `view`. Includes the frame
-header description (see `readFrameHeader`) plus some basic information about the frame - notably
-the frame's length in bytes. If `requireNextFrame` is set, the presence of a _next_ valid frame
-will be required for _this_ frame to be regarded as valid. Returns `null` in the event that no
-frame is found at `offset`.
+header description (see `readFrameHeader`) plus basic information about the frame: The frame's
+length in bytes and the index of the next frame _if_ `requireNextFrame` is set. In this case, the
+presence of a _next_ valid frame will be required for _this_ frame to be regarded as valid. Returns
+`null` in the event that no frame is found at `offset`.
+
+As an example description:
+
+```javascript
+{
+    _section: {
+        type: 'frame',
+        offset: 99934,
+        byteLength: 418,
+        sampleLength: 1152,
+        nextFrameIndex: 100352 // Available iff 'requireNextFrame'
+    },
+    header: { /* .. a frame header description .. */ }
+}
+```
 
 
 ### readLastFrame(view, [offset[, requireNextFrame]])
 
-Locate and return description of the very last valid frame in given DataView `view`. The search
+Locate and return the description of the very last valid frame in given DataView `view`. The search
 is carried out in reverse, from given `offset` (or the very last octet if `offset` is omitted) to
-the first octet in the buffer. If `requireNextFrame` is set, the presence of a next valid frame
-will be required for any found frame to be regarded as valid (causing the method to essentially
-return the next-to-last frame on success). Returns `null` in the event that no frame is found at
-`offset`.
+the buffer's beginning. If `requireNextFrame` is set, the presence of a next valid frame will be
+required for any found frame to be regarded as valid (causing the method to essentially return the
+next-to-last frame on success). Returns `null` in the event that no frame is found at `offset`.
 
 
 ### readId3v2Tag(view[, offset])
@@ -135,12 +177,123 @@ DataView `view`. (This will include any and all
 [currently supported ID3v2 frames](https://github.com/biril/mp3-parser/wiki) located within the
 tag). Returns `null` in the event that no tag is found at `offset`.
 
+As an example description:
+
+```javascript
+{
+    _section: {
+        type: 'ID3v2',
+        offset: 0,
+        byteLength: 2048
+    },
+    header: {
+        majorVersion: 3,
+        minorRevision: 0,
+        flagsOctet: 0,
+        unsynchronisationFlag: false,
+        extendedHeaderFlag: false,
+        experimentalIndicatorFlag: false,
+        size: 2038
+    },
+    frames: [{
+        header: {
+            id: 'TIT2',
+            size: 12,
+            flagsOctet1: 0,
+            flagsOctet2: 0
+        },
+        name: 'Title/songname/content description',
+        content: {
+            encoding: 0,
+            value: 'Flight Path'
+        }
+    }, {
+        header: {
+            id: 'TPUB',
+            size: 10,
+            flagsOctet1: 0,
+            flagsOctet2: 0
+        },
+        name: 'Publisher',
+        content: {
+            encoding: 0,
+            value: 'Planet Mu'
+        }
+    }, {
+        header: {
+            id: 'TCON',
+            size: 4,
+            flagsOctet1: 0,
+            flagsOctet2: 0
+        },
+        name: 'Content type',
+        content: {
+            encoding: 0,
+            value: '(3)'
+        }
+    }, {
+        header: {
+            id: 'TALB',
+            size: 9,
+            flagsOctet1: 0,
+            flagsOctet2: 0
+        },
+        name: 'Album/Movie/Show title',
+        content: {
+            encoding: 0,
+            value: 'Severant'
+        }
+    }, {
+        header: {
+            id: 'TRCK',
+            size: 3,
+            flagsOctet1: 0,
+            flagsOctet2: 0
+        },
+        name: 'Track number/Position in set',
+        content: {
+            encoding: 0,
+            value: '11'
+        }
+    }, {
+        header: {
+            id: 'TYER',
+            size: 5,
+            flagsOctet1: 0,
+            flagsOctet2: 0
+        },
+        name: 'Year',
+        content: {
+            encoding: 0,
+            value: '2011'
+        }
+    }, {
+        /* .. more frames follow .. */
+    }]
+}
+```
+
 
 ### readXingTag(view[, offset])
 
 Read and return description of [Xing / Lame Tag](http://gabriel.mp3-tech.org/mp3infotag.html)
 located at `offset` of DataView `view`. Returns `null` in the event that no frame is found at
 `offset`.
+
+As an example description:
+
+```javascript
+{
+    _section: {
+        type: 'Xing',
+        offset: 2462,
+        byteLength: 417,
+        nextFrameIndex: 2879
+    },
+    header: { /* .. a frame header description .. */ },
+    identifier: 'Xing' // Or 'Info' if Lame tag
+}
+```
 
 
 ### readTags(view[, offset])
