@@ -5,7 +5,7 @@
 //     Copyright (c) 2013 Alex Lambiris
 
 /*jshint node:true */
-/*global describe, beforeEach, it, expect  */
+/*global describe, it, expect  */
 "use strict";
 
 describe("mp3 parser", function () {

@@ -16,7 +16,7 @@ var fs = require("fs"),
 if (!pathToMp3) {
    console.log("please give a path to an mp3 file, i.e. 'node parse.js <file>'");
    process.exit(0);
- }
+}
 
 fs.readFile(pathToMp3, function (error, buffer) {
     if (error) {
