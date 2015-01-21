@@ -14,10 +14,9 @@
   "keywords": [
     "mp3"
   ],
-  "dependencies": {
-    "underscore": "1.5.x"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "underscore": "1.7.x",
     "jasmine-node": "1.9.x",
     "jshint": "2.1.x",
     "grock": "~0.3.3"
