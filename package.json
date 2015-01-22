@@ -17,9 +17,9 @@
   "dependencies": {},
   "devDependencies": {
     "underscore": "1.7.x",
-    "jasmine-node": "1.9.x",
-    "jshint": "2.1.x",
-    "grock": "~0.3.3"
+    "jasmine-node": "1.14.x",
+    "jshint": "2.6.x",
+    "grock": "0.3.x"
   },
   "scripts": {
     "test": "jasmine-node --verbose --color --captureExceptions ./test/spec/",
