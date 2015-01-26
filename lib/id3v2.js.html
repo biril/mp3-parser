@@ -5,6 +5,13 @@
   <title> - id3v2.js</title>
 
   <link rel="stylesheet" href="../assets/style.css">
+  
+    
+      <style>
+        
+      </style>
+    
+  
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
   <meta name="groc-relative-root" content="../"/>
@@ -25,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0<span class="hljs-number">.2</span><span class="hljs-number">.4</span>
+          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0.<span class="hljs-number">2.5</span>
 </code></pre></div>
         </div>
       
@@ -37,7 +44,7 @@
         <div class="comments ">
           <div class="wrapper"><pre><code><span class="hljs-keyword">https</span>://github.com/biril/mp3-parser
 Licensed <span class="hljs-operator">and</span> freely distributed under <span class="hljs-operator">the</span> MIT License
-Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2014</span> Alex Lambiris
+Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2015</span> Alex Lambiris
 </code></pre></div>
         </div>
       
@@ -54,7 +61,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
 <span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
-(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> {</span>
+(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
       
@@ -110,14 +117,14 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> previousMp3Id3v2Parser = globalObject.mp3Id3v2Parser;
     createModule(globalObject.mp3Id3v2Parser = {
-        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span>
+        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
             <span class="hljs-keyword">var</span> mp3Id3v2Parser = globalObject.mp3Id3v2Parser;
             globalObject.mp3Id3v2Parser = previousMp3Id3v2Parser;
-            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> {</span> <span class="hljs-keyword">return</span> mp3Id3v2Parser; }).call();
+            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> mp3Id3v2Parser; }).call();
         }
     }, globalObject.lib);
 
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Id3v2Parser, lib)</span> {</span>
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Id3v2Parser, lib)</span> </span>{
 <span class="hljs-pi">    "use strict"</span>;
 
     <span class="hljs-keyword">var</span> id3v2TagFrameNames = {
@@ -218,10 +225,10 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentT = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
-            <span class="hljs-keyword">var</span> content = { encoding: buffer.getUint8(offset) };
-            content.value = (content.encoding === <span class="hljs-number">0</span> ? lib.readStr.iso :
-                lib.readStr.ucs)(buffer, offset + <span class="hljs-number">1</span>, length - <span class="hljs-number">1</span>);
+        <div class="code"><div class="wrapper">        readFrameContentT = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+            <span class="hljs-keyword">var</span> content = { encoding: view.getUint8(offset) };
+            content.value = lib.readStr[content.encoding === <span class="hljs-number">0</span> ? <span class="hljs-string">'iso'</span> : <span class="hljs-string">'ucs'</span>](
+                view, offset + <span class="hljs-number">1</span>, length - <span class="hljs-number">1</span>);
             <span class="hljs-keyword">return</span> content;
         },
 </div></div>
@@ -246,7 +253,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentTxxx = <span class="hljs-function"><span class="hljs-keyword">function</span>  <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <div class="code"><div class="wrapper">        readFrameContentTxxx = <span class="hljs-function"><span class="hljs-keyword">function</span>  <span class="hljs-params">(view, offset, length)</span> </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -259,7 +266,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">                content = { encoding: buffer.getUint8(offset) },
+        <div class="code"><div class="wrapper">                content = { encoding: view.getUint8(offset) },
 </div></div>
       
       </div>
@@ -303,7 +310,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            offsetTrm = lib.locateStrTrm[enc](buffer, offsetBeg, length - <span class="hljs-number">4</span>);
+        <div class="code"><div class="wrapper">            offsetTrm = lib.locateStrTrm[enc](view, offsetBeg, length - <span class="hljs-number">4</span>);
             <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
                 <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
             }
@@ -319,9 +326,9 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](buffer, offsetBeg, offsetTrm - offsetBeg);
+        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](view, offsetBeg, offsetTrm - offsetBeg);
             offsetTrm += enc === <span class="hljs-string">"ucs"</span> ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>; <span class="hljs-comment">// Move past terminating sequence</span>
-            content.value = lib.readStr[enc](buffer, offsetTrm, offset + length - offsetTrm);
+            content.value = lib.readStr[enc](view, offsetTrm, offset + length - offsetTrm);
 
             <span class="hljs-keyword">return</span> content;
         },
@@ -345,8 +352,8 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentW = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
-            <span class="hljs-keyword">return</span> { value: lib.readStr.iso(buffer, offset, length) };
+        <div class="code"><div class="wrapper">        readFrameContentW = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+            <span class="hljs-keyword">return</span> { value: lib.readStr.iso(view, offset, length) };
         },
 </div></div>
       
@@ -371,7 +378,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentWxxx = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <div class="code"><div class="wrapper">        readFrameContentWxxx = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -384,7 +391,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">                content = { encoding: buffer.getUint8(offset) },
+        <div class="code"><div class="wrapper">                content = { encoding: view.getUint8(offset) },
 </div></div>
       
       </div>
@@ -428,7 +435,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            offsetTrm = lib.locateStrTrm[enc](buffer, offsetBeg, length - <span class="hljs-number">4</span>);
+        <div class="code"><div class="wrapper">            offsetTrm = lib.locateStrTrm[enc](view, offsetBeg, length - <span class="hljs-number">4</span>);
             <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
                 <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
             }
@@ -444,9 +451,9 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](buffer, offsetBeg, offsetTrm - offsetBeg);
+        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](view, offsetBeg, offsetTrm - offsetBeg);
             offsetTrm += enc === <span class="hljs-string">"ucs"</span> ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>; <span class="hljs-comment">// Move past terminating sequence</span>
-            content.value = lib.readStr.iso(buffer, offsetTrm, offset + length - offsetTrm);
+            content.value = lib.readStr.iso(view, offsetTrm, offset + length - offsetTrm);
 
             <span class="hljs-keyword">return</span> content;
         },
@@ -462,7 +469,8 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
  Consists of a frame header followed by encoding, language and content descriptors and
  ends with the actual comment as a text string. Newline characters are allowed in the
  comment text string. There may be more than one comment frame in each tag, but only one
- with the same language and content descriptor</p>
+ with the same language and content descriptor. [Note that the structure of comment
+ frames is identical to that of USLT frames - <code>readFrameContentComm</code> will handle both.]</p>
 <ul>
 <li>Encoding:    a single octet where 0 = ISO-8859-1, 1 = UCS-2</li>
 <li>Language:    3 digit (octet) lang-code (ISO-639-2)</li>
@@ -473,7 +481,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentComm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <div class="code"><div class="wrapper">        readFrameContentComm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -486,7 +494,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">                content = { encoding: buffer.getUint8(offset) },
+        <div class="code"><div class="wrapper">                content = { encoding: view.getUint8(offset) },
 </div></div>
       
       </div>
@@ -530,7 +538,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            content.language = lib.readTrmStr.iso(buffer, offset + <span class="hljs-number">1</span>, <span class="hljs-number">3</span>);
+        <div class="code"><div class="wrapper">            content.language = lib.readTrmStr.iso(view, offset + <span class="hljs-number">1</span>, <span class="hljs-number">3</span>);
 </div></div>
       
       </div>
@@ -543,7 +551,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            offsetTrm = lib.locateStrTrm[enc](buffer, offsetBeg, length - <span class="hljs-number">4</span>);
+        <div class="code"><div class="wrapper">            offsetTrm = lib.locateStrTrm[enc](view, offsetBeg, length - <span class="hljs-number">4</span>);
             <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
                 <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
             }
@@ -559,9 +567,9 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](buffer, offsetBeg, offsetTrm - offsetBeg);
+        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](view, offsetBeg, offsetTrm - offsetBeg);
             offsetTrm += enc === <span class="hljs-string">"ucs"</span> ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>; <span class="hljs-comment">// Move past terminating sequence</span>
-            content.text = lib.readStr[enc](buffer, offsetTrm, offset + length - offsetTrm);
+            content.text = lib.readStr[enc](view, offsetTrm, offset + length - offsetTrm);
 
             <span class="hljs-keyword">return</span> content;
         },
@@ -575,12 +583,13 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
           <div class="wrapper"><p>Read the content of a
  <a href="http://id3.org/id3v2.3.0#Unique_file_identifier">unique file identifier frame</a>. Allows
  identification of the audio file by means of some database that may contain more
- information relevant to the content. All frames begin with a null-terminated string - a
- URL containing an email address, or a link to a location where an email address can be
- found - that belongs to the organisation responsible for this specific database
- implementation. The &#39;Owner identifier&#39; must be non-empty (more than just a termination)
- and is followed by the actual identifier, which may be up to 64 bytes. There may be
- more than one &quot;UFID&quot; frame in a tag, but only one with the same &#39;Owner identifier&#39;.</p>
+ information relevant to the content. Begins with a URL containing an email address, or
+ a link to a location where an email address can be found that belongs to the
+ organisation responsible for this specific database implementation. The &#39;Owner
+ identifier&#39; must be non-empty (more than just a termination) and is followed by the
+ actual identifier, which may be up to 64 bytes. There may be more than one &quot;UFID&quot; frame
+ in a tag, but only one with the same &#39;Owner identifier&#39;. Note that this frame is very
+ similar to the &quot;PRIV&quot; frame</p>
 <ul>
 <li>Owner identifier: a text string (followed by 00)</li>
 <li>Identifier:       up to 64 bytes of binary data</li>
@@ -589,7 +598,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentUfid = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <div class="code"><div class="wrapper">        readFrameContentUfid = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -602,7 +611,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">                ownerIdentifier = lib.readTrmStr.iso(buffer, offset, length),
+        <div class="code"><div class="wrapper">                ownerIdentifier = lib.readTrmStr.iso(view, offset, length),
 </div></div>
       
       </div>
@@ -615,7 +624,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">                identifier = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DataView</span>(buffer.buffer, offset + ownerIdentifier.length + <span class="hljs-number">1</span>,
+        <div class="code"><div class="wrapper">                identifier = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DataView</span>(view.buffer, offset + ownerIdentifier.length + <span class="hljs-number">1</span>,
                     length - ownerIdentifier.length - <span class="hljs-number">1</span>);
 
             <span class="hljs-keyword">return</span> { ownerIdentifier: ownerIdentifier, identifier: identifier };
@@ -643,7 +652,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentIpls = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <div class="code"><div class="wrapper">        readFrameContentIpls = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -657,7 +666,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
       
         <div class="code"><div class="wrapper">                content = {
-                    encoding: buffer.getUint8(offset),
+                    encoding: view.getUint8(offset),
                     values: []
                 },
 
@@ -680,9 +689,9 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
 
             offsetBeg = offset + <span class="hljs-number">1</span>;
             <span class="hljs-keyword">while</span> (offsetBeg &lt; offset + length) {
-                offsetNextStrTrm = lib.locateStrTrm[enc](buffer, offsetBeg,
+                offsetNextStrTrm = lib.locateStrTrm[enc](view, offsetBeg,
                     length - (offsetBeg - offset));
-                content.values.push(lib.readStr[enc](buffer, offsetBeg,
+                content.values.push(lib.readStr[enc](view, offsetBeg,
                     offsetNextStrTrm - offsetBeg));
                 offsetBeg = offsetNextStrTrm + (enc === <span class="hljs-string">"ucs"</span> ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>);
             }
@@ -708,7 +717,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentUser = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset, length)</span> {</span>
+        <div class="code"><div class="wrapper">        readFrameContentUser = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -721,7 +730,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">                content = { encoding: buffer.getUint8(offset) },
+        <div class="code"><div class="wrapper">                content = { encoding: view.getUint8(offset) },
 </div></div>
       
       </div>
@@ -764,7 +773,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            content.language = lib.readTrmStr.iso(buffer, offset + <span class="hljs-number">1</span>, <span class="hljs-number">3</span>);
+        <div class="code"><div class="wrapper">            content.language = lib.readTrmStr.iso(view, offset + <span class="hljs-number">1</span>, <span class="hljs-number">3</span>);
 </div></div>
       
       </div>
@@ -777,7 +786,342 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">            content.text = lib.readStr[enc](buffer, offsetBeg, offset + length - offsetBeg);
+        <div class="code"><div class="wrapper">            content.text = lib.readStr[enc](view, offsetBeg, offset + length - offsetBeg);
+
+            <span class="hljs-keyword">return</span> content;
+        },
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read the content of a
+ <a href="http://id3.org/id3v2.3.0#Private_frame">private frame</a>. Contains binary data that does
+ no fit into the other frames. Begins with a URL containing an email address, or
+ a link to a location where an email address can be found. The &#39;Owner identifier&#39; must
+ be non-empty (more than just a termination) and is followed by the actual data. There
+ may be more than one &quot;PRIV&quot; frame in a tag, but only with different contents. Note that
+ this frame is very similar to the &quot;UFID&quot; frame</p>
+<ul>
+<li>Owner identifier: a text string (followed by 00)</li>
+<li>private data:     binary data (of unbounded length)</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        readFrameContentPriv = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+            <span class="hljs-keyword">var</span></div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read up to the first null terminator to get the owner-identifier</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                ownerIdentifier = lib.readTrmStr.iso(view, offset, length),
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Figure out the private data based on frame length vs owner-identifier length</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                privateData = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DataView</span>(view.buffer, offset + ownerIdentifier.length + <span class="hljs-number">1</span>,
+                    length - ownerIdentifier.length - <span class="hljs-number">1</span>);
+
+            <span class="hljs-keyword">return</span> { ownerIdentifier: ownerIdentifier, privateData: privateData };
+        },
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read the content of a <a href="http://id3.org/id3v2.3.0#Play_counter">play counter</a>. A counter
+ of the number of times a file has been played. There may only be one &quot;PCNT&quot; frame in a
+ tag. [According to the standard, &quot;When the counter reaches all one&#39;s, one byte is
+ inserted in front of the counter thus making the counter eight bits bigger.&quot; This is
+ not currently taken into account]</p>
+<ul>
+<li>Counter: 4 octets (at least ..)</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        readFrameContentPcnt = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>The counter must be at least 4 octets long to begin with</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-number">4</span>) {
+                <span class="hljs-keyword">return</span> {}; <span class="hljs-comment">// Inadequate length!</span>
+            }</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Assume the counter is always exactly 4 octets ..</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">return</span> { counter: view.getUint32(offset) };
+        },
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read the content of a <a href="http://id3.org/id3v2.3.0#Popularimeter">popularimeter</a>. Intended
+ as a measure for the file&#39;s popularity, it contains a user&#39;s email address, one rating
+ octet and a four octer play counter, intended to be increased with one for every time
+ the file is played. If no personal counter is wanted it may be omitted. [As is the case
+ for the &quot;PCNT&quot; frame, according to the standard, &quot;When the counter reaches all one&#39;s,
+ one byte is inserted in front of the counter thus making the counter eight bits
+ bigger.&quot; This is not currently taken into account]. There may be more than one &quot;POPM&quot;
+ frame in each tag, but only one with the same email address</p>
+<ul>
+<li>Email to user: a text string (followed by 00)</li>
+<li>Rating:        a single octet, values in 0-255 (0 = unknown, 1 = worst, 255 = best)</li>
+<li>Counter:       4 octets (at least ..)</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        readFrameContentPopm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+            <span class="hljs-keyword">var</span> content = {
+                    email: lib.readTrmStr.iso(view, offset, length)
+                };
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>rating offset</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            offset += content.email.length + <span class="hljs-number">1</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>email str term + rating + counter = at least 6 octets</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-number">6</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Inadequate length!</span>
+            }
+
+            content.rating = view.getUint8(offset);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Assume the counter is always exactly 4 octets ..</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            content.counter = view.getUint32(offset + <span class="hljs-number">1</span>);
+
+            <span class="hljs-keyword">return</span> content;
+        },
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read the content of an <a href="http://id3.org/id3v2.3.0#Attached_picture">attached picture</a>.
+ Contains a picture directly related to the audio file. In the event that the MIME media
+ type name is omitted, &quot;image/&quot; will be implied. The description has a maximum length of
+ 64 characters, but may be empty. There may be several pictures attached to one file,
+ each in their individual &quot;APIC&quot; frame, but only one with the same content descriptor.
+ There may only be one picture with the picture type declared as picture type $01 and
+ $02 respectively.</p>
+<ul>
+<li>Encoding:     a single octet where 0 = ISO-8859-1, 1 = UCS-2</li>
+<li>MIME Type:    a text string (followed by 00) - MIME type and subtype of image</li>
+<li>Picture type: a single octet, values in 0-255: a type-id as given by the standard</li>
+<li>Description:  a text string according to encoding (followed by 00 (00))</li>
+<li>Picture data: binary data (of unbounded length)</li>
+</ul>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">        readFrameContentApic = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+            <span class="hljs-keyword">var</span></div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>The content to be returned</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                content = { encoding: view.getUint8(offset) },
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Offsets</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">                offsetBeg, <span class="hljs-comment">// content beginning (MIME type)</span>
+                offsetTrm, <span class="hljs-comment">// content null-terminator (seperates descr / text fields)</span>
+
+                enc = content.encoding === <span class="hljs-number">0</span> ? <span class="hljs-string">"iso"</span> : <span class="hljs-string">"ucs"</span>;
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Encoding + MIME type string term + pic type octet + descr. string term = min 4 octets</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (length &lt; <span class="hljs-number">4</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Inadequate length!</span>
+            }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Locate the the null terminator seperating MIME type and picture type</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            offsetBeg = offset + <span class="hljs-number">1</span>; <span class="hljs-comment">// After the encoding octet</span>
+            offsetTrm = lib.locateStrTrm.iso(view, offsetBeg, length - <span class="hljs-number">1</span>);
+            <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
+            }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read MIME type</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            content.mimeType = lib.readStr.iso(view, offsetBeg, offsetTrm - offsetBeg);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read picture type</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            offsetBeg = offsetTrm + <span class="hljs-number">1</span>;
+            content.pictureType = view.getUint8(offsetBeg);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Locate the the null terminator seperating description and picture data</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            offsetBeg += <span class="hljs-number">1</span>;
+            offsetTrm = lib.locateStrTrm[enc](view, offsetBeg, offset + length - offsetBeg);
+            <span class="hljs-keyword">if</span> (offsetTrm === -<span class="hljs-number">1</span>) {
+                <span class="hljs-keyword">return</span> content; <span class="hljs-comment">// Not found!</span>
+            }
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read description</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            content.description = lib.readStr[enc](view, offsetBeg, offsetTrm - offsetBeg);
+</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Read picture data</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            offsetBeg = offsetTrm + (enc === <span class="hljs-string">"ucs"</span> ? <span class="hljs-number">2</span> : <span class="hljs-number">1</span>)
+            content.pictureData = <span class="hljs-keyword">new</span> <span class="hljs-built_in">DataView</span>(view.buffer, offsetBeg, offset + length - offsetBeg);
 
             <span class="hljs-keyword">return</span> content;
         };
@@ -789,12 +1133,12 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="comments ">
           <div class="wrapper"><h3 id="read-an-id3v2-tag-frame"><a href="#read-an-id3v2-tag-frame" class="anchor"></a>Read an ID3v2 Tag Frame</h3><p>Read <a href="http://id3.org/id3v2.3.0#Declared_ID3v2_frames">ID3v2 Tag frame</a> located at <code>offset</code>
- of DataView <code>buffer</code>. Returns null in the event that no tag-frame is found at <code>offset</code></p>
+ of DataView <code>view</code>. Returns null in the event that no tag-frame is found at <code>offset</code></p>
 </div>
         </div>
       
       
-        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2TagFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span></div></div>
+        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2TagFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset)</span> </span>{</div></div>
       
       </div>
     
@@ -814,10 +1158,10 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
       
         <div class="code"><div class="wrapper">        <span class="hljs-keyword">var</span> frame = {
                 header: {
-                    id: lib.readStr.iso(buffer, offset, <span class="hljs-number">4</span>),
-                    size: buffer.getUint32(offset + <span class="hljs-number">4</span>),
-                    flagsOctet1: buffer.getUint8(offset + <span class="hljs-number">8</span>),
-                    flagsOctet2: buffer.getUint8(offset + <span class="hljs-number">9</span>)
+                    id: lib.readStr.iso(view, offset, <span class="hljs-number">4</span>),
+                    size: view.getUint32(offset + <span class="hljs-number">4</span>),
+                    flagsOctet1: view.getUint8(offset + <span class="hljs-number">8</span>),
+                    flagsOctet2: view.getUint8(offset + <span class="hljs-number">9</span>)
                 }
             };
 </div></div>
@@ -858,7 +1202,7 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">        frame.content = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> {</span></div></div>
+        <div class="code"><div class="wrapper">        frame.content = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> </span>{</div></div>
       
       </div>
     
@@ -925,6 +1269,18 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
       <div class="segment">
       
         <div class="comments ">
+          <div class="wrapper"><p>Comment frames or Unsychronised lyrics/text transcription frames</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"COMM"</span> || id === <span class="hljs-string">"USLT"</span>) { <span class="hljs-keyword">return</span> readFrameContentComm; }</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
           <div class="wrapper"><p>Unique-file-identifier frames</p>
 </div>
         </div>
@@ -961,13 +1317,61 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
       <div class="segment">
       
         <div class="comments ">
+          <div class="wrapper"><p>Private frame</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"PRIV"</span>) { <span class="hljs-keyword">return</span> readFrameContentPriv; }</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Play counter</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"PCNT"</span>) { <span class="hljs-keyword">return</span> readFrameContentPcnt; }</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Popularimeter</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"POPM"</span>) { <span class="hljs-keyword">return</span> readFrameContentPopm; }</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>Attached picture</p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (id === <span class="hljs-string">"APIC"</span>) { <span class="hljs-keyword">return</span> readFrameContentApic; }</div></div>
+      
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
           <div class="wrapper"><p>Unknown frame - &#39;parse it&#39; using a no-op returning <code>undefined</code> content</p>
 </div>
         </div>
       
       
         <div class="code"><div class="wrapper">            <span class="hljs-keyword">return</span> lib.noOp;
-        }(frame.header.id))(buffer, offset + <span class="hljs-number">10</span>, frame.header.size);
+        }(frame.header.id))(view, offset + <span class="hljs-number">10</span>, frame.header.size);
 
         <span class="hljs-keyword">return</span> frame;
     };
@@ -979,13 +1383,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><h3 id="read-the-id3v2-tag"><a href="#read-the-id3v2-tag" class="anchor"></a>Read the ID3v2 Tag</h3><p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>buffer</code>. Returns
+          <div class="wrapper"><h3 id="read-the-id3v2-tag"><a href="#read-the-id3v2-tag" class="anchor"></a>Read the ID3v2 Tag</h3><p>Read <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of DataView <code>view</code>. Returns
  null in the event that no tag is found at <code>offset</code></p>
 </div>
         </div>
       
       
-        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(buffer, offset)</span> {</span>
+        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset)</span> </span>{
         offset || (offset = <span class="hljs-number">0</span>);
 </div></div>
       
@@ -1016,7 +1420,7 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (buffer.byteLength - offset &lt; <span class="hljs-number">10</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (view.byteLength - offset &lt; <span class="hljs-number">10</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 </div></div>
       
       </div>
@@ -1029,10 +1433,10 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!lib.isSeq(lib.seq.id3, buffer, offset)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!lib.isSeq(lib.seq.id3, view, offset)) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 
         <span class="hljs-keyword">var</span>
-            flagsOctet = buffer.getUint8(offset + <span class="hljs-number">5</span>),
+            flagsOctet = view.getUint8(offset + <span class="hljs-number">5</span>),
 
             tag = {
                 _section: {
@@ -1040,13 +1444,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
                     offset: offset
                 },
                 header: {
-                    majorVersion: buffer.getUint8(offset + <span class="hljs-number">3</span>),
-                    minorRevision: buffer.getUint8(offset + <span class="hljs-number">4</span>),
+                    majorVersion: view.getUint8(offset + <span class="hljs-number">3</span>),
+                    minorRevision: view.getUint8(offset + <span class="hljs-number">4</span>),
                     flagsOctet: flagsOctet,
                     unsynchronisationFlag: (flagsOctet &amp; <span class="hljs-number">128</span>) === <span class="hljs-number">128</span>,
                     extendedHeaderFlag: (flagsOctet &amp; <span class="hljs-number">64</span>) === <span class="hljs-number">64</span>,
                     experimentalIndicatorFlag: (flagsOctet &amp; <span class="hljs-number">32</span>) === <span class="hljs-number">32</span>,
-                    size: lib.unsynchsafe(buffer.getUint32(offset + <span class="hljs-number">6</span>))
+                    size: lib.unsynchsafe(view.getUint32(offset + <span class="hljs-number">6</span>))
                 },
                 frames: []
             },
@@ -1149,9 +1553,9 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (buffer.getUint32(offset) === <span class="hljs-number">0</span>) { <span class="hljs-keyword">break</span>; }
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">if</span> (view.getUint32(offset) === <span class="hljs-number">0</span>) { <span class="hljs-keyword">break</span>; }
 
-            frame = mp3Id3v2Parser.readId3v2TagFrame(buffer, offset);
+            frame = mp3Id3v2Parser.readId3v2TagFrame(view, offset);
 </div></div>
       
       </div>
@@ -1184,5 +1588,13 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
   <script src="../toc.js"></script>
   <script src="../assets/libs.js"></script>
   <script src="../assets/behavior.js"></script>
+
+  
+    
+      <script>
+        
+      </script>
+    
+  
 </body>
 </html>

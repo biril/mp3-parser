@@ -119,38 +119,38 @@ window.files = [
     },
     {
       "level": 3,
-      "slug": "readframeheader-buffer-offset-",
-      "title": "readFrameHeader(buffer, [offset])"
+      "slug": "readframeheader-view-offset-",
+      "title": "readFrameHeader(view, [offset])"
     },
     {
       "level": 3,
-      "slug": "readframe-buffer-offset-requirenextframe-",
-      "title": "readFrame(buffer, [offset[, requireNextFrame]])"
+      "slug": "readframe-view-offset-requirenextframe-",
+      "title": "readFrame(view, [offset[, requireNextFrame]])"
     },
     {
       "level": 3,
-      "slug": "readlastframe-buffer-offset-requirenextframe-",
-      "title": "readLastFrame(buffer, [offset[, requireNextFrame]])"
+      "slug": "readlastframe-view-offset-requirenextframe-",
+      "title": "readLastFrame(view, [offset[, requireNextFrame]])"
     },
     {
       "level": 3,
-      "slug": "readid3v2tag-buffer-offset-",
-      "title": "readId3v2Tag(buffer[, offset])"
+      "slug": "readid3v2tag-view-offset-",
+      "title": "readId3v2Tag(view[, offset])"
     },
     {
       "level": 3,
-      "slug": "readxingtag-buffer-offset-",
-      "title": "readXingTag(buffer[, offset])"
+      "slug": "readxingtag-view-offset-",
+      "title": "readXingTag(view[, offset])"
     },
     {
       "level": 3,
-      "slug": "readtags-buffer-offset-",
-      "title": "readTags(buffer[, offset])"
+      "slug": "readtags-view-offset-",
+      "title": "readTags(view[, offset])"
     },
     {
       "level": 2,
-      "slug": "i-suggest-that-you-also",
-      "title": "I suggest that you also"
+      "slug": "you-may-also-want-to",
+      "title": "You may also want to"
     },
     {
       "level": 2,

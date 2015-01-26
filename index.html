@@ -5,6 +5,13 @@
   <title>mp3 Parser - README.md</title>
 
   <link rel="stylesheet" href="assets/style.css">
+  
+    
+      <style>
+        
+      </style>
+    
+  
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
   <meta name="groc-relative-root" content=""/>
@@ -28,12 +35,10 @@
           <div class="wrapper"><h1 id="mp3-parser"><a href="#mp3-parser" class="anchor"></a>mp3 Parser</h1><p><a href="https://travis-ci.org/biril/mp3-parser"><img src="https://travis-ci.org/biril/mp3-parser.png" alt="Build Status"></a>
 <a href="http://badge.fury.io/js/mp3-parser"><img src="https://badge.fury.io/js/mp3-parser.png" alt="NPM version"></a>
 <a href="http://badge.fury.io/bo/mp3-parser"><img src="https://badge.fury.io/bo/mp3-parser.png" alt="Bower version"></a></p>
-<p>Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For each of
-these sections present within a given mp3 file, mp3 Parser will provide data indicating their
-presence, their boundaries within the file, as well as any available informative data. In the
-current implementation, the latter is strictly true only for frames as thorough parsing and
-data-extraction from ID3v2 and Xing/Lame tags is work in progress. The primary use case (and raison
-d&#39;etre) for this initial revision is performing precise cuts at frame / tag boundaries.</p>
+<p>Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For any of
+these found within a given mp3 buffer, mp3 Parser will provide data indicating their presence,
+their position within the buffer, as well as relevant informative data (with varying degrees of
+detail).</p>
 <h2 id="set-up"><a href="#set-up" class="anchor"></a>Set up</h2><p>To use mp3 Parser</p>
 <ul>
 <li>install with bower, <code>bower install mp3-parser</code> or</li>
@@ -52,7 +57,7 @@ the current environment:</p>
 </li>
 <li><p>When working <em>with an AMD loader</em> (e.g. requireJS):</p>
 <pre><code class="lang-javascript">  <span class="hljs-comment">// Your module</span>
-  define([<span class="hljs-string">"path/to/mp3-parser/main"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> {</span>
+  define([<span class="hljs-string">"path/to/mp3-parser/main"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> </span>{
       <span class="hljs-keyword">var</span> mp3Tags = mp3Parser.readTags(someMp3DataView);
   });
 </code></pre>
@@ -68,7 +73,7 @@ the current environment:</p>
   })
 
   <span class="hljs-comment">// .. and refer to mp3-parser module by its given package name</span>
-  define([<span class="hljs-string">"mp3-parser"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> {</span>
+  define([<span class="hljs-string">"mp3-parser"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> </span>{
       <span class="hljs-keyword">var</span> mp3Tags = mp3Parser.readTags(someMp3DataView);
   });
 </code></pre>
@@ -76,8 +81,8 @@ the current environment:</p>
 </ul>
 <ul>
 <li><p>Setting up mp3 Parser in projects targetting <em>browsers, without an AMD module loader</em>, is
-  unfortunately quite verbose as a number of files need to be included (in specific order). This
-  should be mitigated in the future, but for now you would need:</p>
+  unfortunately quite verbose as it relies on the (order-specific) inclusion of a number of
+  sources. This should be mitigated in the future, but for now you would need:</p>
 <pre><code class="lang-html">  ...
   <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/lib.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
   <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/xing.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
@@ -90,7 +95,7 @@ the current environment:</p>
 </code></pre>
 </li>
 </ul>
-<h2 id="usage"><a href="#usage" class="anchor"></a>Usage</h2><p>The parser exposes a collection of <code>read____</code> methods, each dedicated to reading a specific section
+<h2 id="usage"><a href="#usage" class="anchor"></a>Usage</h2><p>The parser&#39;s API consists of <code>read____</code> methods, each dedicated to reading a specific section
 of the mp3 file. The current implementation includes <code>readFrameHeader</code>, <code>readFrame</code>,
 <code>readLastFrame</code>, <code>readId3v2Tag</code>, <code>readXingTag</code> and <code>readTags</code>. Each of these accepts a
 <a href="http://www.khronos.org/registry/typedarray/specs/latest/#8">DataView</a>-wrapped ArrayBuffer
@@ -98,38 +103,179 @@ containing the mp3 data, and optionally an offset into the buffer.</p>
 <p>In all cases, a &#39;description&#39; will be returned - a hash containing key-value pairs relevant to the
 specific mp3 section being read. For example the hash returned by <code>readFrameHeader</code> will include an
 <code>mpegAudioVersion</code> key of value &quot;MPEG Version 1 (ISO/IEC 11172-3)&quot; and a <code>layerDescription</code> key
-of value &quot;Layer III&quot;. A description will always have a <code>_section</code> hash with <code>type</code>, <code>byteLength</code>
-and <code>offset</code> keys:</p>
+of value &quot;Layer III&quot;. A section description will always include a <code>_section</code> attribute - a hash
+with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p>
 <ul>
 <li><code>type</code>: &quot;frame&quot;, &quot;frameHeader&quot;, &quot;Xing&quot; or &quot;ID3v2&quot;</li>
 <li><code>byteLenfth</code>: Size of the section in bytes</li>
 <li><code>offset</code>: Buffer offset at which this section resides</li>
 </ul>
 <p>In further detail:</p>
-<h3 id="readframeheader-buffer-offset-"><a href="#readframeheader-buffer-offset-" class="anchor"></a>readFrameHeader(buffer, [offset])</h3><p>Read and return description of header of frame located at <code>offset</code> of DataView <code>buffer</code>. Returns
+<h3 id="readframeheader-view-offset-"><a href="#readframeheader-view-offset-" class="anchor"></a>readFrameHeader(view, [offset])</h3><p>Read and return description of header of frame located at <code>offset</code> of DataView <code>view</code>. Returns
 <code>null</code> in the event that no frame header is found at <code>offset</code>.</p>
-<h3 id="readframe-buffer-offset-requirenextframe-"><a href="#readframe-buffer-offset-requirenextframe-" class="anchor"></a>readFrame(buffer, [offset[, requireNextFrame]])</h3><p>Read and return description of frame located at <code>offset</code> of DataView <code>buffer</code>. Includes the frame
-header description (see <code>readFrameHeader</code>) plus some basic information about the frame - notably
-the frame&#39;s length in bytes. If <code>requireNextFrame</code> is set, the presence of a <em>next</em> valid frame
-will be required for <em>this</em> frame to be regarded as valid. Returns <code>null</code> in the event that no
-frame is found at <code>offset</code>.</p>
-<h3 id="readlastframe-buffer-offset-requirenextframe-"><a href="#readlastframe-buffer-offset-requirenextframe-" class="anchor"></a>readLastFrame(buffer, [offset[, requireNextFrame]])</h3><p>Locate and return description of the very last valid frame in given DataView <code>buffer</code>. The search
-is carried out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code> is ommitted) to
-the first octet in the buffer. If <code>requireNextFrame</code> is set, the presence of a next valid frame
-will be required for any found frame to be regarded as valid (causing the method to essentially
-return the next-to-last frame on success). Returns <code>null</code> in the event that no frame is found at
-<code>offset</code>.</p>
-<h3 id="readid3v2tag-buffer-offset-"><a href="#readid3v2tag-buffer-offset-" class="anchor"></a>readId3v2Tag(buffer[, offset])</h3><p>Read and return description of <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of
-DataView <code>buffer</code>. (This will include any and all
+<p>As an example description:</p>
+<pre><code class="lang-javascript">{
+    _section: {
+        type: <span class="hljs-string">'frameHeader'</span>,
+        offset: <span class="hljs-number">99934</span>,
+        byteLength: <span class="hljs-number">4</span>
+    },
+    mpegAudioVersionBits: <span class="hljs-string">'11'</span>,
+    mpegAudioVersion: <span class="hljs-string">'MPEG Version 1 (ISO/IEC 11172-3)'</span>,
+    layerDescriptionBits: <span class="hljs-string">'01'</span>,
+    layerDescription: <span class="hljs-string">'Layer III'</span>,
+    isProtected: <span class="hljs-number">1</span>,
+    protectionBit: <span class="hljs-string">'1'</span>,
+    bitrateBits: <span class="hljs-string">'1001'</span>,
+    bitrate: <span class="hljs-number">128</span>,
+    samplingRateBits: <span class="hljs-string">'00'</span>,
+    samplingRate: <span class="hljs-number">44100</span>,
+    frameIsPaddedBit: <span class="hljs-string">'1'</span>,
+    frameIsPadded: <span class="hljs-literal">true</span>,
+    framePadding: <span class="hljs-number">1</span>,
+    privateBit: <span class="hljs-string">'0'</span>,
+    channelModeBits: <span class="hljs-string">'01'</span>,
+    channelMode: <span class="hljs-string">'Joint stereo (Stereo)'</span>
+}
+</code></pre>
+<h3 id="readframe-view-offset-requirenextframe-"><a href="#readframe-view-offset-requirenextframe-" class="anchor"></a>readFrame(view, [offset[, requireNextFrame]])</h3><p>Read and return description of frame located at <code>offset</code> of DataView <code>view</code>. Includes the frame
+header description (see <code>readFrameHeader</code>) plus basic information about the frame: The frame&#39;s
+length in bytes and the index of the next frame <em>if</em> <code>requireNextFrame</code> is set. In this case, the
+presence of a <em>next</em> valid frame will be required for <em>this</em> frame to be regarded as valid. Returns
+<code>null</code> in the event that no frame is found at <code>offset</code>.</p>
+<p>As an example description:</p>
+<pre><code class="lang-javascript">{
+    _section: {
+        type: <span class="hljs-string">'frame'</span>,
+        offset: <span class="hljs-number">99934</span>,
+        byteLength: <span class="hljs-number">418</span>,
+        sampleLength: <span class="hljs-number">1152</span>,
+        nextFrameIndex: <span class="hljs-number">100352</span> <span class="hljs-comment">// Available iff 'requireNextFrame'</span>
+    },
+    header: { <span class="hljs-comment">/* .. a frame header description .. */</span> }
+}
+</code></pre>
+<h3 id="readlastframe-view-offset-requirenextframe-"><a href="#readlastframe-view-offset-requirenextframe-" class="anchor"></a>readLastFrame(view, [offset[, requireNextFrame]])</h3><p>Locate and return the description of the very last valid frame in given DataView <code>view</code>. The search
+is carried out in reverse, from given <code>offset</code> (or the very last octet if <code>offset</code> is omitted) to
+the buffer&#39;s beginning. If <code>requireNextFrame</code> is set, the presence of a next valid frame will be
+required for any found frame to be regarded as valid (causing the method to essentially return the
+next-to-last frame on success). Returns <code>null</code> in the event that no frame is found at <code>offset</code>.</p>
+<h3 id="readid3v2tag-view-offset-"><a href="#readid3v2tag-view-offset-" class="anchor"></a>readId3v2Tag(view[, offset])</h3><p>Read and return description of <a href="http://id3.org/id3v2.3.0">ID3v2 Tag</a> located at <code>offset</code> of
+DataView <code>view</code>. (This will include any and all
 <a href="https://github.com/biril/mp3-parser/wiki">currently supported ID3v2 frames</a> located within the
 tag). Returns <code>null</code> in the event that no tag is found at <code>offset</code>.</p>
-<h3 id="readxingtag-buffer-offset-"><a href="#readxingtag-buffer-offset-" class="anchor"></a>readXingTag(buffer[, offset])</h3><p>Read and return description of <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a>
-located at <code>offset</code> of DataView <code>buffer</code>. Returns <code>null</code> in the event that no frame is found at
+<p>As an example description:</p>
+<pre><code class="lang-javascript">{
+    _section: {
+        type: <span class="hljs-string">'ID3v2'</span>,
+        offset: <span class="hljs-number">0</span>,
+        byteLength: <span class="hljs-number">2048</span>
+    },
+    header: {
+        majorVersion: <span class="hljs-number">3</span>,
+        minorRevision: <span class="hljs-number">0</span>,
+        flagsOctet: <span class="hljs-number">0</span>,
+        unsynchronisationFlag: <span class="hljs-literal">false</span>,
+        extendedHeaderFlag: <span class="hljs-literal">false</span>,
+        experimentalIndicatorFlag: <span class="hljs-literal">false</span>,
+        size: <span class="hljs-number">2038</span>
+    },
+    frames: [{
+        header: {
+            id: <span class="hljs-string">'TIT2'</span>,
+            size: <span class="hljs-number">12</span>,
+            flagsOctet1: <span class="hljs-number">0</span>,
+            flagsOctet2: <span class="hljs-number">0</span>
+        },
+        name: <span class="hljs-string">'Title/songname/content description'</span>,
+        content: {
+            encoding: <span class="hljs-number">0</span>,
+            value: <span class="hljs-string">'Flight Path'</span>
+        }
+    }, {
+        header: {
+            id: <span class="hljs-string">'TPUB'</span>,
+            size: <span class="hljs-number">10</span>,
+            flagsOctet1: <span class="hljs-number">0</span>,
+            flagsOctet2: <span class="hljs-number">0</span>
+        },
+        name: <span class="hljs-string">'Publisher'</span>,
+        content: {
+            encoding: <span class="hljs-number">0</span>,
+            value: <span class="hljs-string">'Planet Mu'</span>
+        }
+    }, {
+        header: {
+            id: <span class="hljs-string">'TCON'</span>,
+            size: <span class="hljs-number">4</span>,
+            flagsOctet1: <span class="hljs-number">0</span>,
+            flagsOctet2: <span class="hljs-number">0</span>
+        },
+        name: <span class="hljs-string">'Content type'</span>,
+        content: {
+            encoding: <span class="hljs-number">0</span>,
+            value: <span class="hljs-string">'(3)'</span>
+        }
+    }, {
+        header: {
+            id: <span class="hljs-string">'TALB'</span>,
+            size: <span class="hljs-number">9</span>,
+            flagsOctet1: <span class="hljs-number">0</span>,
+            flagsOctet2: <span class="hljs-number">0</span>
+        },
+        name: <span class="hljs-string">'Album/Movie/Show title'</span>,
+        content: {
+            encoding: <span class="hljs-number">0</span>,
+            value: <span class="hljs-string">'Severant'</span>
+        }
+    }, {
+        header: {
+            id: <span class="hljs-string">'TRCK'</span>,
+            size: <span class="hljs-number">3</span>,
+            flagsOctet1: <span class="hljs-number">0</span>,
+            flagsOctet2: <span class="hljs-number">0</span>
+        },
+        name: <span class="hljs-string">'Track number/Position in set'</span>,
+        content: {
+            encoding: <span class="hljs-number">0</span>,
+            value: <span class="hljs-string">'11'</span>
+        }
+    }, {
+        header: {
+            id: <span class="hljs-string">'TYER'</span>,
+            size: <span class="hljs-number">5</span>,
+            flagsOctet1: <span class="hljs-number">0</span>,
+            flagsOctet2: <span class="hljs-number">0</span>
+        },
+        name: <span class="hljs-string">'Year'</span>,
+        content: {
+            encoding: <span class="hljs-number">0</span>,
+            value: <span class="hljs-string">'2011'</span>
+        }
+    }, {
+        <span class="hljs-comment">/* .. more frames follow .. */</span>
+    }]
+}
+</code></pre>
+<h3 id="readxingtag-view-offset-"><a href="#readxingtag-view-offset-" class="anchor"></a>readXingTag(view[, offset])</h3><p>Read and return description of <a href="http://gabriel.mp3-tech.org/mp3infotag.html">Xing / Lame Tag</a>
+located at <code>offset</code> of DataView <code>view</code>. Returns <code>null</code> in the event that no frame is found at
 <code>offset</code>.</p>
-<h3 id="readtags-buffer-offset-"><a href="#readtags-buffer-offset-" class="anchor"></a>readTags(buffer[, offset])</h3><p>Read and return descriptions of all tags found up to (and additionally including) the very first
+<p>As an example description:</p>
+<pre><code class="lang-javascript">{
+    _section: {
+        type: <span class="hljs-string">'Xing'</span>,
+        offset: <span class="hljs-number">2462</span>,
+        byteLength: <span class="hljs-number">417</span>,
+        nextFrameIndex: <span class="hljs-number">2879</span>
+    },
+    header: { <span class="hljs-comment">/* .. a frame header description .. */</span> },
+    identifier: <span class="hljs-string">'Xing'</span> <span class="hljs-comment">// Or 'Info' if Lame tag</span>
+}
+</code></pre>
+<h3 id="readtags-view-offset-"><a href="#readtags-view-offset-" class="anchor"></a>readTags(view[, offset])</h3><p>Read and return descriptions of all tags found up to (and additionally including) the very first
 frame. Returns an array of descriptions which may include that of a located ID3V2 tag, of a located
 Xing / Lame tag and of a located first frame.</p>
-<h2 id="i-suggest-that-you-also"><a href="#i-suggest-that-you-also" class="anchor"></a>I suggest that you also</h2><ul>
+<h2 id="you-may-also-want-to"><a href="#you-may-also-want-to" class="anchor"></a>You may also want to</h2><ul>
 <li>View the <a href="http://biril.github.io/mp3-parser/">annotated version of the source</a>.</li>
 <li>Try out the <a href="https://github.com/biril/mp3-parser/tree/master/examples/browser">browser</a>
   &amp; <a href="https://github.com/biril/mp3-parser/tree/master/examples/node">node</a> examples.</li>
@@ -137,7 +283,7 @@ Xing / Lame tag and of a located first frame.</p>
   list of currently (un)supported ID3v2 tag frames.</li>
 </ul>
 <h2 id="license"><a href="#license" class="anchor"></a>License</h2><p>Licensed and freely distributed under the MIT License (LICENSE.txt).</p>
-<p>Copyright (c) 2013-2014 Alex Lambiris</p>
+<p>Copyright (c) 2013-2015 Alex Lambiris</p>
 </div>
         </div>
       
@@ -150,5 +296,13 @@ Xing / Lame tag and of a located first frame.</p>
   <script src="toc.js"></script>
   <script src="assets/libs.js"></script>
   <script src="assets/behavior.js"></script>
+
+  
+    
+      <script>
+        
+      </script>
+    
+  
 </body>
 </html>
