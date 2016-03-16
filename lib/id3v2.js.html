@@ -32,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/id3v2 v0.<span class="hljs-number">2.5</span>
+          <div class="wrapper"><pre><code>mp3-parser/id3v2 v0<span class="hljs-number">.2</span><span class="hljs-number">.6</span>
 </code></pre></div>
         </div>
       
@@ -61,7 +61,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
 <span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
-(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> </span>{
+(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
       
@@ -117,14 +117,14 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> previousMp3Id3v2Parser = globalObject.mp3Id3v2Parser;
     createModule(globalObject.mp3Id3v2Parser = {
-        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
             <span class="hljs-keyword">var</span> mp3Id3v2Parser = globalObject.mp3Id3v2Parser;
             globalObject.mp3Id3v2Parser = previousMp3Id3v2Parser;
-            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> mp3Id3v2Parser; }).call();
+            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> mp3Id3v2Parser; }).call();
         }
-    }, globalObject.lib);
+    }, globalObject.mp3ParserLib);
 
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Id3v2Parser, lib)</span> </span>{
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">mp3Id3v2Parser, lib</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 
     <span class="hljs-keyword">var</span> id3v2TagFrameNames = {
@@ -225,7 +225,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentT = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentT = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span> content = { encoding: view.getUint8(offset) };
             content.value = lib.readStr[content.encoding === <span class="hljs-number">0</span> ? <span class="hljs-string">'iso'</span> : <span class="hljs-string">'ucs'</span>](
                 view, offset + <span class="hljs-number">1</span>, length - <span class="hljs-number">1</span>);
@@ -239,7 +239,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="comments ">
           <div class="wrapper"><p>Read the content of a
- (user-defined text-information frame)[<a href="http://id3.org/id3v2.3.0#User_defined_text_information_frame">http://id3.org/id3v2.3.0#User_defined_text_information_frame</a>].
+ <a href="http://id3.org/id3v2.3.0#User_defined_text_information_frame">user-defined text-information frame</a>.
  Intended for one-string text information concerning the audiofile in a similar way to
  the other &quot;T&quot;-frames. The frame body consists of a description of the string,
  represented as a terminated string, followed by the actual string. There may be more
@@ -253,7 +253,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentTxxx = <span class="hljs-function"><span class="hljs-keyword">function</span>  <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentTxxx = <span class="hljs-function"><span class="hljs-keyword">function</span>  (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -352,7 +352,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentW = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentW = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">return</span> { value: lib.readStr.iso(view, offset, length) };
         },
 </div></div>
@@ -378,7 +378,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentWxxx = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentWxxx = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -481,7 +481,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentComm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentComm = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -598,7 +598,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentUfid = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentUfid = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -652,7 +652,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentIpls = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentIpls = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -717,7 +717,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentUser = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentUser = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -812,7 +812,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentPriv = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentPriv = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -862,7 +862,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentPcnt = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{</div></div>
+        <div class="code"><div class="wrapper">        readFrameContentPcnt = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{</div></div>
       
       </div>
     
@@ -914,7 +914,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentPopm = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentPopm = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span> content = {
                     email: lib.readTrmStr.iso(view, offset, length)
                 };
@@ -989,7 +989,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        readFrameContentApic = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset, length)</span> </span>{
+        <div class="code"><div class="wrapper">        readFrameContentApic = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, length</span>) </span>{
             <span class="hljs-keyword">var</span></div></div>
       
       </div>
@@ -1138,7 +1138,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2TagFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset)</span> </span>{</div></div>
+        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2TagFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{</div></div>
       
       </div>
     
@@ -1202,7 +1202,7 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">        frame.content = (<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> </span>{</div></div>
+        <div class="code"><div class="wrapper">        frame.content = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">id</span>) </span>{</div></div>
       
       </div>
     
@@ -1389,7 +1389,7 @@ information. The frame header is 10 octets long and laid out as <code>IIIISSSSFF
         </div>
       
       
-        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset)</span> </span>{
+        <div class="code"><div class="wrapper">    mp3Id3v2Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{
         offset || (offset = <span class="hljs-number">0</span>);
 </div></div>
       

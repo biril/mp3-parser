@@ -32,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-<span class="hljs-keyword">parser</span>/xing v0.<span class="hljs-number">2.5</span>
+          <div class="wrapper"><pre><code>mp3-parser/xing v0<span class="hljs-number">.2</span><span class="hljs-number">.6</span>
 </code></pre></div>
         </div>
       
@@ -61,7 +61,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
 <span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
-(<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(globalObject, createModule)</span> </span>{
+(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
       
@@ -117,14 +117,14 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
         <div class="code"><div class="wrapper">    <span class="hljs-keyword">var</span> previousMp3XingParser = globalObject.mp3XingParser;
     createModule(globalObject.mp3XingParser = {
-        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{
+        noConflict: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
             <span class="hljs-keyword">var</span> mp3XingParser = globalObject.mp3XingParser;
             globalObject.mp3XingParser = previousMp3XingParser;
-            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">()</span> </span>{ <span class="hljs-keyword">return</span> mp3XingParser; }).call();
+            <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> mp3XingParser; }).call();
         }
-    }, globalObject.lib);
+    }, globalObject.mp3ParserLib);
 
-}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(xingParser, lib)</span> </span>{
+}(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">xingParser, lib</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
       
@@ -139,7 +139,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">    xingParser.readXingTag = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(view, offset)</span> </span>{
+        <div class="code"><div class="wrapper">    xingParser.readXingTag = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{
         offset || (offset = <span class="hljs-number">0</span>);
 
         <span class="hljs-keyword">var</span> tag = {

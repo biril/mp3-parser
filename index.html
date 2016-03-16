@@ -57,7 +57,7 @@ the current environment:</p>
 </li>
 <li><p>When working <em>with an AMD loader</em> (e.g. requireJS):</p>
 <pre><code class="lang-javascript">  <span class="hljs-comment">// Your module</span>
-  define([<span class="hljs-string">"path/to/mp3-parser/main"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> </span>{
+  define([<span class="hljs-string">"path/to/mp3-parser/main"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">mp3Parser</span>) </span>{
       <span class="hljs-keyword">var</span> mp3Tags = mp3Parser.readTags(someMp3DataView);
   });
 </code></pre>
@@ -73,7 +73,7 @@ the current environment:</p>
   })
 
   <span class="hljs-comment">// .. and refer to mp3-parser module by its given package name</span>
-  define([<span class="hljs-string">"mp3-parser"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(mp3Parser)</span> </span>{
+  define([<span class="hljs-string">"mp3-parser"</span>], <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">mp3Parser</span>) </span>{
       <span class="hljs-keyword">var</span> mp3Tags = mp3Parser.readTags(someMp3DataView);
   });
 </code></pre>
@@ -84,10 +84,10 @@ the current environment:</p>
   unfortunately quite verbose as it relies on the (order-specific) inclusion of a number of
   sources. This should be mitigated in the future, but for now you would need:</p>
 <pre><code class="lang-html">  ...
-  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/lib.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/xing.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/id3v2.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
-  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/main.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/lib.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/xing.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/lib/id3v2.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"path/to/mp3-parser/main.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
   ...
 </code></pre>
 <p>  which would export the <code>mp3Parser</code> global:</p>
@@ -283,7 +283,7 @@ Xing / Lame tag and of a located first frame.</p>
   list of currently (un)supported ID3v2 tag frames.</li>
 </ul>
 <h2 id="license"><a href="#license" class="anchor"></a>License</h2><p>Licensed and freely distributed under the MIT License (LICENSE.txt).</p>
-<p>Copyright (c) 2013-2015 Alex Lambiris</p>
+<p>Copyright (c) 2013-2016 Alex Lambiris</p>
 </div>
         </div>
       
