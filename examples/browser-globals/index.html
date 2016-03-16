@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>mp3 Parser example - globals</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+  </head>
+  <body>
+
+    <div class="output"></div>
+
+    <script type="text/javascript" src="bower_components/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="bower_components/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript" src="bower_components/mp3-parser/lib/lib.js"></script>
+    <script type="text/javascript" src="bower_components/mp3-parser/lib/xing.js"></script>
+    <script type="text/javascript" src="bower_components/mp3-parser/lib/id3v2.js"></script>
+    <script type="text/javascript" src="bower_components/mp3-parser/main.js"></script>
+
+    <script type="text/javascript">
+      var error = false;
+
+      try { mp3Parser.readTags(new DataView(new ArrayBuffer(100))); }
+      catch (someError) { error = someError; }
+
+      $('.output').text(error ? 'Oops! ' + error : 'mp3Parser is up and running!');
+    </script>
+
+  </body>
+</html>
+
+
