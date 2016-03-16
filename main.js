@@ -31,7 +31,7 @@
             globalObject.mp3Parser = previousMp3Parser;
             return (this.noConflict = function () { return mp3Parser; }).call();
         }
-    }, globalObject.lib, globalObject.mp3Id3v2Parser, globalObject.mp3XingParser);
+    }, globalObject.mp3ParserLib, globalObject.mp3Id3v2Parser, globalObject.mp3XingParser);
 
 }(this, function (mp3Parser, lib, id3v2Parser, xingParser) {
     "use strict";
