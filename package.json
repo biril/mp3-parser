@@ -18,12 +18,13 @@
   "devDependencies": {
     "grock": "^0.3.8",
     "jasmine-node": "^1.14.5",
+    "jscs": "^2.11.0",
     "jshint": "^2.9.1",
     "underscore": "^1.8.3"
   },
   "scripts": {
     "test": "jasmine-node --verbose --color --captureExceptions ./test/spec/",
-    "lint": "jshint --show-non-errors main.js test/spec/",
+    "lint": "jshint --show-non-errors main.js test/spec/ && jscs main.js test/spec/",
     "generate-docs": "grock --glob './lib/*.js' --glob './main.js' --glob './README.md' --index 'README.md' --verbose"
   },
   "engines": {
