@@ -20,7 +20,8 @@
 
     // Global `exports` object signifies CommonJS enviroments with `module.exports`, e.g. Node
     if (typeof exports === "object") {
-        return createModule(exports, require("./lib/lib"), require("./lib/id3v2"), require("./lib/xing"));
+        return createModule(exports, require("./lib/lib"), require("./lib/id3v2"),
+            require("./lib/xing"));
     }
 
     // If none of the above, then assume a browser sans AMD (also attach a `noConflict`)

@@ -75,13 +75,13 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
                 name: "Attached picture",
                 expected: {
                     frame1: {
-                        mimeType: 'MIME type 1',
+                        mimeType: "MIME type 1",
                         pictureType: 3, // code of 'Cover (front)' picture type
                         description: "αβγ Description of the first attached picture",
                         pictureData: _.range(32)
                     },
                     frame2: {
-                        mimeType: 'MIME type 2',
+                        mimeType: "MIME type 2",
                         pictureType: 4, // code of 'Cover (back)' picture type
                         description: "αβγ Description of the second attached picture",
                         pictureData: _.range(64)
@@ -103,7 +103,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
                     },
                     withHalfLang: {
                         description: "commentWithHalfLang",
-                        text: "αβγ This comment has a language field of value 'en' (inadequate length)",
+                        text: "αβγ This comment has a language field of value 'en' " +
+                            "(inadequate length)",
                         language: "en"
                     }
                 }
@@ -203,7 +204,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
             //  points - why would TSIZ which is supposed to contain the "size of file in bytes,
             //  excluding ID3v2 tag" be encoded as a T-frame?? ..
             TALB: { name: "Album/Movie/Show title" },
-            TBPM: { name: "BPM (beats per minute)"}, // Integer represented as a numeric string
+            TBPM: { name: "BPM (beats per minute)" }, // Integer represented as a numeric string
             TCOM: { name: "Composer" },
             TCON: { name: "Content type" },
             TCOP: { name: "Copyright message" }, // Begins with a year followed by space character
@@ -270,7 +271,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
                     },
                     withHalfLang: {
                         description: "lyricsWithHalfLang",
-                        text: "αβγ This lyrics frame has a language field of value 'en' (inadequate length)",
+                        text: "αβγ This lyrics frame has a language field of value 'en' " +
+                            "(inadequate length)",
                         language: "en"
                     }
                 }

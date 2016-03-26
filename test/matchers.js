@@ -35,10 +35,17 @@ module.exports = {
     asDataViewToEqual: function (expected) {
         var getExpectedValue = _.isArray(expected) ?
                 function (i) { return expected[i]; } :
-                function (i) { return expected.getUint8(i); },
+                function (i) { return expected.getUint8(i);
+            },
             getExpectedLength = _.isArray(expected) ?
-                function (i) { return expected.length; } :
-                function (i) { return expected.byteLength; },
+                function () { return expected.length; } :
+                function () { return expected.byteLength;
+            },
+            buildFailMessage = function (expected, actual, index) {
+                return "Expected " + dumpCollection(actual) + " to be a DataView with elements " +
+                    dumpCollection(expected) + ". (Expected " + getExpectedValue(index) +
+                    " at index " + index + ", got " + actual.getUint8(index) + ")";
+            },
             i;
 
         if (this.actual.byteLength !== getExpectedLength()) {
@@ -51,12 +58,7 @@ module.exports = {
 
         for (i = 0; i < this.actual.byteLength; ++i) {
             if (this.actual.getUint8(i) !== getExpectedValue(i)) {
-                this.message = function () {
-                    return "Expected " + dumpCollection(this.actual) +
-                        " to be a DataView with elements " + dumpCollection(expected) +
-                        ". (Expected " + getExpectedValue(i) + " at index " + i + ", got " +
-                        this.actual.getUint8(i) + ")";
-                };
+                this.message = buildFailMessage(expected, this.actual, i);
                 return false;
             }
         }
