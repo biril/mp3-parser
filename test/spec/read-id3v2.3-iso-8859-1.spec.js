@@ -3,7 +3,7 @@
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
-//     Copyright (c) 2013 Alex Lambiris
+//     Copyright (c) 2013-2016 Alex Lambiris
 
 /*jshint node:true */
 /*global describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
