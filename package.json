@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test": "jasmine-node --verbose --color --captureExceptions ./test/spec/",
-    "lint": "jshint --show-non-errors main.js test/spec/ && jscs main.js test/spec/",
+    "lint": "jshint --show-non-errors main.js lib/ test/spec/ && jscs main.js lib/ test/spec/",
     "generate-docs": "grock --glob './lib/*.js' --glob './main.js' --glob './README.md' --index 'README.md' --verbose"
   },
   "engines": {
