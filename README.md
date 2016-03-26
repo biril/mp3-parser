@@ -307,7 +307,8 @@ You may also want to
 --------------------
 
 * View the [annotated version of the source](http://biril.github.io/mp3-parser/).
-* Try out the [browser](https://github.com/biril/mp3-parser/tree/0.2.6/examples/browser)
+* Try out the [browser](https://github.com/biril/mp3-parser/tree/0.2.6/examples/browser),
+    [browser-globals](https://github.com/biril/mp3-parser/tree/0.2.6/examples/browser-globals)
     & [node](https://github.com/biril/mp3-parser/tree/0.2.6/examples/node) examples.
 * Take a look at [the project's wiki](https://github.com/biril/mp3-parser/wiki) which contains a
     list of currently (un)supported ID3v2 tag frames.
