@@ -3,10 +3,17 @@
 (function () {
     "use strict";
 
-    var error = false;
+    $(".fileFormInput").on("change", function () {
 
-    try { mp3Parser.readTags(new DataView(new ArrayBuffer(100))); }
-    catch (someError) { error = someError; }
+        var mp3File = $(".fileFormInput").get(0).files[0];
 
-    $(".output").text(error ? "Oops! " + error : "mp3Parser is up and running!");
+        var reader = new FileReader();
+        reader.onload = function () {
+            var tags = mp3Parser.readTags(new DataView(reader.result));
+            $(".report").text(JSON.stringify(tags, undefined, 2));
+        };
+
+        reader.readAsArrayBuffer(mp3File);
+    });
+
 }());
