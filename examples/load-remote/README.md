@@ -1,5 +1,5 @@
-mp3 Parser, browser example
-===========================
+mp3Parser example: Load remote
+==============================
 
 Uses `XMLHttpRequest` level 2 to load a remote mp3 into a `DataView` and subsequently invokes
 `mp3Parser.readTags` to read and dump any ID3v2 or Xing/Lame tags found therein. It'll work with
