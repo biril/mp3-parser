@@ -9,6 +9,8 @@ URLs (such as [https://soundcloud.com/sonokinetic/capriccio-demo-kaleidoscope](h
 are automatically resolved to a remote mp3 and loaded. (Note that the SC API permits this sort of
 thing for _some_ but not _all_ tracks.)
 
+In this example, mp3Parser is loaded as an AMD module.
+
 
 Set up
 ------
