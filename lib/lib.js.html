@@ -32,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-parser/<span class="hljs-class"><span class="hljs-keyword">lib</span> <span class="hljs-title">v0</span>.2.6</span>
+          <div class="wrapper"><pre><code>mp3-parser/<span class="hljs-class"><span class="hljs-keyword">lib</span> <span class="hljs-title">v0</span>.2.7</span>
 </code></pre></div>
         </div>
       
@@ -44,7 +44,7 @@
         <div class="comments ">
           <div class="wrapper"><pre><code><span class="hljs-keyword">https</span>://github.com/biril/mp3-parser
 Licensed <span class="hljs-operator">and</span> freely distributed under <span class="hljs-operator">the</span> MIT License
-Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2015</span> Alex Lambiris
+Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2016</span> Alex Lambiris
 </code></pre></div>
         </div>
       
@@ -60,7 +60,7 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       
       
         <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
-<span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
+<span class="hljs-comment">/*global exports:false, define:false */</span>
 (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
@@ -369,7 +369,7 @@ isStr = function (str, view, offset) {
             <span class="hljs-keyword">if</span> ((trmOffset - offset) % <span class="hljs-number">2</span> !== <span class="hljs-number">0</span>) { ++trmOffset; }
             <span class="hljs-keyword">return</span> trmOffset;
         }
-    },
+    };
 
     lib.readStr = {</div></div>
       
@@ -456,7 +456,7 @@ for tests at the time of this writing, goes totally weird when switched to BE)</
 
             <span class="hljs-keyword">return</span> <span class="hljs-built_in">String</span>.fromCharCode.apply(<span class="hljs-literal">null</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Uint16Array</span>(buffer, offset, length / <span class="hljs-number">2</span>));
         },
-    },
+    };
 
     lib.readTrmStr = {</div></div>
       
@@ -494,7 +494,7 @@ for tests at the time of this writing, goes totally weird when switched to BE)</
             <span class="hljs-keyword">if</span> (trmOffset !== -<span class="hljs-number">1</span>) { length = trmOffset - offset; }
             <span class="hljs-keyword">return</span> lib.readStr.ucs(view, offset, length);
         }
-    },
+    };
 </div></div>
       
       </div>
@@ -710,7 +710,8 @@ for tests at the time of this writing, goes totally weird when switched to BE)</
       
         <div class="code"><div class="wrapper">        frame._section.sampleLength = <span class="hljs-number">1152</span>;
 
-        frame._section.byteLength = lib.getFrameByteLength(frame.header.bitrate, frame.header.samplingRate, frame.header.framePadding);
+        frame._section.byteLength = lib.getFrameByteLength(frame.header.bitrate,
+            frame.header.samplingRate, frame.header.framePadding);
         frame._section.nextFrameIndex = offset + frame._section.byteLength;
 </div></div>
       
@@ -725,7 +726,8 @@ for tests at the time of this writing, goes totally weird when switched to BE)</
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (lib.isSeq(lib.seq.xing, view, offset + <span class="hljs-number">36</span>) || lib.isSeq(lib.seq.info, view, offset + <span class="hljs-number">36</span>)) {
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (lib.isSeq(lib.seq.xing, view, offset + <span class="hljs-number">36</span>) ||
+            lib.isSeq(lib.seq.info, view, offset + <span class="hljs-number">36</span>)) {
             <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
         }
 </div></div>

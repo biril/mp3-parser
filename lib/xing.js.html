@@ -32,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-parser/xing v0<span class="hljs-number">.2</span><span class="hljs-number">.6</span>
+          <div class="wrapper"><pre><code>mp3-parser/xing v0<span class="hljs-number">.2</span><span class="hljs-number">.7</span>
 </code></pre></div>
         </div>
       
@@ -44,7 +44,7 @@
         <div class="comments ">
           <div class="wrapper"><pre><code><span class="hljs-keyword">https</span>://github.com/biril/mp3-parser
 Licensed <span class="hljs-operator">and</span> freely distributed under <span class="hljs-operator">the</span> MIT License
-Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2015</span> Alex Lambiris
+Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">2016</span> Alex Lambiris
 </code></pre></div>
         </div>
       
@@ -187,11 +187,12 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper">        tag.identifier = (lib.isSeq(lib.seq.xing, view, offset + <span class="hljs-number">36</span>) &amp;&amp; <span class="hljs-string">'Xing'</span>) ||
-            (lib.isSeq(lib.seq.info, view, offset + <span class="hljs-number">36</span>) &amp;&amp; <span class="hljs-string">'Info'</span>);
+        <div class="code"><div class="wrapper">        tag.identifier = (lib.isSeq(lib.seq.xing, view, offset + <span class="hljs-number">36</span>) &amp;&amp; <span class="hljs-string">"Xing"</span>) ||
+            (lib.isSeq(lib.seq.info, view, offset + <span class="hljs-number">36</span>) &amp;&amp; <span class="hljs-string">"Info"</span>);
         <span class="hljs-keyword">if</span> (!tag.identifier) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 
-        tag._section.byteLength = lib.getFrameByteLength(tag.header.bitrate, tag.header.samplingRate, tag.header.framePadding);
+        tag._section.byteLength = lib.getFrameByteLength(tag.header.bitrate,
+            tag.header.samplingRate, tag.header.framePadding);
         tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         <span class="hljs-keyword">return</span> tag;
