@@ -1,0 +1,19 @@
+{
+  "name": "mp3-parser-example-cmd-line-parse",
+  "version": "0.0.1",
+  "description": "Parse given mp3 file to output ID3v2 or Xing/Lame and last frame found.",
+  "keywords": [
+    "mp3",
+    "id3"
+  ],
+  "bugs": "https://github.com/biril/mp3-parser/issues",
+  "license": "MIT",
+  "author": "biril <alexlambiris@gmail.com>",
+  "private": true,
+  "dependencies": {
+    "mp3-parser": "^0.2.6"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  }
+}

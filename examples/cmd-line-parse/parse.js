@@ -3,7 +3,8 @@
 
 const fs = require("fs");
 const util = require("util");
-const mp3Parser = require(__dirname + "/../../main");
+const mp3Parser = require("mp3-parser");
+
 const pathToMp3 = process.argv[2];
 const toArrayBuffer = buffer => {
     const bufferLength = buffer.length;
