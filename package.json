@@ -1,6 +1,6 @@
 {
   "name": "mp3-parser",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "Read mp3 frames & tags",
   "keywords": [
     "mp3",
