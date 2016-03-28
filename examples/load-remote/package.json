@@ -1,19 +1,20 @@
 {
-  "name": "mp3-parser-example",
+  "name": "mp3-parser-example-load-remote",
   "version": "0.0.1",
-  "description": "mp3 Parser example",
-  "homepage": "",
-  "author": "alexlambiris@gmail.com",
-  "repository": {
-      "type": "git",
-      "url": ""
-  },
+  "description": "Load a remote mp3 and dump any ID3v2 or Xing/Lame tags found therein.",
+  "keywords": [
+    "mp3",
+    "id3"
+  ],
+  "bugs": "https://github.com/biril/mp3-parser/issues",
+  "license": "MIT",
+  "author": "biril <alexlambiris@gmail.com>",
   "private": true,
-  "engines": {
-    "node": "0.8.x || 0.10.x"
-  },
   "devDependencies": {
-    "grunt": "0.4.x",
-    "grunt-contrib-connect": "0.3.x"
+    "grunt": "^0.4.5",
+    "grunt-contrib-connect": "^1.0.1"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   }
 }
