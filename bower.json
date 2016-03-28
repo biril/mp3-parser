@@ -7,8 +7,7 @@
     "biril <alexlambiris@gmail.com>"
   ],
   "description": "Read mp3 frames & tags",
-  "keywords": ["mp3"],
-  "dependencies": { "underscore": "1.5.x" },
+  "keywords": ["mp3", "id3"],
   "license": "MIT",
   "ignore": [
     "**/.*",
