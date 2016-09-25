@@ -4,7 +4,7 @@
 
 var _ = require("underscore"),
 
-    // Dump Array or Dataview
+    // Helper to dump the contents of Array or Dataview
     dumpCollection = function (collection, n) {
         var dump = [],
             i = 0,
@@ -29,10 +29,8 @@ var _ = require("underscore"),
         return l + ":[" + dump.join(", ") + "]";
     };
 
-module.exports = {
-
-    // Expect actual to be a DataView with given elements. `expected` can be a DataView or Array
-    asDataViewToEqual: function (expected) {
+var asDataViewToEqualMatcher = function (util) {
+    var compare = function (actual, expected) {
         var getExpectedValue = _.isArray(expected) ?
                 function (i) { return expected[i]; } :
                 function (i) { return expected.getUint8(i);
@@ -48,21 +46,23 @@ module.exports = {
             },
             i;
 
-        if (this.actual.byteLength !== getExpectedLength()) {
-            this.message = function () {
-                return "Expected " + dumpCollection(this.actual) + " to be a DataView of length " +
-                    getExpectedLength();
-            };
-            return false;
+        if (actual.byteLength !== getExpectedLength()) {
+            return {pass: false, message: "Expected " + dumpCollection(this.actual) +
+                    " to be a DataView of length " + getExpectedLength()};
         }
 
-        for (i = 0; i < this.actual.byteLength; ++i) {
-            if (this.actual.getUint8(i) !== getExpectedValue(i)) {
-                this.message = buildFailMessage(expected, this.actual, i);
-                return false;
+        for (i = 0; i < actual.byteLength; ++i) {
+            if (actual.getUint8(i) !== getExpectedValue(i)) {
+                return {pass: false, message: buildFailMessage(expected, this.actual, i)};
             }
         }
 
-        return true;
-    }
+        return {pass: true};
+    };
+
+    return {compare: compare};
 };
+
+var matchers = {asDataViewToEqual: asDataViewToEqualMatcher};
+
+module.exports = matchers;

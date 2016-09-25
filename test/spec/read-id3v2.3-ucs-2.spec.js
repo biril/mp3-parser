@@ -9,7 +9,7 @@
 //     Copyright (c) 2013-2016 Alex Lambiris
 
 /*jshint node:true */
-/*global describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
+/*global jasmine, describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
 "use strict";
 
 describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function () {
@@ -290,7 +290,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
             WXXX: { name: "User defined URL link frame" }
         };
 
-    beforeEach(function () { this.addMatchers(matchers); });
+    beforeEach(function () { jasmine.addMatchers(matchers); });
 
     it("should read COMM: Comments frame", function () {
         var capturedFrames = expectCapturedFrames("COMM", 3),

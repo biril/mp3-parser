@@ -105,7 +105,7 @@ describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subfram
             }
         };
 
-    beforeEach(function () { this.addMatchers(matchers); });
+    beforeEach(function () { jasmine.addMatchers(matchers); });
 
     it("should read CHAP: Chapters frame", function () {
         var capturedFrames = expectCapturedFrames("CHAP", 2),

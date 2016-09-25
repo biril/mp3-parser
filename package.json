@@ -15,13 +15,14 @@
     "url": "https://github.com/biril/mp3-parser"
   },
   "scripts": {
-    "test": "jasmine-node --verbose --color --captureExceptions ./test/spec/",
+    "test": "node ./scripts/test.js",
     "lint": "jshint --show-non-errors main.js lib/ test/spec/ && jscs main.js lib/ test/spec/",
     "generate-docs": "grock --glob './lib/*.js' --glob './main.js' --glob './README.md' --index 'README.md' --verbose"
   },
   "devDependencies": {
     "grock": "^0.3.8",
-    "jasmine-node": "^1.14.5",
+    "jasmine": "^2.5.2",
+    "jasmine-spec-reporter": "^2.7.0",
     "jscs": "^2.11.0",
     "jshint": "^2.9.1",
     "underscore": "^1.8.3"

@@ -6,7 +6,7 @@
 //     Copyright (c) 2013-2016 Alex Lambiris
 
 /*jshint node:true */
-/*global describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
+/*global jasmine, describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
 "use strict";
 
 describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", function () {
@@ -303,7 +303,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
             WXXX: { name: "User defined URL link frame" }
         };
 
-    beforeEach(function () { this.addMatchers(matchers); });
+    beforeEach(function () { jasmine.addMatchers(matchers); });
 
     it("should read UFID: Unique file identifier (multiple)", function () {
         var capturedFrames = expectCapturedFrames("UFID", 2),
