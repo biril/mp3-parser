@@ -4,6 +4,7 @@ const runner = new Jasmine();
 runner.loadConfig({
     spec_dir: "test/spec",
     spec_files: ["**/*.spec.js"],
+    helpers: ["../../node_modules/jasmine-expect/index.js"],
     stopSpecOnExpectationFailure: false,
     random: false
 });
