@@ -1,5 +1,6 @@
-//     mp3-parser test suite: ID3v2.3 tag / ISO-8859-1 encoded frames. Tests run against
-//     id3v2.3-iso-8859-1.mp3 (maintained with [Kid3 ID3 Tagger](http://kid3.sourceforge.net/))
+//     mp3-parser test suite: ID3v2.3 tag / CHAP frame / ISO-8859-1 encoded subframes.
+//     Tests run against id3v2.3-chap-iso-8859-1.mp3
+//     (maintained with [Kid3 ID3 Tagger](http://kid3.sourceforge.net/))
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
@@ -9,7 +10,7 @@
 /*global describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
 "use strict";
 
-describe("ID3v2.3 reader run on ID3v2.3 tag with chap frames", function () {
+describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subframes", function () {
 
     var util = require("util"),
 
@@ -19,7 +20,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with chap frames", function () {
 
         mp3Parser = require(__dirname + "/../../main.js"),
 
-        filePath = __dirname + "/../id3v2.3-chap.mp3",
+        filePath = __dirname + "/../id3v2.3-chap-iso-8859-1.mp3",
 
         // Read the file into a DataView-wrapped ArrayBuffer
         buffer = (function (b) {
@@ -54,7 +55,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with chap frames", function () {
             return capturedFrames;
         },
 
-        // [ID3v2 chap frames](http://id3.org/id3v2.3.0#Declared_ID3v2_frames) along with their
+        // [ID3v2 CHAP frames](http://id3.org/id3v2.3.0#Declared_ID3v2_frames) along with their
         //  'friendly names' as defined in the spec and, in certain cases, an `expected` hash which
         //  defines values to test against
         id3v2TagFrames = {
@@ -75,31 +76,30 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with chap frames", function () {
                         endTime: 2000,
                         startOffset: 65535,
                         endOffset: 4294967295,
-                        frames: [
-                            {
-                                header: {
-                                    id: "TIT2",
-                                    size: 6,
-                                    flagsOctet1: 0,
-                                    flagsOctet2: 0
-                                },
-                                name: "Title/songname/content description",
-                                content: { encoding: 0, value: "Title" }
-                            }, {
-                                header: {
-                                    id: "COMM",
-                                    size: 19,
-                                    flagsOctet1: 0,
-                                    flagsOctet2: 0
-                                },
-                                name: "Comments",
-                                content: {
-                                    encoding: 0,
-                                    language: "eng",
-                                    description: "Comment",
-                                    text: "Comment"
-                                }
-                            }]
+                        frames: [{
+                            header: {
+                                id: "TIT2",
+                                size: 6,
+                                flagsOctet1: 0,
+                                flagsOctet2: 0
+                            },
+                            name: "Title/songname/content description",
+                            content: { encoding: 0, value: "Title" }
+                        }, {
+                            header: {
+                                id: "COMM",
+                                size: 19,
+                                flagsOctet1: 0,
+                                flagsOctet2: 0
+                            },
+                            name: "Comments",
+                            content: {
+                                encoding: 0,
+                                language: "eng",
+                                description: "Comment",
+                                text: "Comment"
+                            }
+                        }]
                     }
                 }
             }
