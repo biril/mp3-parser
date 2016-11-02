@@ -47,22 +47,22 @@ var asDataViewToEqualMatcher = function (util) {
             i;
 
         if (actual.byteLength !== getExpectedLength()) {
-            return {pass: false, message: "Expected " + dumpCollection(this.actual) +
-                    " to be a DataView of length " + getExpectedLength()};
+            return { pass: false, message: "Expected " + dumpCollection(this.actual) +
+                    " to be a DataView of length " + getExpectedLength() };
         }
 
         for (i = 0; i < actual.byteLength; ++i) {
             if (actual.getUint8(i) !== getExpectedValue(i)) {
-                return {pass: false, message: buildFailMessage(expected, this.actual, i)};
+                return { pass: false, message: buildFailMessage(expected, this.actual, i) };
             }
         }
 
-        return {pass: true};
+        return { pass: true };
     };
 
-    return {compare: compare};
+    return { compare: compare };
 };
 
-var matchers = {asDataViewToEqual: asDataViewToEqualMatcher};
+var matchers = { asDataViewToEqual: asDataViewToEqualMatcher };
 
 module.exports = matchers;

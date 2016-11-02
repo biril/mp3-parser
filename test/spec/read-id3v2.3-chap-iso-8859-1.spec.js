@@ -7,7 +7,7 @@
 //     Copyright (c) 2013-2016 Alex Lambiris
 
 /*jshint node:true */
-/*global describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
+/*global jasmine, describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
 "use strict";
 
 describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subframes", function () {
