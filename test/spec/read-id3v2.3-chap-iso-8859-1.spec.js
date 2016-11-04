@@ -20,7 +20,7 @@ describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subfram
 
         mp3Parser = require(__dirname + "/../../main.js"),
 
-        filePath = __dirname + "/../id3v2.3-chap-iso-8859-1.mp3",
+        filePath = __dirname + "/../data/id3v2.3-chap-iso-8859-1.mp3",
 
         // Read the file into a DataView-wrapped ArrayBuffer
         buffer = (function (b) {
