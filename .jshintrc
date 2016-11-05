@@ -9,9 +9,6 @@
   "latedef":true,
   "undef":true,
   "strict":true,
-  "trailing":true,
-  "onevar":true,
-  "smarttabs":true,
   "noarg":true,
   "expr":true
 }
