@@ -112,14 +112,14 @@ describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subfram
             // Get expected and actual chapter frames, for the case of an empty chapter frame
             expectedEmptyChapter = id3v2TagFrames.CHAP.expected.withoutFrames,
             emptyChapter,
-            framesWithoutNestedFrames = _.filter(capturedFrames, function(frame) {
+            framesWithoutNestedFrames = _.filter(capturedFrames, function (frame) {
                 return frame.content.id === expectedEmptyChapter.id;
             }),
 
             // Get expected and actual chapter frames, for the case of an empty chapter frame
             expectedChapterWithFrames = id3v2TagFrames.CHAP.expected.withFrames,
             chapterWithFrames,
-            framesWithNestedFrames = _.filter(capturedFrames, function(frame) {
+            framesWithNestedFrames = _.filter(capturedFrames, function (frame) {
                 return frame.content.id === expectedChapterWithFrames.id;
             }),
             chapterSubFrames,
@@ -144,13 +144,13 @@ describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subfram
         expect(chapterWithFrames.content.endOffset).toBe(expectedChapterWithFrames.endOffset);
         chapterSubFrames = chapterWithFrames.content.frames;
         expect(chapterSubFrames.length).toBe(expectedChapterWithFrames.frames.length);
-        titleFrames = chapterSubFrames.filter(function(frame) {
+        titleFrames = chapterSubFrames.filter(function (frame) {
             return frame.header.id === "TIT2";
         });
         expect(titleFrames.length).toBe(1);
         titleFrame = titleFrames[0];
         expect(titleFrame.content.name).toBe(expectedChapterWithFrames.frames[0].content.name);
-        commentFrames = chapterWithFrames.content.frames.filter(function(frame) {
+        commentFrames = chapterWithFrames.content.frames.filter(function (frame) {
             return frame.header.id === "COMM";
         });
         expect(commentFrames.length).toBe(1);
