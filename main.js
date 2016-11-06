@@ -56,7 +56,6 @@
 
     // ----
 
-
     // ### Read a Frame Header
     //
     // Read and return description of header of frame located at `offset` of DataView `view`.
@@ -64,7 +63,6 @@
     mp3Parser.readFrameHeader = function (view, offset) {
         return lib.readFrameHeader(view, offset);
     };
-
 
     // ### Read a Frame
     //
@@ -76,7 +74,6 @@
     mp3Parser.readFrame = function (view, offset, requireNextFrame) {
         return lib.readFrame(view, offset, requireNextFrame);
     };
-
 
     // ### Read the Last Frame
     //
@@ -102,7 +99,6 @@
         return null;
     };
 
-
     // ### Read the ID3v2 Tag
     //
     // Read and return description of [ID3v2 Tag](http://id3.org/id3v2.3.0) located at `offset` of
@@ -113,7 +109,6 @@
         return id3v2Parser.readId3v2Tag(view, offset);
     };
 
-
     // ### Read the Xing Tag
     //
     // Read and return description of
@@ -122,7 +117,6 @@
     mp3Parser.readXingTag = function (view, offset) {
         return xingParser.readXingTag(view, offset);
     };
-
 
     // ### Read all Tags up to First Frame
     // Read and return descriptions of all tags found up to (and including) the very first frame.
