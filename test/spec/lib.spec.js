@@ -9,13 +9,11 @@
 "use strict";
 
 describe("lib", () => {
-
     const lib = require(`${__dirname}/../../lib/lib.js`);
 
     // For ASCII - ISO/IEC 8859-1, see [ASCII code table](http://www.asciitable.com/)
     // For UCS-2 - ISO/IEC 10646-1, see [UCS-2 code table](http://www.columbia.edu/kermit/ucs2.html)
     describe("wordSeqFromStr", () => {
-
         it("should convert empty string to empty array", () => {
             const seq = lib.wordSeqFromStr("");
             expect(seq).toBeEmptyArray();
@@ -48,7 +46,5 @@ describe("lib", () => {
 
             expect(seq).toEqual(strOctets);
         });
-
     });
-
 });

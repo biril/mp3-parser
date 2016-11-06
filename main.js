@@ -33,7 +33,6 @@
             return (this.noConflict = function () { return mp3Parser; }).call();
         }
     }, globalObject.mp3ParserLib, globalObject.mp3Id3v2Parser, globalObject.mp3XingParser);
-
 }(this, function (mp3Parser, lib, id3v2Parser, xingParser) {
     "use strict";
 
@@ -137,14 +136,12 @@
 
         // While we haven't located the first frame, pick the next offset ..
         for (; offset < bufferLength && !foundFirstFrame; ++offset) {
-
             // .. and try out each of the 'readers' on it
             for (i = 0; i < numOfReaders; ++i) {
                 section = readers[i](view, offset);
 
                 // If one of the readers successfully parses a section ..
                 if (section) {
-
                     // .. store it ..
                     sections.push(section);
 
@@ -170,5 +167,4 @@
 
         return sections;
     };
-
 }));

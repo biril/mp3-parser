@@ -13,7 +13,6 @@
 "use strict";
 
 describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function () {
-
     var util = require("util"),
 
         _ = require("underscore"),
@@ -475,5 +474,4 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
         expect(frame2.content.pictureType).toBe(expectedFrame2.pictureType);
         expect(frame2.content.pictureData).asDataViewToEqual(expectedFrame2.pictureData);
     });
-
 });

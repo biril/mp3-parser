@@ -10,7 +10,6 @@
 "use strict";
 
 describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", function () {
-
     var util = require("util"),
 
         _ = require("underscore"),
@@ -534,7 +533,6 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
 
     //
     it("should read POPM: Popularimeter (multiple)", function () {
-
         var capturedFrames = expectCapturedFrames("POPM", 2),
             frame1 = _(capturedFrames).find(function (frame) {
                 return frame.content.email === "Email to user first";
@@ -587,5 +585,4 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
         expect(frame2.content.pictureType).toBe(expectedFrame2.pictureType);
         expect(frame2.content.pictureData).asDataViewToEqual(expectedFrame2.pictureData);
     });
-
 });

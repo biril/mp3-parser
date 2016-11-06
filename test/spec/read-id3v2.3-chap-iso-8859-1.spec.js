@@ -11,7 +11,6 @@
 "use strict";
 
 describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subframes", function () {
-
     var util = require("util"),
 
         _ = require("underscore"),

@@ -16,12 +16,10 @@ const methodNames = [
 ];
 
 describe("ID3v2.3 parser", () => {
-
     const parser = require(`${__dirname}/../../lib/id3v2.js`);
 
     it(`should be exported, with expected API ${methodNames.join(", ")}`, () => {
         expect(parser).toBeObject();
         _.each(methodNames, methodName => expect(parser).toHaveMethod(methodName));
     });
-
 });

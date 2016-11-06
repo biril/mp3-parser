@@ -20,12 +20,10 @@ const methodNames = [
 ];
 
 describe("mp3 parser", () => {
-
     var mp3Parser = require(__dirname + "/../../main.js");
 
     it(`should be exported, with expected API ${methodNames.join(", ")}`, () => {
         expect(mp3Parser).toBeObject();
         _.each(methodNames, methodName => expect(mp3Parser).toHaveMethod(methodName));
     });
-
 });
