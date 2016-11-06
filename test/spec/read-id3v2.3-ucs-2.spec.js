@@ -8,8 +8,8 @@
 //     Licensed and freely distributed under the MIT License
 //     Copyright (c) 2013-2016 Alex Lambiris
 
-/*jshint node:true */
-/*global jasmine, describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
+/* jshint node:true */
+/* global jasmine, describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
 "use strict";
 
 describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function () {

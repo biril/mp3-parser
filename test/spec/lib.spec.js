@@ -4,8 +4,8 @@
 //     Licensed and freely distributed under the MIT License
 //     Copyright (c) 2013-2016 Alex Lambiris
 
-/*jshint node:true, esversion:6 */
-/*global describe, it, expect  */
+/* jshint node:true, esversion:6 */
+/* global describe, it, expect  */
 "use strict";
 
 describe("lib", () => {

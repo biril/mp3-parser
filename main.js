@@ -6,8 +6,8 @@
 
 // ----
 
-/*jshint browser:true */
-/*global exports:false, define:false, require:false */
+/* jshint browser:true */
+/* global exports:false, define:false, require:false */
 (function (globalObject, createModule) {
     "use strict";
 
