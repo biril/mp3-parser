@@ -11,8 +11,8 @@
 const _ = require("underscore");
 
 const methodNames = [
-	"readId3v2TagFrame",
-	"readId3v2Tag"
+    "readId3v2TagFrame",
+    "readId3v2Tag"
 ];
 
 describe("ID3v2.3 parser", () => {
