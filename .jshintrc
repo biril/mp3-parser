@@ -1,14 +1,17 @@
 {
+  "curly": true,
+  "eqeqeq": true,
+  "esversion": 5,
+  "forin": true,
+  "freeze": true,
   "futurehostile": true,
+  "latedef": true,
+  "noarg": true,
   "nocomma": true,
+  "nonbsp": true,
   "nonew": true,
+  "strict": true,
+  "undef": true,
   "unused": true,
-  "curly":true,
-  "eqeqeq":true,
-  "forin":true,
-  "latedef":true,
-  "undef":true,
-  "strict":true,
-  "noarg":true,
-  "expr":true
+  "expr": true
 }
