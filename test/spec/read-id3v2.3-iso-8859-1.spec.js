@@ -201,6 +201,7 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", fun
                 name: "Synchronized tempo codes",
                 expected: {}
             },
+
             // Text information frames. For some of these (which are commented below), the standard
             //  contains specific formatting instructions. They are however T-frames and as such
             //  their content is of variable length and encoding. As a result the formatting
