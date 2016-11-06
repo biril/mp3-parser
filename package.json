@@ -17,7 +17,7 @@
   "scripts": {
     "test": "node ./scripts/test.js",
     "lint": "jshint --show-non-errors main.js lib/ test/spec/ && jscs main.js lib/ test/spec/",
-    "generate-docs": "grock --glob './lib/*.js' --glob './main.js' --glob './README.md' --index 'README.md' --verbose"
+    "generate-docs": "grock --glob './README.md' --glob './main.js' --glob './lib/*.js' --index 'README.md' --verbose"
   },
   "devDependencies": {
     "grock": "^0.3.8",
