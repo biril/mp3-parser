@@ -10,6 +10,7 @@
   "disallowKeywordsOnNewLine": ["else"],
   "disallowMultipleLineBreaks": true,
   "disallowMultipleLineStrings": true,
+  "disallowMultipleVarDecl": {"allExcept": ["undefined"]},
   "disallowNewlineBeforeBlockStatements": true,
   "disallowOperatorBeforeLineBreak": ["."],
   "disallowPaddingNewlinesInBlocks": true,

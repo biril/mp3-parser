@@ -126,18 +126,18 @@
     mp3Parser.readTags = function (view, offset) {
         offset || (offset = 0);
 
-        var sections = [],
-            section = null,
-            readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame],
-            foundFirstFrame = false,
-            i = 0,
-            numOfReaders = readers.length,
-            bufferLength = view.byteLength;
+        var sections = [];
+        var section = null;
+        var isFirstFrameFound = false;
+        var bufferLength = view.byteLength;
+
+        var readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame];
+        var numOfReaders = readers.length;
 
         // While we haven't located the first frame, pick the next offset ..
-        for (; offset < bufferLength && !foundFirstFrame; ++offset) {
+        for (; offset < bufferLength && !isFirstFrameFound; ++offset) {
             // .. and try out each of the 'readers' on it
-            for (i = 0; i < numOfReaders; ++i) {
+            for (var i = 0; i < numOfReaders; ++i) {
                 section = readers[i](view, offset);
 
                 // If one of the readers successfully parses a section ..
@@ -152,9 +152,9 @@
 
                     // If the section we just parsed is a frame then we've actually located the
                     //  first frame. Break out of the readers-loop making sure to set
-                    //  foundFirstFrame (so that we also exit the outer loop)
+                    //  isFirstFrameFound (so that we also exit the outer loop)
                     if (section._section.type === "frame") {
-                        foundFirstFrame = true;
+                        isFirstFrameFound = true;
                         break;
                     }
 
