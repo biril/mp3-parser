@@ -4,11 +4,23 @@
 
 "use strict";
 
+const fs = require('fs');
 const _ = require("underscore");
 
 //
 const concat = function (/* ...arrays */) {
     return Array.prototype.concat.apply([], arguments);
+};
+
+// Get contents of file at given path, wrapped in a DataView instance. Will perform a blocking read
+const dataViewFromFilePath = filePath => {
+    var fileBuffer = fs.readFileSync(filePath);
+    var fileBufferLength = fileBuffer.length;
+
+    var uint8Array = new Uint8Array(new ArrayBuffer(fileBufferLength));
+    for (var i = 0; i < fileBufferLength; ++i) { uint8Array[i] = fileBuffer[i]; }
+
+    return new DataView(uint8Array.buffer);
 };
 
 //
@@ -77,4 +89,4 @@ const buildFrameView = frameDescr =>
     dataViewFromArray(buildFrameOctets(frameDescr.id, frameDescr.content), frameDescr.offset);
 
 //
-module.exports = { buildFrameView };
+module.exports = { buildFrameView, dataViewFromFilePath };

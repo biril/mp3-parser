@@ -6,36 +6,21 @@
 //     Copyright (c) 2013-2016 Alex Lambiris
 
 /* jshint node:true */
-/* global jasmine, describe, beforeEach, it, expect, Uint8Array, ArrayBuffer */
+/* global jasmine, describe, beforeEach, it, expect */
 "use strict";
 
 var _ = require("underscore");
-var fs = require("fs");
-var util = require("util");
-var matchers = require(__dirname + "/../matchers.js");
+var util = require("../util");
+var matchers = require("../matchers.js");
+
+var mp3Parser = require("../../main.js");
+
+var mp3FilePath = __dirname + "/../data/id3v2.3-iso-8859-1.mp3";
 
 describe("ID3v2.3 reader run on ID3v2.3 tag with ISO-8859-1 encoded frames", function () {
-    var mp3Parser = require(__dirname + "/../../main.js");
-
-    var filePath = __dirname + "/../data/id3v2.3-iso-8859-1.mp3";
-
-    // Read the file into a DataView-wrapped ArrayBuffer
-    var buffer = (function (b) {
-        if (!b) {
-            util.error("Oops: Failed to load " + filePath);
-            process.exit(1);
-        }
-
-        var bufferLength = b.length;
-        var uint8Array = new Uint8Array(new ArrayBuffer(bufferLength));
-
-        for (var i = 0; i < bufferLength; ++i) { uint8Array[i] = b[i]; }
-
-        return new DataView(uint8Array.buffer);
-    }(fs.readFileSync(filePath)));
-
     // Read the ID3v2 tag. This is done once, here, and all tests run on `capturedId3v2Tag`
-    var capturedId3v2Tag = mp3Parser.readId3v2Tag(buffer);
+    var mp3FileView = util.dataViewFromFilePath(mp3FilePath);
+    var capturedId3v2Tag = mp3Parser.readId3v2Tag(mp3FileView);
 
     // Helper to get (an array of) all captured ID3v2 tag frames of given `id`
     var getCapturedFrames = function (id) {
