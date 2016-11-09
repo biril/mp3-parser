@@ -8,48 +8,43 @@
 //     Licensed and freely distributed under the MIT License
 //     Copyright (c) 2013-2016 Alex Lambiris
 
-/* jshint node:true */
+/* jshint node:true, esversion:6 */
 /* global jasmine, describe, beforeEach, it, expect */
 "use strict";
 
-var _ = require("underscore");
-var util = require("../util");
-var matchers = require("../matchers.js");
+const _ = require("underscore");
+const util = require("../util");
+const matchers = require("../matchers.js");
 
-var mp3Parser = require("../../main.js");
+const mp3Parser = require("../../main.js");
 
-var mp3FilePath = __dirname + "/../data/id3v2.3-ucs-2.mp3";
+const mp3FilePath = `${__dirname}/../data/id3v2.3-ucs-2.mp3`;
 
-describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function () {
+describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", () => {
     // Read the ID3v2 tag. This is done once, here, and all tests run on `capturedId3v2Tag`
-    var mp3FileView = util.dataViewFromFilePath(mp3FilePath);
-    var capturedId3v2Tag = mp3Parser.readId3v2Tag(mp3FileView);
+    const mp3FileView = util.dataViewFromFilePath(mp3FilePath);
+    const capturedId3v2Tag = mp3Parser.readId3v2Tag(mp3FileView);
 
     // Helper to get (an array of) all captured ID3v2 tag frames of given `id`
-    var getCapturedFrames = function (id) {
-        return _(capturedId3v2Tag.frames).filter(function (frame) {
-            return frame.header.id === id;
-        });
-    };
+    const getCapturedFrames = id =>
+        _(capturedId3v2Tag.frames).filter(frame => frame.header.id === id);
 
     // Expect that `numOfFrames` of `id` were captured. Returns an array of relevant
     //  captured frames - unless the `numOfFrames` expectation fails
-    var expectCapturedFrames = function (id, numOfFrames) {
-        var capturedFrames = getCapturedFrames(id);
+    const expectCapturedFrames = (id, numOfFrames) => {
+        const capturedFrames = getCapturedFrames(id);
         expect(capturedFrames.length).toBe(numOfFrames);
         return capturedFrames;
     };
 
     // Expect that a single (exactly one) frame of given `id` was captured. Returns the
     //  relevant frame - unless the `numOfFrames` expectation fails
-    var expectSingleCapturedFrame = function (id) {
-        return expectCapturedFrames(id, 1)[0];
-    };
+    const expectSingleCapturedFrame = id => expectCapturedFrames(id, 1)[0];
 
     // The subset of [ID3v2 tag frames](http://id3.org/id3v2.3.0#Declared_ID3v2_frames) that
     //  may be encoded in UCS-2, along with their 'friendly names' as defined in the spec and,
     //  in certain cases, an `expected` hash which defines values to test against
-    var id3v2TagFrames = {
+    const id3v2TagFrames = {
         AENC: {
             name: "Audio encryption",
             expected: {}
@@ -274,81 +269,75 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
         WXXX: { name: "User defined URL link frame" }
     };
 
-    beforeEach(function () { jasmine.addMatchers(matchers); });
+    beforeEach(() => { jasmine.addMatchers(matchers); });
 
-    it("should read COMM: Comments frame", function () {
-        var capturedFrames = expectCapturedFrames("COMM", 3);
+    it("should read COMM: Comments frame", () => {
+        const capturedFrames = expectCapturedFrames("COMM", 3);
 
         // Get expected and actual comment frames, for the case of no lang-field
-        var expectedFrameWithoutLang = id3v2TagFrames.COMM.expected.withoutLang;
-        var framesWithoutLang = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedFrameWithoutLang.description;
-        });
+        const expectedFrameWithoutLang = id3v2TagFrames.COMM.expected.withoutLang;
+        const framesWithoutLang = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedFrameWithoutLang.description);
 
         // Get expected and actual comment frames, for the case of lang-field present
-        var expectedFrameWithLang = id3v2TagFrames.COMM.expected.withLang;
-        var framesWithLang = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedFrameWithLang.description;
-        });
+        const expectedFrameWithLang = id3v2TagFrames.COMM.expected.withLang;
+        const framesWithLang = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedFrameWithLang.description);
 
         // Get expected and actual comment frames, for the case of lang-field of inadequate
         //  length present
-        var expectedFrameWithHalfLang = id3v2TagFrames.COMM.expected.withHalfLang;
-        var framesWithHalfLang = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedFrameWithHalfLang.description;
-        });
+        const expectedFrameWithHalfLang = id3v2TagFrames.COMM.expected.withHalfLang;
+        const framesWithHalfLang = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedFrameWithHalfLang.description);
 
         expect(framesWithoutLang.length).toBe(1);
-        var frameWithoutLang = framesWithoutLang[0];
+        const frameWithoutLang = framesWithoutLang[0];
         expect(frameWithoutLang.content.language).toBe(expectedFrameWithoutLang.language);
         expect(frameWithoutLang.content.text).toBe(expectedFrameWithoutLang.text);
 
         expect(framesWithLang.length).toBe(1);
-        var frameWithLang = framesWithLang[0];
+        const frameWithLang = framesWithLang[0];
         expect(frameWithLang.content.language).toBe(expectedFrameWithLang.language);
         expect(frameWithLang.content.text).toBe(expectedFrameWithLang.text);
 
         expect(framesWithHalfLang.length).toBe(1);
-        var frameWithHalfLang = framesWithHalfLang[0];
+        const frameWithHalfLang = framesWithHalfLang[0];
         expect(frameWithHalfLang.content.language).toBe(expectedFrameWithHalfLang.language);
         expect(frameWithHalfLang.content.text).toBe(expectedFrameWithHalfLang.text);
     });
 
     // The USLT frame's structure is basically identical to the COMM's
-    it("should read USLT: Unsychronised lyrics/text transcription frame", function () {
-        var capturedFrames = expectCapturedFrames("USLT", 3);
+    it("should read USLT: Unsychronised lyrics/text transcription frame", () => {
+        const capturedFrames = expectCapturedFrames("USLT", 3);
 
         // Get expected and actual frames, for the case of no lang-field
-        var expectedWithoutLang = id3v2TagFrames.USLT.expected.withoutLang;
-        var framesWithoutLang = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedWithoutLang.description;
-        });
+        const expectedWithoutLang = id3v2TagFrames.USLT.expected.withoutLang;
+        const framesWithoutLang = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedWithoutLang.description);
 
         // Get expected and actual frames, for the case of lang-field present
-        var expectedWithLang = id3v2TagFrames.USLT.expected.withLang;
-        var framesWithLang = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedWithLang.description;
-        });
+        const expectedWithLang = id3v2TagFrames.USLT.expected.withLang;
+        const framesWithLang = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedWithLang.description);
 
         // Get expected and actual frames, for the case of lang-field of inadequate
         //  length present
-        var expectedWithHalfLang = id3v2TagFrames.USLT.expected.withHalfLang;
-        var framesWithHalfLang = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedWithHalfLang.description;
-        });
+        const expectedWithHalfLang = id3v2TagFrames.USLT.expected.withHalfLang;
+        const framesWithHalfLang = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedWithHalfLang.description);
 
         expect(framesWithoutLang.length).toBe(1);
-        var frameWithoutLang = framesWithoutLang[0];
+        const frameWithoutLang = framesWithoutLang[0];
         expect(frameWithoutLang.content.language).toBe(expectedWithoutLang.language);
         expect(frameWithoutLang.content.text).toBe(expectedWithoutLang.text);
 
         expect(framesWithLang.length).toBe(1);
-        var frameWithLang = framesWithLang[0];
+        const frameWithLang = framesWithLang[0];
         expect(frameWithLang.content.language).toBe(expectedWithLang.language);
         expect(frameWithLang.content.text).toBe(expectedWithLang.text);
 
         expect(framesWithHalfLang.length).toBe(1);
-        var frameWithHalfLang = framesWithHalfLang[0];
+        const frameWithHalfLang = framesWithHalfLang[0];
         expect(frameWithHalfLang.content.language).toBe(expectedWithHalfLang.language);
         expect(frameWithHalfLang.content.text).toBe(expectedWithHalfLang.text);
     });
@@ -362,13 +351,11 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
     //  of them (see earlier comments regarding how no formatting can reasonably be enforced on
     //  T-frames)
     _.chain(id3v2TagFrames)
-        .map(function (frame, id) {
-            return { id: id, name: frame.name, expected: frame.expected };
-        }).filter(function (frame) {
-            return frame.id.charAt(0) === "T" && frame.id !== "TXXX";
-        }).each(function (frame) {
-            it("should read " + frame.id + ": " + frame.name, function () {
-                var f = expectSingleCapturedFrame(frame.id);
+        .map((frame, id) => ({ id: id, name: frame.name, expected: frame.expected }))
+        .filter(frame => frame.id.charAt(0) === "T" && frame.id !== "TXXX")
+        .each(frame => {
+            it(`should read ${frame.id}: ${frame.name}`, () => {
+                const f = expectSingleCapturedFrame(frame.id);
 
                 expect(f.content.encoding).toBe(1);
                 expect(f.content.value).toBe(frame.expected ?
@@ -377,8 +364,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
         });
 
     //
-    it("should read TXXX: User defined text information frame", function () {
-        var f = expectSingleCapturedFrame("TXXX");
+    it("should read TXXX: User defined text information frame", () => {
+        const f = expectSingleCapturedFrame("TXXX");
 
         expect(f.content.encoding).toBe(1);
         expect(f.content.description).toBe("αβγ " + id3v2TagFrames.TXXX.name + " description");
@@ -386,8 +373,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
     });
 
     //
-    it("should read WXXX: User defined URL link frame", function () {
-        var f = expectSingleCapturedFrame("WXXX");
+    it("should read WXXX: User defined URL link frame", () => {
+        const f = expectSingleCapturedFrame("WXXX");
 
         expect(f.content.encoding).toBe(1);
         expect(f.content.description).toBe("αβγ " + id3v2TagFrames.WXXX.name + " description");
@@ -399,8 +386,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
     //  involvement and so on'. In the current implementation however, the frame's content is
     //  parsed as a collection of strings without attaching special meaning. There may only be one
     //  "IPLS" frame in each tag
-    it("should read IPLS: Involved People List Frame", function () {
-        var f = expectSingleCapturedFrame("IPLS");
+    it("should read IPLS: Involved People List Frame", () => {
+        const f = expectSingleCapturedFrame("IPLS");
 
         expect(f.content.encoding).toBe(1);
         expect(f.content.values[0]).toBe("αβγ Involvement 1");
@@ -411,8 +398,8 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
     });
 
     //
-    it("should read USER: Terms of use frame", function () {
-        var f = expectSingleCapturedFrame("USER");
+    it("should read USER: Terms of use frame", () => {
+        const f = expectSingleCapturedFrame("USER");
 
         expect(f.content.encoding).toBe(1);
         expect(f.content.language).toBe("eng");
@@ -420,33 +407,31 @@ describe("ID3v2.3 reader run on ID3v2.3 tag with UCS2 encoded frames", function 
     });
 
     //
-    it("should read APIC: Attached picture", function () {
-        var capturedFrames = expectCapturedFrames("APIC", 2);
+    it("should read APIC: Attached picture", () => {
+        const capturedFrames = expectCapturedFrames("APIC", 2);
 
         // Note that APIC frames are differentiated by description - According to the standard,
         //  there may be several pictures attached to one file, each in their individual "APIC"
         //  frame, but only one with the same content descriptor
 
         // Get expected and actual frames for the case of the first APIC test frame
-        var expectedFrame1 = id3v2TagFrames.APIC.expected.frame1;
-        var frame1s = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedFrame1.description;
-        });
+        const expectedFrame1 = id3v2TagFrames.APIC.expected.frame1;
+        const frame1s = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedFrame1.description);
 
         // Get expected and actual frames for the case of the second APIC test frame
-        var expectedFrame2 = id3v2TagFrames.APIC.expected.frame2;
-        var frame2s = _(capturedFrames).filter(function (frame) {
-            return frame.content.description === expectedFrame2.description;
-        });
+        const expectedFrame2 = id3v2TagFrames.APIC.expected.frame2;
+        const frame2s = _(capturedFrames).filter(frame =>
+            frame.content.description === expectedFrame2.description);
 
         expect(frame1s.length).toBe(1);
-        var frame1 = frame1s[0];
+        const frame1 = frame1s[0];
         expect(frame1.content.mimeType).toBe(expectedFrame1.mimeType);
         expect(frame1.content.pictureType).toBe(expectedFrame1.pictureType);
         expect(frame1.content.pictureData).asDataViewToEqual(expectedFrame1.pictureData);
 
         expect(frame2s.length).toBe(1);
-        var frame2 = frame2s[0];
+        const frame2 = frame2s[0];
         expect(frame2.content.mimeType).toBe(expectedFrame2.mimeType);
         expect(frame2.content.pictureType).toBe(expectedFrame2.pictureType);
         expect(frame2.content.pictureData).asDataViewToEqual(expectedFrame2.pictureData);
