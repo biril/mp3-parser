@@ -8,8 +8,10 @@
 /* global describe, it, expect  */
 "use strict";
 
+// The module under test
+const lib = require("../../lib/lib");
+
 describe("lib", () => {
-    const lib = require(`${__dirname}/../../lib/lib.js`);
 
     // For ASCII - ISO/IEC 8859-1, see [ASCII code table](http://www.asciitable.com/)
     // For UCS-2 - ISO/IEC 10646-1, see [UCS-2 code table](http://www.columbia.edu/kermit/ucs2.html)

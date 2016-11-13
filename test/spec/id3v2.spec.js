@@ -15,9 +15,10 @@ const methodNames = [
     "readId3v2Tag"
 ];
 
-describe("ID3v2.3 parser", () => {
-    const parser = require(`${__dirname}/../../lib/id3v2.js`);
+// The module under test
+const parser = require("../../lib/id3v2");
 
+describe("ID3v2.3 parser", () => {
     it(`should be exported, with expected API ${methodNames.join(", ")}`, () => {
         expect(parser).toBeObject();
         _.each(methodNames, methodName => expect(parser).toHaveMethod(methodName));

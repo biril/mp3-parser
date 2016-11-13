@@ -25,8 +25,10 @@ const util = require("../util");
 // Make-believe offset of frame bytes, within containing ID3v2 tag
 const frmOffset = 7;
 
+// The module under test
+const parser = require("../../lib/id3v2");
+
 describe("ID3v2.3 parser, reading IPLS frame", () => {
-    const parser = require(`${__dirname}/../../lib/id3v2.js`);
 
     // TODO: Add header tests before content tests
 

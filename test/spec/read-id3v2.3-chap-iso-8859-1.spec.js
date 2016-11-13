@@ -12,9 +12,10 @@
 
 const _ = require("underscore");
 const util = require("../util");
-const matchers = require("../matchers.js");
+const matchers = require("../matchers");
 
-const mp3Parser = require("../../main.js");
+// The module under test
+const mp3Parser = require("../../main");
 
 const mp3FilePath = `${__dirname}/../data/id3v2.3-chap-iso-8859-1.mp3`;
 

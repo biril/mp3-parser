@@ -19,11 +19,12 @@ const methodNames = [
     "readTags"
 ];
 
-describe("mp3 parser", () => {
-    var mp3Parser = require(__dirname + "/../../main.js");
+// The module under test
+const parser = require("../../main");
 
+describe("mp3 parser", () => {
     it(`should be exported, with expected API ${methodNames.join(", ")}`, () => {
-        expect(mp3Parser).toBeObject();
-        _.each(methodNames, methodName => expect(mp3Parser).toHaveMethod(methodName));
+        expect(parser).toBeObject();
+        _.each(methodNames, methodName => expect(parser).toHaveMethod(methodName));
     });
 });
