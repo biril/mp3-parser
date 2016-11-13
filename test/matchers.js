@@ -2,67 +2,75 @@
 
 "use strict";
 
-var _ = require("underscore"),
+const _ = require("underscore");
 
-    // Helper to dump the contents of Array or Dataview
-    dumpCollection = function (collection, n) {
-        var dump = [],
-            i = 0,
-            l = _.isArray(collection) ? collection.length : collection.byteLength,
-            getCollectionValue = _.isArray(collection) ?
-                function (i) { return collection[i]; } :
-                function (i) { return collection.getUint8(i); };
+const retPass = () => ({ pass: true });
+const retFail = message => ({ pass: false, message });
 
-        if ((n || (n = 3)) >= l / 2) { n = l + 1; }
+// Helper to dump the contents of Array or Dataview
+const dumpCollection = function (collection, n) {
+    const length = _.isArray(collection) ? collection.length : collection.byteLength;
+    const getVal = _.isArray(collection) ? x => collection[x] : x => collection.getUint8(x);
 
-        while (true) {
-            if (i === l) { break; }
+    if ((n || (n = 3)) >= length / 2) { n = length + 1; }
 
-            dump.push(getCollectionValue(i++));
+    let i = 0;
+    const dump = [];
+    while (true) {
+        if (i === length) { break; }
 
-            if (i === n) {
-                dump.push("...");
-                i = l - n;
-            }
+        dump.push(getVal(i++));
+
+        if (i === n) {
+            dump.push("...");
+            i = length - n;
         }
+    }
 
-        return l + ":[" + dump.join(", ") + "]";
-    };
-
-var asDataViewToEqualMatcher = function (util) {
-    var compare = function (actual, expected) {
-        var getExpectedValue = _.isArray(expected) ?
-                function (i) { return expected[i]; } :
-                function (i) { return expected.getUint8(i);
-            },
-            getExpectedLength = _.isArray(expected) ?
-                function () { return expected.length; } :
-                function () { return expected.byteLength;
-            },
-            buildFailMessage = function (expected, actual, index) {
-                return "Expected " + dumpCollection(actual) + " to be a DataView with elements " +
-                    dumpCollection(expected) + ". (Expected " + getExpectedValue(index) +
-                    " at index " + index + ", got " + actual.getUint8(index) + ")";
-            },
-            i;
-
-        if (actual.byteLength !== getExpectedLength()) {
-            return { pass: false, message: "Expected " + dumpCollection(this.actual) +
-                    " to be a DataView of length " + getExpectedLength() };
-        }
-
-        for (i = 0; i < actual.byteLength; ++i) {
-            if (actual.getUint8(i) !== getExpectedValue(i)) {
-                return { pass: false, message: buildFailMessage(expected, this.actual, i) };
-            }
-        }
-
-        return { pass: true };
-    };
-
-    return { compare: compare };
+    return length + ":[" + dump.join(", ") + "]";
 };
 
-var matchers = { asDataViewToEqual: asDataViewToEqualMatcher };
+// The custom matchers
+const matchers = {};
+
+// Expect the actual - which should be a DataView instance - to have the same elements as the
+//  expected. Which may be given as a DataView instance or an array
+matchers.asDataViewToEqual = util => {
+    const compare = (actual, expected) => {
+        // Do they have the same length?
+        const expectedLength = expected[_.isArray(expected) ? 'length' : 'byteLength'];
+        if (actual.byteLength !== expectedLength) {
+            return retFail(`Expected ${dumpCollection(actual)} to be a DataView of length
+                ${expectedLength}`);
+        }
+
+        // Do they have the same elements?
+        const getExpectedValue = _.isArray(expected) ? i => expected[i] : i => expected.getUint8(i);
+        for (let i = 0; i < actual.byteLength; ++i) {
+            if (actual.getUint8(i) !== getExpectedValue(i)) {
+                return retFail(`Expected ${dumpCollection(actual)} to be a DataView with elements
+                    ${dumpCollection(expected)}. (Expected ${getExpectedValue(i)} at index ${i},
+                    got ${actual.getUint8(i)})`);
+            }
+        }
+
+        return retPass();
+    };
+
+    return { compare };
+};
+
+// Expect the actual to have expected length
+matchers.toHaveLength = util => {
+    const compare = (actual, expectedLength) => {
+        if (actual.length !== expectedLength) {
+            return retFail(`Expected ${dumpCollection(actual)} to have length ${expectedLength}`);
+        }
+
+        return retPass();
+    };
+
+    return { compare };
+};
 
 module.exports = matchers;
