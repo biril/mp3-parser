@@ -24,6 +24,7 @@
     "generate-docs": "grock --glob './README.md' --glob './main.js' --glob './lib/*.js' --index 'README.md' --verbose"
   },
   "devDependencies": {
+    "audio-test-data": "git://github.com/biril/audio-test-data.git",
     "grock": "^0.3.8",
     "jasmine": "^2.5.2",
     "jasmine-expect": "^3.0.1",

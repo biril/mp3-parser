@@ -8,8 +8,14 @@
 /* global describe, it, expect  */
 "use strict";
 
+const util = require("../util");
+
 // The module under test
 const lib = require("../../lib/lib");
+
+// Helper to load MPEG test files
+var dataViewFromTestFilePath = testFilePath =>
+    util.dataViewFromFilePath(`${__dirname}/../../node_modules/audio-test-data/${testFilePath}`);
 
 describe("lib", () => {
 
@@ -49,4 +55,19 @@ describe("lib", () => {
             expect(seq).toEqual(strOctets);
         });
     });
+
+    describe("readFrame", () => {
+        it("should read frame of MPEG layer2 v1 32KHz 32kbps mono file", () => {
+            const fileView = dataViewFromTestFilePath("layer2/v1/32000_032_m.mp2");
+
+            const frame = lib.readFrame(fileView);
+
+            expect(frame._section.type).toEqual("frame");
+            expect(frame._section.offset).toEqual(0);
+
+            expect(frame.header._section.type).toEqual("frameHeader");
+            expect(frame.header.layerDescription).toEqual("Layer II");
+            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 1 (ISO/IEC 11172-3)");
+        });
+    })
 });
