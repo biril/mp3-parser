@@ -76,6 +76,9 @@ describe("lib", () => {
             const frame = lib.readFrame(fileView);
 
             expectFrameLV(frame, 2, 1);
+            expect(frame.header.bitrate).toEqual(32);
+            expect(frame.header.samplingRate).toEqual(32000);
+            expect(frame.header.channelMode).toEqual("Single channel (Mono)");
         });
 
         it("should read frame of MPEG layer2 v1 48KHz 320kbps stereo file", () => {
@@ -84,6 +87,9 @@ describe("lib", () => {
             const frame = lib.readFrame(fileView);
 
             expectFrameLV(frame, 2, 1);
+            expect(frame.header.bitrate).toEqual(320);
+            expect(frame.header.samplingRate).toEqual(48000);
+            expect(frame.header.channelMode).toEqual("Stereo");
         });
 
         it("should read frame of MPEG layer2 v2 16KHz 32kbps mono file", () => {
@@ -92,6 +98,9 @@ describe("lib", () => {
             const frame = lib.readFrame(fileView);
 
             expectFrameLV(frame, 2, 2);
+            expect(frame.header.bitrate).toEqual(32);
+            expect(frame.header.samplingRate).toEqual(16000);
+            expect(frame.header.channelMode).toEqual("Single channel (Mono)");
         });
 
         it("should read frame of MPEG layer2 v2 22.05Hz 160kbps stereo file", () => {
@@ -100,6 +109,9 @@ describe("lib", () => {
             const frame = lib.readFrame(fileView);
 
             expectFrameLV(frame, 2, 2);
+            expect(frame.header.bitrate).toEqual(160);
+            expect(frame.header.samplingRate).toEqual(22050);
+            expect(frame.header.channelMode).toEqual("Stereo");
         });
     });
 });
