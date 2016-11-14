@@ -5,8 +5,8 @@ mp3 Parser
 [![NPM version](https://badge.fury.io/js/mp3-parser.png)](http://badge.fury.io/js/mp3-parser)
 [![Bower version](https://badge.fury.io/bo/mp3-parser.png)](http://badge.fury.io/bo/mp3-parser)
 
-Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For any of
-these found within a given mp3 buffer, mp3 Parser will provide data indicating their presence,
+Locate and read MPEG audio file sections: Individual frames as well as ID3v2 and Xing/Lame tags. For
+any of these found within a given buffer, mp3 Parser will provide data indicating their presence,
 their position within the buffer, as well as relevant informative data (with varying degrees of
 detail).
 
@@ -85,16 +85,16 @@ Usage
 -----
 
 The parser's API consists of `read____` methods, each dedicated to reading a specific section
-of the mp3 file. The current implementation includes `readFrameHeader`, `readFrame`,
+of the MPEG audio file. The current implementation includes `readFrameHeader`, `readFrame`,
 `readLastFrame`, `readId3v2Tag`, `readXingTag` and `readTags`. Each of these accepts a
 [DataView](http://www.khronos.org/registry/typedarray/specs/latest/#8)-wrapped ArrayBuffer
-containing the mp3 data, and optionally an offset into the buffer.
+containing the audio data, and optionally an offset into the buffer.
 
 In all cases, a 'description' will be returned - a hash containing key-value pairs relevant to the
-specific mp3 section being read. For example the hash returned by `readFrameHeader` will include an
-`mpegAudioVersion` key of value "MPEG Version 1 (ISO/IEC 11172-3)" and a `layerDescription` key
-of value "Layer III". A section description will always include a `_section` attribute - a hash
-with `type`, `byteLength` and `offset` keys:
+specific section being read. For example, the hash returned by `readFrameHeader` for an mp3 file
+will include an `mpegAudioVersion` key of value "MPEG Version 1 (ISO/IEC 11172-3)" and a
+`layerDescription` key of value "Layer III". A section description will always include a
+`_section` attribute - a hash with `type`, `byteLength` and `offset` keys:
 
 * `type`: "frame", "frameHeader", "Xing" or "ID3v2"
 * `byteLenfth`: Size of the section in bytes
