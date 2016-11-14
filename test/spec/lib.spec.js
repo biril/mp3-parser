@@ -57,17 +57,25 @@ describe("lib", () => {
     });
 
     describe("readFrame", () => {
+        const layerDescriptions = {2: 'Layer II', 3: 'Layer III' };
+        const mpegAudioVersions = {1: 'MPEG Version 1 (ISO/IEC 11172-3)', 2: 'MPEG Version 2 (ISO/IEC 13818-3)'};
+
+        // Run typical expectations for a frame of given `layer` & `version`
+        const expectFrameLV = (frame, layer, version) => {
+            expect(frame._section.type).toEqual("frame");
+            expect(frame._section.offset).toEqual(0);
+
+            expect(frame.header._section.type).toEqual("frameHeader");
+            expect(frame.header.layerDescription).toEqual(layerDescriptions[layer]);
+            expect(frame.header.mpegAudioVersion).toEqual(mpegAudioVersions[version]);
+        };
+
         it("should read frame of MPEG layer2 v1 32KHz 32kbps mono file", () => {
             const fileView = dataViewFromTestFilePath("layer2/v1/32000_032_m.mp2");
 
             const frame = lib.readFrame(fileView);
 
-            expect(frame._section.type).toEqual("frame");
-            expect(frame._section.offset).toEqual(0);
-
-            expect(frame.header._section.type).toEqual("frameHeader");
-            expect(frame.header.layerDescription).toEqual("Layer II");
-            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 1 (ISO/IEC 11172-3)");
+            expectFrameLV(frame, 2, 1);
         });
 
         it("should read frame of MPEG layer2 v1 48KHz 320kbps stereo file", () => {
@@ -75,12 +83,7 @@ describe("lib", () => {
 
             const frame = lib.readFrame(fileView);
 
-            expect(frame._section.type).toEqual("frame");
-            expect(frame._section.offset).toEqual(0);
-
-            expect(frame.header._section.type).toEqual("frameHeader");
-            expect(frame.header.layerDescription).toEqual("Layer II");
-            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 1 (ISO/IEC 11172-3)");
+            expectFrameLV(frame, 2, 1);
         });
 
         it("should read frame of MPEG layer2 v2 16KHz 32kbps mono file", () => {
@@ -88,12 +91,7 @@ describe("lib", () => {
 
             const frame = lib.readFrame(fileView);
 
-            expect(frame._section.type).toEqual("frame");
-            expect(frame._section.offset).toEqual(0);
-
-            expect(frame.header._section.type).toEqual("frameHeader");
-            expect(frame.header.layerDescription).toEqual("Layer II");
-            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 2 (ISO/IEC 13818-3)");
+            expectFrameLV(frame, 2, 2);
         });
 
         it("should read frame of MPEG layer2 v2 22.05Hz 160kbps stereo file", () => {
@@ -101,12 +99,7 @@ describe("lib", () => {
 
             const frame = lib.readFrame(fileView);
 
-            expect(frame._section.type).toEqual("frame");
-            expect(frame._section.offset).toEqual(0);
-
-            expect(frame.header._section.type).toEqual("frameHeader");
-            expect(frame.header.layerDescription).toEqual("Layer II");
-            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 2 (ISO/IEC 13818-3)");
+            expectFrameLV(frame, 2, 2);
         });
     })
 });
