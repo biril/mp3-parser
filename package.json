@@ -12,7 +12,7 @@
   "main": "main.js",
   "directories": {
     "lib": "lib",
-    "example": "examples"
+    "example": "example"
   },
   "repository": {
     "type": "git",
