@@ -101,5 +101,5 @@ describe("lib", () => {
 
             expectFrameLV(frame, 2, 2);
         });
-    })
+    });
 });
