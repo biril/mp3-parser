@@ -108,34 +108,63 @@ In further detail:
 Read and return description of header of frame located at `offset` of DataView `view`. Returns
 `null` in the event that no frame header is found at `offset`.
 
-As an example description:
+A couple of example descriptions:
 
-```javascript
-{
-    _section: {
-        type: 'frameHeader',
-        offset: 99934,
-        byteLength: 4
-    },
-    mpegAudioVersionBits: '11',
-    mpegAudioVersion: 'MPEG Version 1 (ISO/IEC 11172-3)',
-    layerDescriptionBits: '01',
-    layerDescription: 'Layer III',
-    isProtected: 1,
-    protectionBit: '1',
-    bitrateBits: '1001',
-    bitrate: 128,
-    samplingRateBits: '00',
-    samplingRate: 44100,
-    frameIsPaddedBit: '1',
-    frameIsPadded: true,
-    framePadding: 1,
-    privateBit: '0',
-    channelModeBits: '01',
-    channelMode: 'Joint stereo (Stereo)'
-}
-```
+* Version 1, Layer III (mp3), 44.1KHz 128Kbs Joint Stereo:
 
+    ```javascript
+    {
+        _section: {
+            type: 'frameHeader',
+            offset: 99934,
+            byteLength: 4
+        },
+        mpegAudioVersionBits: '11',
+        mpegAudioVersion: 'MPEG Version 1 (ISO/IEC 11172-3)',
+        layerDescriptionBits: '01',
+        layerDescription: 'Layer III',
+        isProtected: 1,
+        protectionBit: '1',
+        bitrateBits: '1001',
+        bitrate: 128,
+        samplingRateBits: '00',
+        samplingRate: 44100,
+        frameIsPaddedBit: '1',
+        frameIsPadded: true,
+        framePadding: 1,
+        privateBit: '0',
+        channelModeBits: '01',
+        channelMode: 'Joint stereo (Stereo)'
+    }
+    ```
+
+* Version 2, Layer II, 16KHz 32Kbs Mono:
+
+    ```javascript
+    {
+        _section: {
+            type: 'frameHeader',
+            offset: 0,
+            byteLength: 4
+        },
+        mpegAudioVersionBits: '10',
+        mpegAudioVersion: 'MPEG Version 2 (ISO/IEC 13818-3)',
+        layerDescriptionBits: '10',
+        layerDescription: 'Layer II',
+        isProtected: 1,
+        protectionBit: '1',
+        bitrateBits: '0100',
+        bitrate: 32,
+        samplingRateBits: '10',
+        samplingRate: 16000,
+        frameIsPaddedBit: '0',
+        frameIsPadded: false,
+        framePadding: 0,
+        privateBit: '0',
+        channelModeBits: '11',
+        channelMode: 'Single channel (Mono)'
+    }
+    ```
 
 ### readFrame(view, [offset[, requireNextFrame]])
 
