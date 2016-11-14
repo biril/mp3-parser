@@ -69,5 +69,44 @@ describe("lib", () => {
             expect(frame.header.layerDescription).toEqual("Layer II");
             expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 1 (ISO/IEC 11172-3)");
         });
+
+        it("should read frame of MPEG layer2 v1 48KHz 320kbps stereo file", () => {
+            const fileView = dataViewFromTestFilePath("layer2/v1/48000_320_s.mp2");
+
+            const frame = lib.readFrame(fileView);
+
+            expect(frame._section.type).toEqual("frame");
+            expect(frame._section.offset).toEqual(0);
+
+            expect(frame.header._section.type).toEqual("frameHeader");
+            expect(frame.header.layerDescription).toEqual("Layer II");
+            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 1 (ISO/IEC 11172-3)");
+        });
+
+        it("should read frame of MPEG layer2 v2 16KHz 32kbps mono file", () => {
+            const fileView = dataViewFromTestFilePath("layer2/v2/16000_032_m.mp2");
+
+            const frame = lib.readFrame(fileView);
+
+            expect(frame._section.type).toEqual("frame");
+            expect(frame._section.offset).toEqual(0);
+
+            expect(frame.header._section.type).toEqual("frameHeader");
+            expect(frame.header.layerDescription).toEqual("Layer II");
+            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 2 (ISO/IEC 13818-3)");
+        });
+
+        it("should read frame of MPEG layer2 v2 22.05Hz 160kbps stereo file", () => {
+            const fileView = dataViewFromTestFilePath("layer2/v2/22050_160_s.mp2");
+
+            const frame = lib.readFrame(fileView);
+
+            expect(frame._section.type).toEqual("frame");
+            expect(frame._section.offset).toEqual(0);
+
+            expect(frame.header._section.type).toEqual("frameHeader");
+            expect(frame.header.layerDescription).toEqual("Layer II");
+            expect(frame.header.mpegAudioVersion).toEqual("MPEG Version 2 (ISO/IEC 13818-3)");
+        });
     })
 });
