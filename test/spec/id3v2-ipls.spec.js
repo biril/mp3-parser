@@ -23,7 +23,7 @@
 const util = require("../util");
 
 // Make-believe offset of frame bytes, within containing ID3v2 tag
-const frmOffset = 7;
+const frameOffset = 7;
 
 // The module under test
 const parser = require("../../lib/id3v2");
@@ -33,31 +33,31 @@ describe("ID3v2.3 parser, reading IPLS frame", () => {
     // TODO: Add header tests before content tests
 
     it("should read IPLS frame with content: 0first0second0", () => {
-        const frmView = util.buildFrameView({
+        const frameView = util.buildFrameView({
             id: "IPLS",
             content: [0, "first", 0, "second", 0],
-            offset: frmOffset
+            offset: frameOffset
         });
 
-        const frm = parser.readId3v2TagFrame(frmView, frmOffset, frmView.byteLength);
+        const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
 
-        expect(frm.content.encoding).toBe(0);
-        expect(frm.content.values[0]).toBe("first");
-        expect(frm.content.values[1]).toBe("second");
+        expect(frame.content.encoding).toBe(0);
+        expect(frame.content.values[0]).toBe("first");
+        expect(frame.content.values[1]).toBe("second");
     });
 
     it("should read IPLS frame with content: 0first0second0third0", () => {
-        const frmView = util.buildFrameView({
+        const frameView = util.buildFrameView({
             id: "IPLS",
             content: [0, "first", 0, "second", 0, "third", 0],
-            offset: frmOffset
+            offset: frameOffset
         });
 
-        const frm = parser.readId3v2TagFrame(frmView, frmOffset, frmView.byteLength);
+        const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
 
-        expect(frm.content.encoding).toBe(0);
-        expect(frm.content.values[0]).toBe("first");
-        expect(frm.content.values[1]).toBe("second");
-        expect(frm.content.values[2]).toBe("third");
+        expect(frame.content.encoding).toBe(0);
+        expect(frame.content.values[0]).toBe("first");
+        expect(frame.content.values[1]).toBe("second");
+        expect(frame.content.values[2]).toBe("third");
     });
 });
