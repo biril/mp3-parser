@@ -7,7 +7,7 @@
 const fs = require('fs');
 const _ = require("underscore");
 
-//
+// Concat given arrays into new one. Just a shorthand
 const concat = function (/* ...arrays */) {
     return Array.prototype.concat.apply([], arguments);
 };
@@ -23,7 +23,8 @@ const dataViewFromFilePath = filePath => {
     return new DataView(uint8Array.buffer);
 };
 
-//
+// Get a DataView instance containing elements of given array. Array elements of index < `offset`
+//  will be ignored
 const dataViewFromArray = (array, offset) => {
     const dataView = new DataView(new ArrayBuffer(offset + array.length));
     for (let i = array.length - 1; i >= 0; --i) {
@@ -48,14 +49,14 @@ const wordSeqFromStr = str => {
     return seq;
 };
 
-// Helper to split one dword (in this context, a 32bit value) into 4 octets
+// Get an array of 4 octets by splitting given dword (in this context, a 32bit value) into
 const octetsFromDword = dword => {
     const dwView = new DataView(new ArrayBuffer(4));
     dwView.setUint32(0, dword);
     return [dwView.getUint8(0), dwView.getUint8(1), dwView.getUint8(2), dwView.getUint8(3)];
 };
 
-// Given an id of a frame and the size of its contents, get the frame's header as sequence of octets
+// Get octet array for frame's header, given frame's id and content size
 const buildFrameHeaderOctets = (frameId, frameContentSize) => {
     // The frame header is 10 octets long and laid out as `IIIISSSSFF`, where
     // * `IIII......`: Frame id (four characters)
@@ -66,11 +67,11 @@ const buildFrameHeaderOctets = (frameId, frameContentSize) => {
     return concat(frameIdOctets, frameContentSizeOctets, [0, 0]);
 };
 
-//
+// Get octet array for frame's content. Given `content` should be an array of numbers and strings
 const buildFrameContentOctets = content =>
     _.flatten(_.map(content, c => _.isString(c) ? wordSeqFromStr(c) : c));
 
-//
+// Get octet array for frame of given `id` and `content` (an array of numbers and strings)
 const buildFrameOctets = (id, content) => {
     // All frames consist of a header followed by the actual data
     var frameContentOctets = buildFrameContentOctets(content);
@@ -78,12 +79,12 @@ const buildFrameOctets = (id, content) => {
     return concat(frameHeaderOctets, frameContentOctets);
 };
 
-// Given a frame descriptor `frameDescr` return the frame's octets wrapped in a DataView instance
-//  The given frame descriptor should have properties
+// Get frame's octets wrapped in a DataView instance, given a frame descriptor hash `frameDescr`
+//  that descibes the frame. This should have properties
 //  * id: The frame's id, e.g. "IPLS"
 //  * content: The frame's content as an array of numbers and strings
 //  * offset: The frame's offset within the returned view. This is useful in emulating a frame
-//     that appear in some arbitrary position of the bitstream, rather than 0 which obviously
+//     that appears in some arbitrary position of the bitstream, rather than 0 which obviously
 //     isn't the general case
 const buildFrameView = frameDescr =>
     dataViewFromArray(buildFrameOctets(frameDescr.id, frameDescr.content), frameDescr.offset);
