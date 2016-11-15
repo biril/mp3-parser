@@ -343,6 +343,18 @@ You may also want to
     list of currently (un)supported ID3v2 tag frames.
 
 
+Changelog
+---------
+
+#### 3.0.0 — _Nov XX, 2016_ — [Diff](https://github.com/biril/mp3-parser/compare/0.2.7...master)
+
+* Add support for ID3v2 CHAP frames (Thanks [markusahlstrand](https://github.com/markusahlstrand)).
+* Add support for MPEG v2 / layers I - III (Thanks [jdelStrother](https://github.com/jdelStrother)).
+* Fix ..
+* Improve test-runner (switch to Jasmine). Add tests. Revise and clean-up linter config.
+* Lots of minor fixes and housekeeping.
+
+
 License
 -------
 
