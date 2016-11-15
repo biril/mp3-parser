@@ -1,6 +1,6 @@
 //     mp3-parser test suite: ID3v2.3 tag / CHAP frame / ISO-8859-1 encoded subframes.
 //     Tests run against id3v2.3-chap-iso-8859-1.mp3
-//     (maintained with [Kid3 ID3 Tagger](http://kid3.sourceforge.net/))
+//     (maintained with [Kid3 ID3 Tagger](http://kid3.sourceforge.net/), version 3.0.2)
 
 //     https://github.com/biril/mp3-parser
 //     Licensed and freely distributed under the MIT License
@@ -17,7 +17,7 @@ const matchers = require("../matchers");
 // The module under test
 const mp3Parser = require("../../main");
 
-const mp3FilePath = `${__dirname}/../data/id3v2.3-chap-iso-8859-1.mp3`;
+const mp3FilePath = `${__dirname}/../data/kid3-3.0.2/id3v2.3-chap-iso-8859-1.mp3`;
 
 describe("ID3v2.3 reader run on CHAP frames with with ISO-8859-1 encoded subframes", () => {
     // Read the ID3v2 tag. This is done once, here, and all tests run on `capturedId3v2Tag`
