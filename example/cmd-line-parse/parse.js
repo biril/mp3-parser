@@ -15,21 +15,23 @@ const toArrayBuffer = buffer => {
 };
 
 if (!pathToMp3) {
-    console.log("please provide a path to an mp3 file, i.e. 'node parse.js <file>'");
+    console.log("please invoke with path to MPEG audio file, i.e. 'node parse.js <file>'");
     process.exit(0);
 }
 
 fs.readFile(pathToMp3, (error, buffer) => {
     if (error) {
-        console.log("Oops: " + error);
+        console.error("" + error);
         process.exit(1);
     }
 
     buffer = new DataView(toArrayBuffer(buffer));
 
-    const lastFrame = mp3Parser.readLastFrame(buffer);
     const tags = mp3Parser.readTags(buffer);
+    console.log("\nTags:\n-----");
+    console.log(util.inspect(tags, { depth: 5, colors: true }));
 
-    util.puts("\nTags:\n-----\n" + util.inspect(tags, { depth: 5, colors: true }));
-    util.puts("\nLast frame:\n-----------\n" + util.inspect(lastFrame, { depth: 3, colors: true }));
+    const lastFrame = mp3Parser.readLastFrame(buffer);
+    console.log("\nLast frame:\n-----------\n");
+    console.log(util.inspect(lastFrame, { depth: 3, colors: true }));
 });
