@@ -22,50 +22,67 @@
 
 const util = require("../util");
 
-// Make-believe offset of frame bytes, within containing ID3v2 tag
+// Make-believe offset of the frame's bytes, within its ID3v2 tag container
 const frameOffset = 7;
 
 // The module under test
 const parser = require("../../lib/id3v2");
+
+// Shorthand helper to build IPLS frames
+const buildFrameView = content => util.buildFrameView({
+    id: 'IPLS',
+    offset: frameOffset,
+    content: content,
+    contentEncoding: content[0] === 1 ? 'ucs' : 'iso',
+    endianness: 'le'
+});
 
 describe("ID3v2.3 parser, reading IPLS frame", () => {
 
     // TODO: Add header tests before content tests
 
     it("should read IPLS frame with content: 0first0second0", () => {
-        const frameView = util.buildFrameView({
-            id: "IPLS",
-            content: [0, "first", 0, "second", 0],
-            offset: frameOffset
-        });
+        const frameView = buildFrameView([0, "first", 0, "second", 0]);
 
         const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
 
         expect(frame.content.encoding).toBe(0);
         expect(frame.content.values[0]).toBe("first");
         expect(frame.content.values[1]).toBe("second");
+    });
+
+    it("should read IPLS frame with content: 1πρώτο00δεύτερο00", () => {
+        const frameView = buildFrameView([1, "πρώτο", 0, 0, "δεύτερο", 0, 0]);
+
+        const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
+
+        expect(frame.content.encoding).toBe(1);
+        expect(frame.content.values[0]).toBe("πρώτο");
+        expect(frame.content.values[1]).toBe("δεύτερο");
     });
 
     it("should read IPLS frame with content: 0first0second", () => {
-        const frameView = util.buildFrameView({
-            id: "IPLS",
-            content: [0, "first", 0, "second"],
-            offset: frameOffset
-        });
+        const frameView = buildFrameView([0, "first", 0, "second"]);
 
         const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
 
         expect(frame.content.encoding).toBe(0);
         expect(frame.content.values[0]).toBe("first");
         expect(frame.content.values[1]).toBe("second");
+    });
+
+    it("should read IPLS frame with content: 1πρώτο00δεύτερο", () => {
+        const frameView = buildFrameView([1, "πρώτο", 0, 0, "δεύτερο"]);
+
+        const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
+
+        expect(frame.content.encoding).toBe(1);
+        expect(frame.content.values[0]).toBe("πρώτο");
+        expect(frame.content.values[1]).toBe("δεύτερο");
     });
 
     it("should read IPLS frame with content: 0first0second0third0", () => {
-        const frameView = util.buildFrameView({
-            id: "IPLS",
-            content: [0, "first", 0, "second", 0, "third", 0],
-            offset: frameOffset
-        });
+        const frameView = buildFrameView([0, "first", 0, "second", 0, "third", 0]);
 
         const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
 
@@ -75,12 +92,19 @@ describe("ID3v2.3 parser, reading IPLS frame", () => {
         expect(frame.content.values[2]).toBe("third");
     });
 
+    it("should read IPLS frame with content: 0πρώτο00δεύτερο00τρίτο00", () => {
+        const frameView = buildFrameView([1, "πρώτο", 0, 0, "δεύτερο", 0, 0, "τρίτο", 0, 0]);
+
+        const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
+
+        expect(frame.content.encoding).toBe(1);
+        expect(frame.content.values[0]).toBe("πρώτο");
+        expect(frame.content.values[1]).toBe("δεύτερο");
+        expect(frame.content.values[2]).toBe("τρίτο");
+    });
+
     it("should read IPLS frame with content: 0first0second0third", () => {
-        const frameView = util.buildFrameView({
-            id: "IPLS",
-            content: [0, "first", 0, "second", 0, "third"],
-            offset: frameOffset
-        });
+        const frameView = buildFrameView([0, "first", 0, "second", 0, "third"]);
 
         const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
 
@@ -88,5 +112,16 @@ describe("ID3v2.3 parser, reading IPLS frame", () => {
         expect(frame.content.values[0]).toBe("first");
         expect(frame.content.values[1]).toBe("second");
         expect(frame.content.values[2]).toBe("third");
+    });
+
+    it("should read IPLS frame with content: 0πρώτο00δεύτερο00τρίτο", () => {
+        const frameView = buildFrameView([1, "πρώτο", 0, 0, "δεύτερο", 0, 0, "τρίτο"]);
+
+        const frame = parser.readId3v2TagFrame(frameView, frameOffset, frameView.byteLength);
+
+        expect(frame.content.encoding).toBe(1);
+        expect(frame.content.values[0]).toBe("πρώτο");
+        expect(frame.content.values[1]).toBe("δεύτερο");
+        expect(frame.content.values[2]).toBe("τρίτο");
     });
 });
