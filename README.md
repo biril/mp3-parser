@@ -343,6 +343,16 @@ You may also want to
     list of currently (un)supported ID3v2 tag frames.
 
 
+Contributing
+------------
+
+Contibutions are appreciated, naturally. Feel free to submit pull requests against `master`. Please
+make sure that `npm run lint` and `npm test` are green before you do so. Pull requests featuring
+appropriate unit tests are ideal. However, less than ideal pull requests are also fine, especially
+until the test suite gets the documentation it deserves - probably along with some necessary
+housekeeping.
+
+
 Changelog
 ---------
 
