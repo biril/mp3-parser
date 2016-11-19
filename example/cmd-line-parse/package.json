@@ -3,8 +3,14 @@
   "version": "0.0.1",
   "description": "Parse given mp3 file to output ID3v2 or Xing/Lame and last frame found.",
   "keywords": [
+    "mpeg",
+    "audio",
     "mp3",
-    "id3"
+    "mp2",
+    "id3",
+    "id3v2",
+    "xing",
+    "lame"
   ],
   "bugs": "https://github.com/biril/mp3-parser/issues",
   "license": "MIT",
