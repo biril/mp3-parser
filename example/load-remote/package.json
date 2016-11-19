@@ -3,16 +3,22 @@
   "version": "0.0.1",
   "description": "Load a remote mp3 and dump any ID3v2 or Xing/Lame tags found therein.",
   "keywords": [
+    "mpeg",
+    "audio",
     "mp3",
-    "id3"
+    "mp2",
+    "id3",
+    "id3v2",
+    "xing",
+    "lame"
   ],
   "bugs": "https://github.com/biril/mp3-parser/issues",
   "license": "MIT",
   "author": "biril <alexlambiris@gmail.com>",
   "private": true,
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-contrib-connect": "^1.0.1"
+    "grunt": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2"
   },
   "engines": {
     "node": ">=4.0.0"
