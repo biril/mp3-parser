@@ -1,13 +1,24 @@
 {
   "name": "mp3-parser",
   "main": "main.js",
-  "version": "0.2.7",
-  "homepage": "https://github.com/biril/mp3-parser",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/biril/mp3-parser.git"
+  },
   "authors": [
     "biril <alexlambiris@gmail.com>"
   ],
-  "description": "Read mp3 frames & tags",
-  "keywords": ["mp3", "id3"],
+  "description": "Read MPEG audio frames & tags",
+  "keywords": [
+    "mpeg",
+    "audio",
+    "mp3",
+    "mp2",
+    "id3",
+    "id3v2",
+    "xing",
+    "lame"
+  ],
   "license": "MIT",
   "ignore": [
     "**/.*",
@@ -17,5 +28,10 @@
     "examples/",
     "docs/",
     "package.json"
+  ],
+  "moduleType": [
+    "globals",
+    "amd",
+    "node"
   ]
 }
