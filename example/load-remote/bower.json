@@ -15,6 +15,6 @@
     "requirejs": "^2.3.2",
     "underscore": "^1.8.3",
     "jquery": "^2.0.3",
-    "mp3-parser": "~0.2.7"
+    "mp3-parser": "~0.3.0"
   }
 }

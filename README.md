@@ -336,9 +336,9 @@ You may also want to
 --------------------
 
 * View the [annotated version of the source](http://biril.github.io/mp3-parser/).
-* Try out the [load remote](https://github.com/biril/mp3-parser/tree/0.2.7/example/load-remote),
-    [read file](https://github.com/biril/mp3-parser/tree/0.2.7/example/read-file)
-    & [cmd line parse](https://github.com/biril/mp3-parser/tree/0.2.7/example/cmd-line-parse) examples.
+* Try out the [load remote](https://github.com/biril/mp3-parser/tree/0.3.0/example/load-remote),
+    [read file](https://github.com/biril/mp3-parser/tree/0.3.0/example/read-file)
+    & [cmd line parse](https://github.com/biril/mp3-parser/tree/0.3.0/example/cmd-line-parse) examples.
 * Take a look at [the project's wiki](https://github.com/biril/mp3-parser/wiki) which contains a
     list of currently (un)supported ID3v2 tag frames.
 
@@ -356,7 +356,12 @@ housekeeping.
 Changelog
 ---------
 
-#### Next — _Nov ??, 2016_ — [Diff](https://github.com/biril/mp3-parser/compare/0.2.7...master)
+#### Next — [Diff](https://github.com/biril/mp3-parser/compare/0.3.0...master)
+
+TBD
+
+
+#### 0.3.0 — _Nov 20, 2016_ — [Diff](https://github.com/biril/mp3-parser/compare/0.2.7...0.3.0)
 
 * Add support for ID3v2 CHAP frames (Thanks [markusahlstrand](https://github.com/markusahlstrand)).
 * Add support for MPEG v2 / layers I - III (Thanks [jdelStrother](https://github.com/jdelStrother)).

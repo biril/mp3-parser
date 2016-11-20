@@ -17,7 +17,7 @@
   "author": "biril <alexlambiris@gmail.com>",
   "private": true,
   "dependencies": {
-    "mp3-parser": "^0.2.6"
+    "mp3-parser": "^0.3.0"
   },
   "engines": {
     "node": ">=4.0.0"
