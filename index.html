@@ -35,8 +35,8 @@
           <div class="wrapper"><h1 id="mp3-parser"><a href="#mp3-parser" class="anchor"></a>mp3 Parser</h1><p><a href="https://travis-ci.org/biril/mp3-parser"><img src="https://travis-ci.org/biril/mp3-parser.png" alt="Build Status"></a>
 <a href="http://badge.fury.io/js/mp3-parser"><img src="https://badge.fury.io/js/mp3-parser.png" alt="NPM version"></a>
 <a href="http://badge.fury.io/bo/mp3-parser"><img src="https://badge.fury.io/bo/mp3-parser.png" alt="Bower version"></a></p>
-<p>Locate and read mp3 sections: Individual mp3 frames as well as ID3v2 and Xing/Lame tags. For any of
-these found within a given mp3 buffer, mp3 Parser will provide data indicating their presence,
+<p>Locate and read MPEG audio file sections: Individual frames as well as ID3v2 and Xing/Lame tags. For
+any of these found within a given buffer, mp3 Parser will provide data indicating their presence,
 their position within the buffer, as well as relevant informative data (with varying degrees of
 detail).</p>
 <h2 id="set-up"><a href="#set-up" class="anchor"></a>Set up</h2><p>To use mp3 Parser</p>
@@ -96,15 +96,15 @@ the current environment:</p>
 </li>
 </ul>
 <h2 id="usage"><a href="#usage" class="anchor"></a>Usage</h2><p>The parser&#39;s API consists of <code>read____</code> methods, each dedicated to reading a specific section
-of the mp3 file. The current implementation includes <code>readFrameHeader</code>, <code>readFrame</code>,
+of the MPEG audio file. The current implementation includes <code>readFrameHeader</code>, <code>readFrame</code>,
 <code>readLastFrame</code>, <code>readId3v2Tag</code>, <code>readXingTag</code> and <code>readTags</code>. Each of these accepts a
 <a href="http://www.khronos.org/registry/typedarray/specs/latest/#8">DataView</a>-wrapped ArrayBuffer
-containing the mp3 data, and optionally an offset into the buffer.</p>
+containing the audio data, and optionally an offset into the buffer.</p>
 <p>In all cases, a &#39;description&#39; will be returned - a hash containing key-value pairs relevant to the
-specific mp3 section being read. For example the hash returned by <code>readFrameHeader</code> will include an
-<code>mpegAudioVersion</code> key of value &quot;MPEG Version 1 (ISO/IEC 11172-3)&quot; and a <code>layerDescription</code> key
-of value &quot;Layer III&quot;. A section description will always include a <code>_section</code> attribute - a hash
-with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p>
+specific section being read. For example, the hash returned by <code>readFrameHeader</code> for an mp3 file
+will include an <code>mpegAudioVersion</code> key of value &quot;MPEG Version 1 (ISO/IEC 11172-3)&quot; and a
+<code>layerDescription</code> key of value &quot;Layer III&quot;. A section description will always include a
+<code>_section</code> attribute - a hash with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p>
 <ul>
 <li><code>type</code>: &quot;frame&quot;, &quot;frameHeader&quot;, &quot;Xing&quot; or &quot;ID3v2&quot;</li>
 <li><code>byteLenfth</code>: Size of the section in bytes</li>
@@ -113,31 +113,61 @@ with <code>type</code>, <code>byteLength</code> and <code>offset</code> keys:</p
 <p>In further detail:</p>
 <h3 id="readframeheader-view-offset-"><a href="#readframeheader-view-offset-" class="anchor"></a>readFrameHeader(view, [offset])</h3><p>Read and return description of header of frame located at <code>offset</code> of DataView <code>view</code>. Returns
 <code>null</code> in the event that no frame header is found at <code>offset</code>.</p>
-<p>As an example description:</p>
-<pre><code class="lang-javascript">{
-    _section: {
-        type: <span class="hljs-string">'frameHeader'</span>,
-        offset: <span class="hljs-number">99934</span>,
-        byteLength: <span class="hljs-number">4</span>
-    },
-    mpegAudioVersionBits: <span class="hljs-string">'11'</span>,
-    mpegAudioVersion: <span class="hljs-string">'MPEG Version 1 (ISO/IEC 11172-3)'</span>,
-    layerDescriptionBits: <span class="hljs-string">'01'</span>,
-    layerDescription: <span class="hljs-string">'Layer III'</span>,
-    isProtected: <span class="hljs-number">1</span>,
-    protectionBit: <span class="hljs-string">'1'</span>,
-    bitrateBits: <span class="hljs-string">'1001'</span>,
-    bitrate: <span class="hljs-number">128</span>,
-    samplingRateBits: <span class="hljs-string">'00'</span>,
-    samplingRate: <span class="hljs-number">44100</span>,
-    frameIsPaddedBit: <span class="hljs-string">'1'</span>,
-    frameIsPadded: <span class="hljs-literal">true</span>,
-    framePadding: <span class="hljs-number">1</span>,
-    privateBit: <span class="hljs-string">'0'</span>,
-    channelModeBits: <span class="hljs-string">'01'</span>,
-    channelMode: <span class="hljs-string">'Joint stereo (Stereo)'</span>
-}
+<p>A couple of example descriptions:</p>
+<ul>
+<li><p>Version 1, Layer III (mp3), 44.1KHz 128Kbs Joint Stereo:</p>
+<pre><code class="lang-javascript">  {
+      _section: {
+          type: <span class="hljs-string">'frameHeader'</span>,
+          offset: <span class="hljs-number">99934</span>,
+          byteLength: <span class="hljs-number">4</span>
+      },
+      mpegAudioVersionBits: <span class="hljs-string">'11'</span>,
+      mpegAudioVersion: <span class="hljs-string">'MPEG Version 1 (ISO/IEC 11172-3)'</span>,
+      layerDescriptionBits: <span class="hljs-string">'01'</span>,
+      layerDescription: <span class="hljs-string">'Layer III'</span>,
+      isProtected: <span class="hljs-number">1</span>,
+      protectionBit: <span class="hljs-string">'1'</span>,
+      bitrateBits: <span class="hljs-string">'1001'</span>,
+      bitrate: <span class="hljs-number">128</span>,
+      samplingRateBits: <span class="hljs-string">'00'</span>,
+      samplingRate: <span class="hljs-number">44100</span>,
+      frameIsPaddedBit: <span class="hljs-string">'1'</span>,
+      frameIsPadded: <span class="hljs-literal">true</span>,
+      framePadding: <span class="hljs-number">1</span>,
+      privateBit: <span class="hljs-string">'0'</span>,
+      channelModeBits: <span class="hljs-string">'01'</span>,
+      channelMode: <span class="hljs-string">'Joint stereo (Stereo)'</span>
+  }
 </code></pre>
+</li>
+<li><p>Version 2, Layer II, 16KHz 32Kbs Mono:</p>
+<pre><code class="lang-javascript">  {
+      _section: {
+          type: <span class="hljs-string">'frameHeader'</span>,
+          offset: <span class="hljs-number">0</span>,
+          byteLength: <span class="hljs-number">4</span>
+      },
+      mpegAudioVersionBits: <span class="hljs-string">'10'</span>,
+      mpegAudioVersion: <span class="hljs-string">'MPEG Version 2 (ISO/IEC 13818-3)'</span>,
+      layerDescriptionBits: <span class="hljs-string">'10'</span>,
+      layerDescription: <span class="hljs-string">'Layer II'</span>,
+      isProtected: <span class="hljs-number">1</span>,
+      protectionBit: <span class="hljs-string">'1'</span>,
+      bitrateBits: <span class="hljs-string">'0100'</span>,
+      bitrate: <span class="hljs-number">32</span>,
+      samplingRateBits: <span class="hljs-string">'10'</span>,
+      samplingRate: <span class="hljs-number">16000</span>,
+      frameIsPaddedBit: <span class="hljs-string">'0'</span>,
+      frameIsPadded: <span class="hljs-literal">false</span>,
+      framePadding: <span class="hljs-number">0</span>,
+      privateBit: <span class="hljs-string">'0'</span>,
+      channelModeBits: <span class="hljs-string">'11'</span>,
+      channelMode: <span class="hljs-string">'Single channel (Mono)'</span>
+  }
+</code></pre>
+</li>
+</ul>
 <h3 id="readframe-view-offset-requirenextframe-"><a href="#readframe-view-offset-requirenextframe-" class="anchor"></a>readFrame(view, [offset[, requireNextFrame]])</h3><p>Read and return description of frame located at <code>offset</code> of DataView <code>view</code>. Includes the frame
 header description (see <code>readFrameHeader</code>) plus basic information about the frame: The frame&#39;s
 length in bytes and the index of the next frame <em>if</em> <code>requireNextFrame</code> is set. In this case, the
@@ -277,11 +307,24 @@ frame. Returns an array of descriptions which may include that of a located ID3V
 Xing / Lame tag and of a located first frame.</p>
 <h2 id="you-may-also-want-to"><a href="#you-may-also-want-to" class="anchor"></a>You may also want to</h2><ul>
 <li>View the <a href="http://biril.github.io/mp3-parser/">annotated version of the source</a>.</li>
-<li>Try out the <a href="https://github.com/biril/mp3-parser/tree/0.2.7/examples/load-remote">load remote</a>,
-  <a href="https://github.com/biril/mp3-parser/tree/0.2.7/examples/read-file">read file</a>
-  &amp; <a href="https://github.com/biril/mp3-parser/tree/0.2.7/examples/cmd-line-parse">cmd line parse</a> examples.</li>
+<li>Try out the <a href="https://github.com/biril/mp3-parser/tree/0.3.0/example/load-remote">load remote</a>,
+  <a href="https://github.com/biril/mp3-parser/tree/0.3.0/example/read-file">read file</a>
+  &amp; <a href="https://github.com/biril/mp3-parser/tree/0.3.0/example/cmd-line-parse">cmd line parse</a> examples.</li>
 <li>Take a look at <a href="https://github.com/biril/mp3-parser/wiki">the project&#39;s wiki</a> which contains a
   list of currently (un)supported ID3v2 tag frames.</li>
+</ul>
+<h2 id="contributing"><a href="#contributing" class="anchor"></a>Contributing</h2><p>Contibutions are appreciated, naturally. Feel free to submit pull requests against <code>master</code>. Please
+make sure that <code>npm run lint</code> and <code>npm test</code> are green before you do so. Pull requests featuring
+appropriate unit tests are ideal. However, less than ideal pull requests are also fine, especially
+until the test suite gets the documentation it deserves - probably along with some necessary
+housekeeping.</p>
+<h2 id="changelog"><a href="#changelog" class="anchor"></a>Changelog</h2><h4 id="next-diff"><a href="#next-diff" class="anchor"></a>Next — <a href="https://github.com/biril/mp3-parser/compare/0.3.0...master">Diff</a></h4><p>TBD</p>
+<h4 id="0-3-0-nov-20-2016-diff"><a href="#0-3-0-nov-20-2016-diff" class="anchor"></a>0.3.0 — <em>Nov 20, 2016</em> — <a href="https://github.com/biril/mp3-parser/compare/0.2.7...0.3.0">Diff</a></h4><ul>
+<li>Add support for ID3v2 CHAP frames (Thanks <a href="https://github.com/markusahlstrand">markusahlstrand</a>).</li>
+<li>Add support for MPEG v2 / layers I - III (Thanks <a href="https://github.com/jdelStrother">jdelStrother</a>).</li>
+<li>Fix ID3v2 IPLS frame parsing defect (fixes <a href="https://github.com/biril/mp3-parser/issues/4">issue #4</a>, probably maybe).</li>
+<li>Improve test-runner (switch to Jasmine). Add tests. Revise and clean-up linter config.</li>
+<li>Lots of minor fixes and housekeeping.</li>
 </ul>
 <h2 id="license"><a href="#license" class="anchor"></a>License</h2><p>Licensed and freely distributed under the MIT License (LICENSE.txt).</p>
 <p>Copyright (c) 2013-2016 Alex Lambiris</p>

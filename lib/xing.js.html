@@ -32,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-parser/xing v0<span class="hljs-number">.2</span><span class="hljs-number">.7</span>
+          <div class="wrapper"><pre><code>mp3-parser/xing v0<span class="hljs-number">.3</span><span class="hljs-number">.0</span>
 </code></pre></div>
         </div>
       
@@ -59,9 +59,18 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
-<span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
-(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>jshint browser:true 
+global exports:false, define:false, require:false </p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
       
@@ -123,7 +132,6 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
             <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> mp3XingParser; }).call();
         }
     }, globalObject.mp3ParserLib);
-
 }(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">xingParser, lib</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
@@ -143,12 +151,11 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         offset || (offset = <span class="hljs-number">0</span>);
 
         <span class="hljs-keyword">var</span> tag = {
-                _section: {
-                    type: <span class="hljs-string">"Xing"</span>,
-                    offset: offset
-                },
-                header: lib.readFrameHeader(view, offset)
-            };
+            _section: { type: <span class="hljs-string">"Xing"</span>, offset: offset },
+            header: lib.readFrameHeader(view, offset)
+        };
+
+        <span class="hljs-keyword">var</span> head = tag.header; <span class="hljs-comment">// Convenience shortcut</span>
 </div></div>
       
       </div>
@@ -156,12 +163,15 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><p>The Xing header should begin with a valid frame header</p>
+          <div class="wrapper"><p>The Xing tag should begin with a valid frame header</p>
 </div>
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!tag.header) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (!head) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+
+        <span class="hljs-keyword">var</span> xingOffset = offset +
+            lib.getXingOffset(head.mpegAudioVersionBits, head.channelModeBits);
 </div></div>
       
       </div>
@@ -169,12 +179,12 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><p>There should be at least 36 (header) + 4 (&quot;Xing&quot;/&quot;Info&quot;) = 40 octets ahead</p>
+          <div class="wrapper"><p>There should be at least &#39;offset&#39; (header) + 4 (&quot;Xing&quot;/&quot;Info&quot;) octets ahead</p>
 </div>
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (view.byteLength &lt; offset + <span class="hljs-number">40</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">if</span> (view.byteLength &lt; xingOffset + <span class="hljs-number">4</span>) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 </div></div>
       
       </div>
@@ -182,17 +192,17 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><p>A &quot;Xing&quot; or &quot;Info&quot; identifier should reside at octet 36</p>
+          <div class="wrapper"><p>A &quot;Xing&quot; or &quot;Info&quot; identifier should be present</p>
 </div>
         </div>
       
       
-        <div class="code"><div class="wrapper">        tag.identifier = (lib.isSeq(lib.seq.xing, view, offset + <span class="hljs-number">36</span>) &amp;&amp; <span class="hljs-string">"Xing"</span>) ||
-            (lib.isSeq(lib.seq.info, view, offset + <span class="hljs-number">36</span>) &amp;&amp; <span class="hljs-string">"Info"</span>);
+        <div class="code"><div class="wrapper">        tag.identifier = (lib.isSeq(lib.seq.xing, view, xingOffset) &amp;&amp; <span class="hljs-string">"Xing"</span>) ||
+            (lib.isSeq(lib.seq.info, view, xingOffset) &amp;&amp; <span class="hljs-string">"Info"</span>);
         <span class="hljs-keyword">if</span> (!tag.identifier) { <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>; }
 
-        tag._section.byteLength = lib.getFrameByteLength(tag.header.bitrate,
-            tag.header.samplingRate, tag.header.framePadding);
+        tag._section.byteLength = lib.getFrameByteLength(head.bitrate, head.samplingRate,
+            head.framePadding, head.mpegAudioVersionBits, head.layerDescriptionBits);
         tag._section.nextFrameIndex = offset + tag._section.byteLength;
 
         <span class="hljs-keyword">return</span> tag;

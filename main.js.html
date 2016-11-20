@@ -32,7 +32,7 @@
       <div class="segment">
       
         <div class="comments ">
-          <div class="wrapper"><pre><code>mp3-parser v0<span class="hljs-number">.2</span><span class="hljs-number">.7</span>
+          <div class="wrapper"><pre><code>mp3-parser v0<span class="hljs-number">.3</span><span class="hljs-number">.0</span>
 </code></pre></div>
         </div>
       
@@ -59,9 +59,18 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
         </div>
       
       
-        <div class="code"><div class="wrapper"><span class="hljs-comment">/*jshint browser:true */</span>
-<span class="hljs-comment">/*global exports:false, define:false, require:false */</span>
-(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
+      </div>
+    
+      <div class="segment">
+      
+        <div class="comments ">
+          <div class="wrapper"><p>jshint browser:true 
+global exports:false, define:false, require:false </p>
+</div>
+        </div>
+      
+      
+        <div class="code"><div class="wrapper">(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">globalObject, createModule</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
       
@@ -124,7 +133,6 @@ Copyright (c) <span class="hljs-number">2013</span>-<span class="hljs-number">20
             <span class="hljs-keyword">return</span> (<span class="hljs-keyword">this</span>.noConflict = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> mp3Parser; }).call();
         }
     }, globalObject.mp3ParserLib, globalObject.mp3Id3v2Parser, globalObject.mp3XingParser);
-
 }(<span class="hljs-keyword">this</span>, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">mp3Parser, lib, id3v2Parser, xingParser</span>) </span>{
 <span class="hljs-pi">    "use strict"</span>;
 </div></div>
@@ -176,7 +184,6 @@ All methods return a description of the section read in the form of a hash conta
         <div class="code"><div class="wrapper">    mp3Parser.readFrameHeader = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{
         <span class="hljs-keyword">return</span> lib.readFrameHeader(view, offset);
     };
-
 </div></div>
       
       </div>
@@ -196,7 +203,6 @@ All methods return a description of the section read in the form of a hash conta
         <div class="code"><div class="wrapper">    mp3Parser.readFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset, requireNextFrame</span>) </span>{
         <span class="hljs-keyword">return</span> lib.readFrame(view, offset, requireNextFrame);
     };
-
 </div></div>
       
       </div>
@@ -239,7 +245,6 @@ All methods return a description of the section read in the form of a hash conta
 
         <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>;
     };
-
 </div></div>
       
       </div>
@@ -258,7 +263,6 @@ All methods return a description of the section read in the form of a hash conta
         <div class="code"><div class="wrapper">    mp3Parser.readId3v2Tag = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{
         <span class="hljs-keyword">return</span> id3v2Parser.readId3v2Tag(view, offset);
     };
-
 </div></div>
       
       </div>
@@ -276,7 +280,6 @@ All methods return a description of the section read in the form of a hash conta
         <div class="code"><div class="wrapper">    mp3Parser.readXingTag = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{
         <span class="hljs-keyword">return</span> xingParser.readXingTag(view, offset);
     };
-
 </div></div>
       
       </div>
@@ -296,13 +299,13 @@ All methods return a description of the section read in the form of a hash conta
         <div class="code"><div class="wrapper">    mp3Parser.readTags = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">view, offset</span>) </span>{
         offset || (offset = <span class="hljs-number">0</span>);
 
-        <span class="hljs-keyword">var</span> sections = [],
-            section = <span class="hljs-literal">null</span>,
-            readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame],
-            foundFirstFrame = <span class="hljs-literal">false</span>,
-            i = <span class="hljs-number">0</span>,
-            numOfReaders = readers.length,
-            bufferLength = view.byteLength;
+        <span class="hljs-keyword">var</span> sections = [];
+        <span class="hljs-keyword">var</span> section = <span class="hljs-literal">null</span>;
+        <span class="hljs-keyword">var</span> isFirstFrameFound = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">var</span> bufferLength = view.byteLength;
+
+        <span class="hljs-keyword">var</span> readers = [mp3Parser.readId3v2Tag, mp3Parser.readXingTag, mp3Parser.readFrame];
+        <span class="hljs-keyword">var</span> numOfReaders = readers.length;
 </div></div>
       
       </div>
@@ -315,8 +318,7 @@ All methods return a description of the section read in the form of a hash conta
         </div>
       
       
-        <div class="code"><div class="wrapper">        <span class="hljs-keyword">for</span> (; offset &lt; bufferLength &amp;&amp; !foundFirstFrame; ++offset) {
-</div></div>
+        <div class="code"><div class="wrapper">        <span class="hljs-keyword">for</span> (; offset &lt; bufferLength &amp;&amp; !isFirstFrameFound; ++offset) {</div></div>
       
       </div>
     
@@ -328,7 +330,7 @@ All methods return a description of the section read in the form of a hash conta
         </div>
       
       
-        <div class="code"><div class="wrapper">            <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; numOfReaders; ++i) {
+        <div class="code"><div class="wrapper">            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; numOfReaders; ++i) {
                 section = readers[i](view, offset);
 </div></div>
       
@@ -342,8 +344,7 @@ All methods return a description of the section read in the form of a hash conta
         </div>
       
       
-        <div class="code"><div class="wrapper">                <span class="hljs-keyword">if</span> (section) {
-</div></div>
+        <div class="code"><div class="wrapper">                <span class="hljs-keyword">if</span> (section) {</div></div>
       
       </div>
     
@@ -380,13 +381,13 @@ All methods return a description of the section read in the form of a hash conta
         <div class="comments ">
           <div class="wrapper"><p>If the section we just parsed is a frame then we&#39;ve actually located the
  first frame. Break out of the readers-loop making sure to set
- foundFirstFrame (so that we also exit the outer loop)</p>
+ isFirstFrameFound (so that we also exit the outer loop)</p>
 </div>
         </div>
       
       
         <div class="code"><div class="wrapper">                    <span class="hljs-keyword">if</span> (section._section.type === <span class="hljs-string">"frame"</span>) {
-                        foundFirstFrame = <span class="hljs-literal">true</span>;
+                        isFirstFrameFound = <span class="hljs-literal">true</span>;
                         <span class="hljs-keyword">break</span>;
                     }
 </div></div>
@@ -409,7 +410,6 @@ All methods return a description of the section read in the form of a hash conta
 
         <span class="hljs-keyword">return</span> sections;
     };
-
 }));
 </div></div>
       
