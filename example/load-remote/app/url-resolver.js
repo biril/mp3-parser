@@ -24,14 +24,16 @@ define(["underscore", "jquery"], function (_, $) {
     return {
 
         // Resolve given `url`. The `onResolved` handler's signature should be
-        // `function (error, resolvedUrl) {..}` where `error` is null on success or  a descriptive
-        //  message on failure. Note that the handler may run synchronously or asynchronously
-        //  depending on given URL
+        // `function (error, resolvedUrl) {..}` where `error` is `null` on success or a descriptive
+        //  message on failure. Note that the handler will always execute asynchronously regardless
+        //  of given URL
         resolve: function (url, onResolved) {
             onResolved || (onResolved = function () {});
 
             // Pass-through if there's no resolution to carry out
-            if(!_.isString(url) || !scTrackUrlFormat.test(url)) { return onResolved(null, url); }
+            if(!_.isString(url) || !scTrackUrlFormat.test(url)) {
+                return _.defer(onResolved, null, url);
+            }
 
             // Resolve using SC's /resolve API
             $.ajax({
